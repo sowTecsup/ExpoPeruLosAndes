@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión Textil IA — Expo Perú Los Andes</title>
+<style>
+  :root {
+    --teal: #1A5E5E;
+    --teal-light: #2A8080;
+    --teal-pale: #E0F2F2;
+    --gold: #C4A035;
+    --gold-light: #E8C96A;
+    --crimson: #7B1E1E;
+    --cream: #F8F0DC;
+    --cream-dark: #EDE0C4;
+    --dark: #1A1A2E;
+    --text: #2C2C2C;
+    --muted: #6B6B6B;
+    --white: #FFFFFF;
+    --green: #1A6B3A;
+    --green-light: #E0F4EA;
+    --orange: #B05A00;
+    --orange-light: #FFF0E0;
+    --red: #9B2020;
+    --red-light: #FDE8E8;
+    --shadow: 0 4px 20px rgba(0,0,0,0.10);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F0F4F8; color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--teal) 60%, #0F3E3E 100%);
+    color: white; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-logo { font-size: 30px; }
+  .header-title h1 { font-size: 19px; font-weight: 700; }
+  .header-title p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; letter-spacing: 0.8px; }
+  .header-badge { background: var(--gold); color: var(--dark); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  /* NAV TABS */
+  nav { background: var(--dark); display: flex; padding: 0 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .nav-tab {
+    padding: 16px 20px; color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 600;
+    cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px; white-space: nowrap;
+  }
+  .nav-tab:hover { color: rgba(255,255,255,0.8); }
+  .nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+
+  /* MAIN */
+  .main { max-width: 960px; margin: 0 auto; padding: 28px 20px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--white); border-radius: 14px; box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .card-title { font-size: 16px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+  .card-subtitle { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  .stat-card { background: var(--white); border-radius: 12px; padding: 18px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--teal); }
+  .stat-val { font-size: 28px; font-weight: 700; color: var(--teal); }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* FORM */
+  .form-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  label { font-size: 12px; font-weight: 600; color: var(--dark); text-transform: uppercase; letter-spacing: 0.3px; }
+  input, select, textarea { border: 1.5px solid #DDE; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #FAFBFC; transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); background: white; }
+
+  /* BUTTONS */
+  .btn { padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+  .btn-teal { background: var(--teal); color: white; }
+  .btn-teal:hover { background: var(--teal-light); }
+  .btn-gold { background: var(--gold); color: var(--dark); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-red { background: var(--crimson); color: white; }
+  .btn-red:hover { background: #9B2E2E; }
+  .btn-outline { background: transparent; border: 1.5px solid #DDE; color: var(--muted); }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+  .btn-icon { background: transparent; border: none; cursor: pointer; font-size: 16px; padding: 4px; }
+
+  /* STATUS BADGES */
+  .badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+  .badge-pending { background: var(--orange-light); color: var(--orange); }
+  .badge-progress { background: #EEF4FF; color: #2B52A8; }
+  .badge-done { background: var(--green-light); color: var(--green); }
+  .badge-shipped { background: #F0E8FF; color: #5B3FB5; }
+  .badge-issue { background: var(--red-light); color: var(--red); }
+
+  /* ORDERS TABLE */
+  .orders-table { width: 100%; border-collapse: collapse; }
+  .orders-table th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); background: #F5F6FA; border-bottom: 2px solid #EEE; }
+  .orders-table td { padding: 12px 12px; font-size: 13px; border-bottom: 1px solid #F0F0F0; vertical-align: middle; }
+  .orders-table tr:hover td { background: #FAFBFF; }
+  .order-client { font-weight: 600; color: var(--dark); }
+  .order-product { color: var(--muted); font-size: 12px; }
+
+  /* QUALITY MODULE */
+  .quality-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .quality-category { background: #FAFBFC; border: 1.5px solid #EEE; border-radius: 12px; padding: 18px; }
+  .quality-cat-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .quality-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #EEE; }
+  .quality-item:last-child { border-bottom: none; }
+  .q-check { width: 20px; height: 20px; border: 2px solid #CCC; border-radius: 50%; cursor: pointer; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .q-check.pass { background: var(--green); border-color: var(--green); color: white; }
+  .q-check.fail { background: var(--crimson); border-color: var(--crimson); color: white; }
+  .quality-item-text { flex: 1; }
+  .quality-item-name { font-size: 13px; font-weight: 600; color: var(--dark); }
+  .quality-item-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .q-buttons { display: flex; gap: 6px; margin-top: 4px; }
+  .q-btn { padding: 3px 10px; border-radius: 6px; font-size: 11px; border: none; cursor: pointer; font-weight: 600; }
+  .q-btn-pass { background: var(--green-light); color: var(--green); }
+  .q-btn-pass:hover { background: var(--green); color: white; }
+  .q-btn-fail { background: var(--red-light); color: var(--red); }
+  .q-btn-fail:hover { background: var(--crimson); color: white; }
+
+  /* QUALITY SCORE */
+  .quality-score-ring {
+    width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 16px;
+    background: conic-gradient(var(--green) 0%, var(--green) var(--pct, 0%), #EEE var(--pct, 0%) 100%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 12px white, 0 0 0 14px #EEE;
+  }
+  .quality-score-inner { width: 90px; height: 90px; border-radius: 50%; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .quality-score-num { font-size: 28px; font-weight: 700; color: var(--dark); }
+  .quality-score-label { font-size: 10px; color: var(--muted); }
+
+  /* COST CALCULATOR */
+  .calc-section { background: #FAFBFC; border: 1.5px solid #EEE; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .calc-section-title { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .calc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .calc-label { flex: 1; font-size: 13px; color: var(--text); }
+  .calc-input { width: 120px; text-align: right; font-weight: 600; }
+  .calc-result { background: linear-gradient(135deg, var(--dark), var(--teal)); color: white; border-radius: 12px; padding: 24px; text-align: center; }
+  .calc-result-label { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
+  .calc-result-val { font-size: 36px; font-weight: 700; color: var(--gold-light); }
+  .calc-result-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .calc-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .calc-break-item { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; text-align: center; }
+  .calc-break-val { font-size: 18px; font-weight: 700; color: var(--gold-light); }
+  .calc-break-label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  /* PACKAGING */
+  .pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pack-option { border: 2px solid #EEE; border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.2s; }
+  .pack-option:hover { border-color: var(--gold); }
+  .pack-option.selected { border-color: var(--gold); background: #FFFBEF; }
+  .pack-option-icon { font-size: 28px; margin-bottom: 8px; }
+  .pack-option-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--dark); }
+  .pack-option-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .pack-option-cost { font-size: 13px; color: var(--teal); font-weight: 600; margin-top: 8px; }
+
+  /* TIPS */
+  .tip { background: linear-gradient(135deg, var(--teal-pale), #D0ECEC); border-left: 4px solid var(--teal); border-radius: 8px; padding: 14px 16px; margin-top: 14px; font-size: 13px; color: var(--teal); line-height: 1.6; }
+  .tip strong { color: var(--dark); }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 16px; padding: 28px; max-width: 540px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .modal-title { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 20px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+
+  /* NOTIFICATION */
+  .notif { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 14px 20px; border-radius: 12px; font-size: 14px; box-shadow: var(--shadow); z-index: 999; display: none; }
+  .notif.show { display: block; }
+
+  /* ALERT BOX */
+  .alert { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 12px; }
+  .alert-warning { background: var(--orange-light); color: var(--orange); border-left: 4px solid var(--orange); }
+  .alert-success { background: var(--green-light); color: var(--green); border-left: 4px solid var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-logo">⚙️</div>
+    <div class="header-title">
+      <h1>Gestión Textil IA</h1>
+      <p>Expo Perú Los Andes · Optimización de Procesos</p>
+    </div>
+  </div>
+  <div class="header-badge">🤖 IA APLICADA</div>
+</header>
+
+<nav>
+  <div class="nav-tab active" onclick="showPanel('orders')" id="ntab_orders">📋 Pedidos y Clientes</div>
+  <div class="nav-tab" onclick="showPanel('quality')" id="ntab_quality">✅ Control de Calidad</div>
+  <div class="nav-tab" onclick="showPanel('costs')" id="ntab_costs">💰 Costos y Precios</div>
+  <div class="nav-tab" onclick="showPanel('packaging')" id="ntab_packaging">📦 Packaging Premium</div>
+</nav>
+
+<div class="main">
+
+  <!-- ===== PANEL 1: PEDIDOS ===== -->
+  <div class="panel active" id="panel_orders">
+    <div class="stats-row" id="ordersStats">
+      <div class="stat-card">
+        <div class="stat-val" id="stat_total">0</div>
+        <div class="stat-label">Total de pedidos</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--orange);">
+        <div class="stat-val" style="color: var(--orange);" id="stat_pending">0</div>
+        <div class="stat-label">En proceso</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--green);">
+        <div class="stat-val" style="color: var(--green);" id="stat_done">0</div>
+        <div class="stat-label">Completados</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--gold);">
+        <div class="stat-val" style="color: var(--gold);" id="stat_revenue">S/ 0</div>
+        <div class="stat-label">Valor total</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">📋 Registro de Pedidos</div>
+          <div class="card-subtitle">Gestiona tus pedidos y clientes en un solo lugar</div>
+        </div>
+        <button class="btn btn-teal" onclick="openModal()">+ Nuevo pedido</button>
+      </div>
+
+      <div id="ordersTableWrap">
+        <div class="empty-state" id="emptyOrders">
+          <div class="empty-icon">📦</div>
+          <p>Aún no has registrado pedidos.<br>Haz clic en <strong>"+ Nuevo pedido"</strong> para comenzar.</p>
+        </div>
+        <table class="orders-table" id="ordersTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Cliente</th>
+              <th>Producto</th>
+              <th>Piezas</th>
+              <th>Valor (USD)</th>
+              <th>Entrega</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>🤖 IA para gestión de pedidos:</strong> En el futuro próximo, WhatsApp Business + IA puede responder automáticamente a consultas de clientes 24/7, confirmar pedidos y enviar recordatorios de entrega. Herramientas como ManyChat o Tidio permiten implementarlo hoy.
+    </div>
+  </div>
+
+  <!-- ===== PANEL 2: CALIDAD ===== -->
+  <div class="panel" id="panel_quality">
+    <div style="display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: start;">
+      <div class="card" style="text-align: center; padding: 24px 16px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 16px;">PUNTAJE DE CALIDAD</div>
+        <div class="quality-score-ring" id="scoreRing">
+          <div class="quality-score-inner">
+            <div class="quality-score-num" id="scoreNum">—</div>
+            <div class="quality-score-label">/ 15 checks</div>
+          </div>
+        </div>
+        <div id="scoreLabel" style="font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 16px;">Sin evaluar</div>
+        <button class="btn btn-outline" style="width:100%; margin-bottom: 8px;" onclick="resetQuality()">🔄 Nueva evaluación</button>
+        <button class="btn btn-teal" style="width:100%;" onclick="exportQuality()">📄 Exportar resultado</button>
+      </div>
+
+      <div>
+        <div class="quality-grid">
+          <div class="quality-category">
+            <div class="quality-cat-title">🧵 Fibra y Materia Prima</div>
+            <div id="qcat_fibra"></div>
+          </div>
+          <div class="quality-category">
+            <div class="quality-cat-title">🪡 Proceso de Tejido</div>
+            <div id="qcat_tejido"></div>
+          </div>
+          <div class="quality-category">
+            <div class="quality-cat-title">🎨 Acabado y Presentación</div>
+            <div id="qcat_acabado"></div>
+          </div>
+          <div class="quality-category">
+            <div class="quality-cat-title">📐 Medidas y Uniformidad</div>
+            <div id="qcat_medidas"></div>
+          </div>
+        </div>
+
+        <div class="tip" style="margin-top: 16px;">
+          <strong>🤖 IA en control de calidad:</strong> En Cusco ya se usa mecatrónica + visión computacional para detectar defectos en prendas en segundos. Esta tecnología puede revisar uniformidad de tejido, irregularidades de color y defectos de fibra de forma automática, ahorrando hasta un 70% del tiempo de revisión manual.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANEL 3: COSTOS ===== -->
+  <div class="panel" id="panel_costs">
+    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start;">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">💰 Calculadora de Costos</div>
+              <div class="card-subtitle">Calcula el precio justo para tu producto</div>
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <div class="calc-section-title">🧶 Materia prima</div>
+            <div class="calc-row">
+              <span class="calc-label">Fibra (kg utilizados × precio/kg)</span>
+              <input type="number" class="calc-input" id="c_fiber_qty" value="0.3" step="0.1" min="0" onchange="recalculate()"> kg ×
+              <input type="number" class="calc-input" id="c_fiber_price" value="80" min="0" onchange="recalculate()"> S/
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Tintes y fijadores</span>
+              <input type="number" class="calc-input" id="c_dyes" value="5" min="0" onchange="recalculate()"> S/
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Otros materiales (botones, cremalleras, etc.)</span>
+              <input type="number" class="calc-input" id="c_other_mat" value="3" min="0" onchange="recalculate()"> S/
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <div class="calc-section-title">⏱️ Mano de obra</div>
+            <div class="calc-row">
+              <span class="calc-label">Horas de tejido</span>
+              <input type="number" class="calc-input" id="c_hours" value="20" min="0" onchange="recalculate()"> h ×
+              <input type="number" class="calc-input" id="c_hour_rate" value="8" min="0" onchange="recalculate()"> S/
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Horas de acabado / costura</span>
+              <input type="number" class="calc-input" id="c_finish_h" value="3" min="0" onchange="recalculate()"> h ×
+              <input type="number" class="calc-input" id="c_finish_rate" value="6" min="0" onchange="recalculate()"> S/
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <div class="calc-section-title">📦 Empaque y envío</div>
+            <div class="calc-row">
+              <span class="calc-label">Packaging (caja, papel, etiquetas)</span>
+              <input type="number" class="calc-input" id="c_pack" value="15" min="0" onchange="recalculate()"> S/
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Envío / flete estimado</span>
+              <input type="number" class="calc-input" id="c_shipping" value="25" min="0" onchange="recalculate()"> S/
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <div class="calc-section-title">📊 Márgenes</div>
+            <div class="calc-row">
+              <span class="calc-label">Gastos generales (% sobre costos)</span>
+              <input type="number" class="calc-input" id="c_overhead_pct" value="15" min="0" max="100" onchange="recalculate()"> %
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Margen de ganancia deseado (%)</span>
+              <input type="number" class="calc-input" id="c_margin_pct" value="40" min="0" max="200" onchange="recalculate()"> %
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Tipo de cambio S/ → USD</span>
+              <input type="number" class="calc-input" id="c_exchange" value="3.75" step="0.05" min="1" onchange="recalculate()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="calc-result" id="calcResult">
+          <div class="calc-result-label">PRECIO MÍNIMO DE VENTA</div>
+          <div class="calc-result-val" id="r_min_usd">$0 USD</div>
+          <div class="calc-result-sub" id="r_min_pen">S/ 0</div>
+
+          <div class="calc-breakdown">
+            <div class="calc-break-item">
+              <div class="calc-break-val" id="r_cost">S/ 0</div>
+              <div class="calc-break-label">Costo total</div>
+            </div>
+            <div class="calc-break-item">
+              <div class="calc-break-val" id="r_overhead">S/ 0</div>
+              <div class="calc-break-label">Gastos generales</div>
+            </div>
+            <div class="calc-break-item">
+              <div class="calc-break-val" id="r_profit">S/ 0</div>
+              <div class="calc-break-label">Ganancia</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 16px;">
+          <div class="card-title" style="font-size: 14px; margin-bottom: 14px;">📈 Precio sugerido por mercado</div>
+          <div id="marketPrices"></div>
+        </div>
+
+        <div class="tip" style="margin-top: 0;">
+          <strong>💡 Regla de oro:</strong> El precio de exportación debe ser al menos 3× tu costo de producción para cubrir márgenes de distribuidores internacionales (35–50%) y tu propio margen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANEL 4: PACKAGING ===== -->
+  <div class="panel" id="panel_packaging">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">📦 Packaging Premium para Exportación</div>
+          <div class="card-subtitle">El empaque es la primera impresión en mercados internacionales</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <div style="font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 14px;">Selecciona el nivel de empaque:</div>
+        <div class="pack-grid">
+          <div class="pack-option" id="pack_basic" onclick="selectPack('basic')">
+            <div class="pack-option-icon">📬</div>
+            <div class="pack-option-name">Básico — Mercado local</div>
+            <div class="pack-option-desc">Bolsa de tela con etiqueta cosida. Funcional y económico para ventas en ferias y mercados locales.</div>
+            <div class="pack-option-cost">Costo: S/ 2–8 por pieza</div>
+          </div>
+          <div class="pack-option" id="pack_standard" onclick="selectPack('standard')">
+            <div class="pack-option-icon">📦</div>
+            <div class="pack-option-name">Estándar — Exportación básica</div>
+            <div class="pack-option-desc">Caja de cartón con papel tissue, tarjeta de artesano y bolsa de organza. Para plataformas como Etsy.</div>
+            <div class="pack-option-cost">Costo: S/ 15–35 por pieza</div>
+          </div>
+          <div class="pack-option" id="pack_premium" onclick="selectPack('premium')">
+            <div class="pack-option-icon">🎁</div>
+            <div class="pack-option-name">Premium — Lujo / Boutiques</div>
+            <div class="pack-option-desc">Caja rígida con diseño andino, papel de seda, ribbon, tarjeta historia bilingüe y certificado de autenticidad.</div>
+            <div class="pack-option-cost">Costo: S/ 35–80 por pieza</div>
+          </div>
+          <div class="pack-option" id="pack_luxury" onclick="selectPack('luxury')">
+            <div class="pack-option-icon">💎</div>
+            <div class="pack-option-name">Luxury — Vicuña / Ultra premium</div>
+            <div class="pack-option-desc">Caja de madera o cuero artesanal, broche dorado, certificado de fibra, historia del artesano en tarjeta premium.</div>
+            <div class="pack-option-cost">Costo: S/ 80–200 por pieza</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="packingGuide" style="display:none;" class="card" style="background: #FAFBFC;">
+        <div class="card-title" style="font-size: 15px; margin-bottom: 16px;" id="packGuideTitle">Guía de empaque</div>
+        <div id="packGuideContent"></div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div style="font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 14px;">✅ Lista de verificación de empaque antes de enviar:</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Producto limpio y sin pelusa
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Etiqueta con composición y cuidado (ES + EN)
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Tarjeta historia del artesano incluida
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Código QR con video del proceso de tejido
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Caja o bolsa acorde al nivel de precio
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Producto fotografiado antes de empacar
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Número de seguimiento enviado al cliente
+          </label>
+          <label style="display:flex; align-items:center; gap:10px; background: #FAFBFC; padding: 10px 14px; border-radius: 8px; cursor:pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: normal; color: var(--text);">
+            <input type="checkbox" style="width:16px; height:16px; accent-color: var(--teal);"> Declaración de aduana correctamente llenada
+          </label>
+        </div>
+      </div>
+
+      <div class="tip" style="margin-top: 20px;">
+        <strong>💡 El packaging 3D:</strong> Herramientas como Canva, Adobe Dimension o PackLane permiten diseñar y visualizar tu empaque en 3D antes de imprimir. Puedes mostrar a compradores internacionales cómo se verá el producto empacado sin costo de prototipado.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL NUEVO PEDIDO -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-title">+ Registrar nuevo pedido</div>
+    <div class="form-row" style="grid-template-columns: 1fr 1fr;">
+      <div class="form-group">
+        <label>Nombre del cliente</label>
+        <input type="text" id="m_client" placeholder="Ej: Sarah Johnson">
+      </div>
+      <div class="form-group">
+        <label>País / Ciudad</label>
+        <input type="text" id="m_country" placeholder="Ej: Nueva York, EE.UU.">
+      </div>
+    </div>
+    <div class="form-row" style="grid-template-columns: 1fr 1fr 80px;">
+      <div class="form-group">
+        <label>Producto</label>
+        <select id="m_product">
+          <option>Pullover de alpaca</option>
+          <option>Chullo andino</option>
+          <option>Tapiz textil</option>
+          <option>Chalina de vicuña</option>
+          <option>Poncho tradicional</option>
+          <option>Bolso andino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Valor (USD)</label>
+        <input type="number" id="m_value" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label>Piezas</label>
+        <input type="number" id="m_qty" value="1" min="1">
+      </div>
+    </div>
+    <div class="form-row" style="grid-template-columns: 1fr 1fr;">
+      <div class="form-group">
+        <label>Fecha de entrega</label>
+        <input type="date" id="m_deadline">
+      </div>
+      <div class="form-group">
+        <label>Estado inicial</label>
+        <select id="m_status">
+          <option value="pending">Pendiente de inicio</option>
+          <option value="progress">En proceso</option>
+          <option value="done">Completado</option>
+          <option value="shipped">Enviado</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top: 8px;">
+      <label>Notas adicionales</label>
+      <textarea id="m_notes" placeholder="Colores, tallas, instrucciones especiales..." style="min-height: 60px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-teal" onclick="saveOrder()">Guardar pedido</button>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif">✅ Acción completada</div>
+
+<script>
+// ===== ORDERS =====
+let orders = JSON.parse(localStorage.getItem('gti_orders') || '[]');
+let orderIdCounter = parseInt(localStorage.getItem('gti_oid') || '1');
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel_' + name).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ntab_' + name).classList.add('active');
+}
+
+function openModal() {
+  document.getElementById('orderModal').classList.add('open');
+  const today = new Date(); today.setDate(today.getDate() + 30);
+  document.getElementById('m_deadline').value = today.toISOString().split('T')[0];
+}
+function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
+
+function saveOrder() {
+  const client = document.getElementById('m_client').value.trim();
+  const value = parseFloat(document.getElementById('m_value').value) || 0;
+  if (!client) { alert('Ingresa el nombre del cliente.'); return; }
+  const order = {
+    id: orderIdCounter++,
+    client,
+    country: document.getElementById('m_country').value.trim(),
+    product: document.getElementById('m_product').value,
+    qty: parseInt(document.getElementById('m_qty').value) || 1,
+    value,
+    deadline: document.getElementById('m_deadline').value,
+    status: document.getElementById('m_status').value,
+    notes: document.getElementById('m_notes').value.trim(),
+    createdAt: new Date().toISOString().split('T')[0]
+  };
+  orders.push(order);
+  localStorage.setItem('gti_orders', JSON.stringify(orders));
+  localStorage.setItem('gti_oid', orderIdCounter.toString());
+  closeModal();
+  renderOrders();
+  showNotif('Pedido guardado correctamente');
+}
+
+function deleteOrder(id) {
+  if (!confirm('¿Eliminar este pedido?')) return;
+  orders = orders.filter(o => o.id !== id);
+  localStorage.setItem('gti_orders', JSON.stringify(orders));
+  renderOrders();
+}
+
+function updateStatus(id, status) {
+  const o = orders.find(o => o.id === id);
+  if (o) { o.status = status; localStorage.setItem('gti_orders', JSON.stringify(orders)); renderOrders(); }
+}
+
+const statusLabels = { pending: 'Pendiente', progress: 'En proceso', done: 'Completado', shipped: 'Enviado', issue: 'Problema' };
+const statusClasses = { pending: 'badge-pending', progress: 'badge-progress', done: 'badge-done', shipped: 'badge-shipped', issue: 'badge-issue' };
+
+function renderOrders() {
+  const total = orders.length;
+  const inProgress = orders.filter(o => o.status === 'pending' || o.status === 'progress').length;
+  const done = orders.filter(o => o.status === 'done' || o.status === 'shipped').length;
+  const revenue = orders.reduce((s, o) => s + (o.value * o.qty), 0);
+  document.getElementById('stat_total').textContent = total;
+  document.getElementById('stat_pending').textContent = inProgress;
+  document.getElementById('stat_done').textContent = done;
+  document.getElementById('stat_revenue').textContent = '$' + revenue.toFixed(0);
+
+  const empty = document.getElementById('emptyOrders');
+  const table = document.getElementById('ordersTable');
+  if (orders.length === 0) { empty.style.display = 'block'; table.style.display = 'none'; return; }
+  empty.style.display = 'none'; table.style.display = 'table';
+
+  const body = document.getElementById('ordersBody');
+  body.innerHTML = orders.map(o => `
+    <tr>
+      <td style="color:var(--muted); font-size:12px;">#${o.id}</td>
+      <td>
+        <div class="order-client">${o.client}</div>
+        <div class="order-product">${o.country || ''}</div>
+      </td>
+      <td>
+        <div style="font-size:13px;">${o.product}</div>
+        <div style="font-size:11px; color:var(--muted);">${o.notes ? o.notes.substring(0,40)+'...' : ''}</div>
+      </td>
+      <td style="text-align:center; font-weight:600;">${o.qty}</td>
+      <td style="font-weight:700; color:var(--teal);">$${(o.value * o.qty).toFixed(0)}</td>
+      <td style="font-size:12px; color:var(--muted);">${o.deadline || '—'}</td>
+      <td>
+        <select onchange="updateStatus(${o.id}, this.value)" style="font-size:12px; padding:4px 8px; border-radius:6px; border:1px solid #DDE;">
+          ${['pending','progress','done','shipped','issue'].map(s => `<option value="${s}" ${s===o.status?'selected':''}>${statusLabels[s]}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <button class="btn-icon" onclick="deleteOrder(${o.id})" title="Eliminar">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ===== QUALITY =====
+const qualityItems = {
+  fibra: [
+    { name: 'Fibra limpia y sin impurezas', desc: 'Sin polvo, grasa ni restos vegetales' },
+    { name: 'Grosor uniforme del hilo', desc: 'No hay variaciones notables en el calibre' },
+    { name: 'Color consistente', desc: 'Tinte parejo sin manchas o variaciones de tono' },
+    { name: 'Certificado de fibra disponible', desc: 'Alpaca, vicuña o camélido verificado' },
+  ],
+  tejido: [
+    { name: 'Tensión uniforme del tejido', desc: 'Sin zonas más sueltas o apretadas' },
+    { name: 'Puntos completos sin saltos', desc: 'Sin puntos caídos o errores de patrón' },
+    { name: 'Diseño centrado y simétrico', desc: 'Los motivos están alineados y balanceados' },
+    { name: 'Sin hilos sueltos al interior', desc: 'El interior de la prenda está limpio' },
+  ],
+  acabado: [
+    { name: 'Costuras resistentes y limpias', desc: 'Sin hilos colgantes en uniones' },
+    { name: 'Bordes bien terminados', desc: 'Sin deshilachado en puños y cuellos' },
+    { name: 'Pelusa removida (antipilling)', desc: 'Superficie suave y presentable' },
+    { name: 'Etiqueta bien cosida y legible', desc: 'Composición, cuidado y origen visible' },
+  ],
+  medidas: [
+    { name: 'Talla según especificaciones', desc: 'Medidas de pecho, largo y manga correctas' },
+    { name: 'Peso dentro del rango esperado', desc: 'El peso corresponde a la fibra declarada' },
+    { name: 'Emparejamiento de colores en juegos', desc: 'Si son pares/juegos, coinciden perfectamente' },
+  ]
+};
+
+let qualityState = {};
+
+function renderQuality() {
+  Object.entries(qualityItems).forEach(([cat, items]) => {
+    const container = document.getElementById('qcat_' + cat);
+    container.innerHTML = items.map((item, idx) => {
+      const key = cat + '_' + idx;
+      const state = qualityState[key];
+      return `
+        <div class="quality-item">
+          <div class="q-check ${state === 'pass' ? 'pass' : state === 'fail' ? 'fail' : ''}" id="qcheck_${key}">
+            ${state === 'pass' ? '✓' : state === 'fail' ? '✗' : ''}
+          </div>
+          <div class="quality-item-text">
+            <div class="quality-item-name">${item.name}</div>
+            <div class="quality-item-desc">${item.desc}</div>
+            <div class="q-buttons">
+              <button class="q-btn q-btn-pass" onclick="setQuality('${key}', 'pass')">✓ Pasa</button>
+              <button class="q-btn q-btn-fail" onclick="setQuality('${key}', 'fail')">✗ Falla</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  });
+  updateScore();
+}
+
+function setQuality(key, val) {
+  qualityState[key] = val;
+  renderQuality();
+}
+
+function updateScore() {
+  const allItems = Object.entries(qualityItems).flatMap(([cat, items]) => items.map((_, i) => cat + '_' + i));
+  const total = allItems.length;
+  const passed = allItems.filter(k => qualityState[k] === 'pass').length;
+  const evaluated = allItems.filter(k => qualityState[k]).length;
+
+  if (evaluated === 0) {
+    document.getElementById('scoreNum').textContent = '—';
+    document.getElementById('scoreLabel').textContent = 'Sin evaluar';
+    document.getElementById('scoreRing').style.setProperty('--pct', '0%');
+    return;
+  }
+
+  const pct = Math.round((passed / total) * 100);
+  document.getElementById('scoreNum').textContent = passed;
+  document.getElementById('scoreRing').style.setProperty('--pct', pct + '%');
+
+  let label, color;
+  if (pct >= 90) { label = '🥇 EXPORTABLE'; color = 'var(--green)'; }
+  else if (pct >= 70) { label = '✅ Aprobado'; color = 'var(--teal)'; }
+  else if (pct >= 50) { label = '⚠️ Requiere mejoras'; color = 'var(--orange)'; }
+  else { label = '❌ No apto aún'; color = 'var(--crimson)'; }
+
+  document.getElementById('scoreLabel').textContent = label;
+  document.getElementById('scoreLabel').style.color = color;
+}
+
+function resetQuality() {
+  qualityState = {};
+  renderQuality();
+}
+
+function exportQuality() {
+  const allItems = Object.entries(qualityItems).flatMap(([cat, items]) => items.map((item, i) => ({ ...item, key: cat + '_' + i, cat })));
+  const passed = allItems.filter(i => qualityState[i.key] === 'pass').map(i => i.name);
+  const failed = allItems.filter(i => qualityState[i.key] === 'fail').map(i => i.name);
+  const score = passed.length;
+  const total = allItems.length;
+  let text = `REPORTE DE CONTROL DE CALIDAD — GESTIÓN TEXTIL IA\n`;
+  text += `Fecha: ${new Date().toLocaleDateString('es-PE')}\n`;
+  text += `Puntaje: ${score}/${total} (${Math.round(score/total*100)}%)\n\n`;
+  text += `✅ PASÓ (${passed.length}):\n${passed.map(p => '  · ' + p).join('\n')}\n\n`;
+  text += `❌ FALLA (${failed.length}):\n${failed.map(f => '  · ' + f).join('\n') || '  Ninguna'}`;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'reporte_calidad.txt'; a.click();
+}
+
+// ===== COSTS =====
+function recalculate() {
+  const fiberQty = parseFloat(document.getElementById('c_fiber_qty').value) || 0;
+  const fiberPrice = parseFloat(document.getElementById('c_fiber_price').value) || 0;
+  const dyes = parseFloat(document.getElementById('c_dyes').value) || 0;
+  const otherMat = parseFloat(document.getElementById('c_other_mat').value) || 0;
+  const hours = parseFloat(document.getElementById('c_hours').value) || 0;
+  const hourRate = parseFloat(document.getElementById('c_hour_rate').value) || 0;
+  const finishH = parseFloat(document.getElementById('c_finish_h').value) || 0;
+  const finishRate = parseFloat(document.getElementById('c_finish_rate').value) || 0;
+  const pack = parseFloat(document.getElementById('c_pack').value) || 0;
+  const shipping = parseFloat(document.getElementById('c_shipping').value) || 0;
+  const overheadPct = parseFloat(document.getElementById('c_overhead_pct').value) || 0;
+  const marginPct = parseFloat(document.getElementById('c_margin_pct').value) || 0;
+  const exchange = parseFloat(document.getElementById('c_exchange').value) || 3.75;
+
+  const directCost = (fiberQty * fiberPrice) + dyes + otherMat + (hours * hourRate) + (finishH * finishRate) + pack + shipping;
+  const overhead = directCost * (overheadPct / 100);
+  const totalCost = directCost + overhead;
+  const profit = totalCost * (marginPct / 100);
+  const minPrice = totalCost + profit;
+  const minPriceUSD = minPrice / exchange;
+
+  document.getElementById('r_cost').textContent = 'S/ ' + directCost.toFixed(0);
+  document.getElementById('r_overhead').textContent = 'S/ ' + overhead.toFixed(0);
+  document.getElementById('r_profit').textContent = 'S/ ' + profit.toFixed(0);
+  document.getElementById('r_min_pen').textContent = 'S/ ' + minPrice.toFixed(0) + ' PEN';
+  document.getElementById('r_min_usd').textContent = '$' + minPriceUSD.toFixed(0) + ' USD';
+
+  const mktPrices = document.getElementById('marketPrices');
+  mktPrices.innerHTML = [
+    { flag: '🇺🇸', market: 'EE.UU.', mult: 2.5 },
+    { flag: '🇯🇵', market: 'Japón', mult: 3.2 },
+    { flag: '🇩🇪', market: 'Europa', mult: 2.8 },
+    { flag: '🇦🇺', market: 'Australia', mult: 2.6 },
+  ].map(m => `
+    <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 0; border-bottom: 1px solid #EEE; font-size: 14px;">
+      <span>${m.flag} ${m.market}</span>
+      <span style="font-weight:700; color:var(--teal);">$${(minPriceUSD * m.mult).toFixed(0)} USD</span>
+    </div>
+  `).join('') + `<div style="font-size:11px; color:var(--muted); margin-top:8px;">*Incluye margen de distribuidor internacional (40–60%)</div>`;
+}
+
+// ===== PACKAGING =====
+const packGuides = {
+  basic: {
+    title: '📬 Guía: Packaging Básico',
+    content: `<ul style="list-style:none; padding:0;">
+      <li style="padding:6px 0; font-size:13px;">✔️ Bolsa de tela de tocuyo natural con logo bordado o impreso</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Etiqueta cosida con fibra, cuidado y región</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Tarjeta pequeña con nombre del artesano y contacto</li>
+      <li style="padding:6px 0; font-size:13px;">💡 Ideal para: ferias locales, mercados artesanales, ventas directas</li>
+    </ul>`
+  },
+  standard: {
+    title: '📦 Guía: Packaging Estándar para Exportación',
+    content: `<ul style="list-style:none; padding:0;">
+      <li style="padding:6px 0; font-size:13px;">✔️ Caja de cartón personalizada con diseño andino</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Papel tissue de colores (terracota, dorado)</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Bolsa de organza para proteger la prenda</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Tarjeta historia del artesano (ES + EN)</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Instrucciones de cuidado en tarjeta separada</li>
+      <li style="padding:6px 0; font-size:13px;">💡 Ideal para: Etsy, Amazon Handmade, ventas directas a EE.UU. y Europa</li>
+    </ul>`
+  },
+  premium: {
+    title: '🎁 Guía: Packaging Premium — Boutiques y Lujo',
+    content: `<ul style="list-style:none; padding:0;">
+      <li style="padding:6px 0; font-size:13px;">✔️ Caja rígida con interior de satén o terciopelo</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Diseño exterior con motivos andinos en relieve o foil dorado</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Ribbon o moño en colores andinos</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Tarjeta historia del artesano en papel premium, bilingüe</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Certificado de autenticidad y fibra firmado</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ QR code con video del proceso de elaboración</li>
+      <li style="padding:6px 0; font-size:13px;">💡 Ideal para: boutiques internacionales, compradores Japón y Alemania</li>
+    </ul>`
+  },
+  luxury: {
+    title: '💎 Guía: Packaging Luxury — Vicuña / Ultra Premium',
+    content: `<ul style="list-style:none; padding:0;">
+      <li style="padding:6px 0; font-size:13px;">✔️ Caja de madera artesanal lacada o cuero genuino</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Broche o cierre metálico dorado personalizado</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Interior de seda natural o cachemira</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Certificado de fibra con análisis de diámetro (micrómetros)</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Libro artesanal mini con la historia del artesano y la región</li>
+      <li style="padding:6px 0; font-size:13px;">✔️ Número de serie único por pieza</li>
+      <li style="padding:6px 0; font-size:13px;">💡 Ideal para: galerías de arte, compradores de vicuña, mercado japonés ultra luxury</li>
+    </ul>`
+  }
+};
+
+function selectPack(type) {
+  document.querySelectorAll('.pack-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('pack_' + type).classList.add('selected');
+  const guide = packGuides[type];
+  document.getElementById('packGuideTitle').textContent = guide.title;
+  document.getElementById('packGuideContent').innerHTML = guide.content;
+  document.getElementById('packingGuide').style.display = 'block';
+}
+
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = '✅ ' + msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2000);
+}
+
+// INIT
+renderOrders();
+renderQuality();
+recalculate();
+</script>
+</body>
+</html>

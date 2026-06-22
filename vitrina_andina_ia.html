@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitrina Andina IA — Expo Perú Los Andes</title>
+<style>
+  :root {
+    --crimson: #7B1E1E;
+    --gold: #C4A035;
+    --gold-light: #E8C96A;
+    --teal: #1A5E5E;
+    --teal-light: #2A8080;
+    --cream: #F8F0DC;
+    --cream-dark: #EDE0C4;
+    --dark: #1A1A2E;
+    --text: #2C2C2C;
+    --muted: #6B6B6B;
+    --white: #FFFFFF;
+    --shadow: 0 4px 24px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--crimson) 50%, #4A0E0E 100%);
+    color: var(--white); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shadow-lg);
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-logo { font-size: 32px; }
+  .header-title h1 { font-size: 20px; font-weight: bold; letter-spacing: 0.5px; }
+  .header-title p { font-size: 12px; color: var(--gold-light); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .header-badge { background: var(--gold); color: var(--dark); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+
+  /* STEPS */
+  .steps-bar { background: var(--dark); padding: 0 32px; display: flex; gap: 0; }
+  .step-tab {
+    padding: 14px 20px; cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.5);
+    border-bottom: 3px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+    white-space: nowrap;
+  }
+  .step-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .step-tab.done { color: rgba(255,255,255,0.7); }
+  .step-tab .step-num {
+    width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;
+  }
+  .step-tab.active .step-num { background: var(--gold); color: var(--dark); }
+  .step-tab.done .step-num { background: var(--teal); color: white; }
+
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--cream-dark); }
+  .card-icon { font-size: 28px; }
+  .card-title { font-size: 18px; font-weight: bold; color: var(--crimson); }
+  .card-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 13px; font-weight: bold; color: var(--dark); }
+  label .req { color: var(--crimson); }
+  input, select, textarea {
+    border: 2px solid var(--cream-dark); border-radius: 8px; padding: 10px 14px;
+    font-size: 14px; font-family: inherit; color: var(--text); background: var(--cream);
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: white; }
+
+  /* BUTTONS */
+  .btn { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; letter-spacing: 0.3px; }
+  .btn-primary { background: linear-gradient(135deg, var(--crimson), #9B2E2E); color: white; box-shadow: 0 4px 15px rgba(123,30,30,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(123,30,30,0.4); }
+  .btn-gold { background: linear-gradient(135deg, var(--gold), #A8882A); color: var(--dark); box-shadow: 0 4px 15px rgba(196,160,53,0.3); }
+  .btn-gold:hover { transform: translateY(-2px); }
+  .btn-teal { background: linear-gradient(135deg, var(--teal), var(--teal-light)); color: white; }
+  .btn-teal:hover { transform: translateY(-2px); }
+  .btn-outline { background: transparent; border: 2px solid var(--cream-dark); color: var(--muted); }
+  .btn-outline:hover { border-color: var(--crimson); color: var(--crimson); }
+  .btn-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+  /* TAG */
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+  .tag-gold { background: #FFF4D6; color: #8A6C10; border: 1px solid var(--gold-light); }
+  .tag-teal { background: #E0F0F0; color: var(--teal); border: 1px solid #A0D0D0; }
+  .tag-red { background: #FDE8E8; color: var(--crimson); border: 1px solid #F0B0B0; }
+
+  /* CATALOG CARD */
+  .catalog-card {
+    background: linear-gradient(145deg, var(--dark) 0%, #2A1A3E 100%);
+    border-radius: 20px; padding: 32px; color: white; position: relative; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .catalog-card::before {
+    content: ''; position: absolute; top: -50px; right: -50px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,160,53,0.15) 0%, transparent 70%);
+  }
+  .catalog-card::after {
+    content: ''; position: absolute; bottom: -30px; left: -30px;
+    width: 150px; height: 150px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,94,94,0.2) 0%, transparent 70%);
+  }
+  .catalog-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .catalog-badge { background: var(--gold); color: var(--dark); padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+  .catalog-region { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; }
+  .catalog-name { font-size: 26px; font-weight: bold; margin-bottom: 6px; color: var(--gold-light); }
+  .catalog-product { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+  .catalog-desc-es { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 14px; font-style: italic; }
+  .catalog-divider { height: 1px; background: rgba(196,160,53,0.3); margin: 16px 0; }
+  .catalog-desc-en { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.6); font-style: italic; }
+  .catalog-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; }
+  .catalog-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .catalog-tag { background: rgba(196,160,53,0.2); color: var(--gold-light); padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+  .catalog-price { text-align: right; }
+  .catalog-price .price-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+  .catalog-price .price-val { font-size: 22px; font-weight: bold; color: var(--gold); }
+
+  /* LANG TABS */
+  .lang-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .lang-tab { padding: 6px 16px; border-radius: 8px; border: 2px solid var(--cream-dark); background: var(--cream); font-size: 13px; cursor: pointer; font-family: inherit; font-weight: bold; color: var(--muted); transition: all 0.2s; }
+  .lang-tab.active { border-color: var(--gold); background: #FFF4D6; color: #8A6C10; }
+
+  /* TEXT CONTENT BOX */
+  .content-box { background: var(--cream); border: 2px solid var(--cream-dark); border-radius: 12px; padding: 16px 20px; font-size: 14px; line-height: 1.8; color: var(--text); position: relative; }
+  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--white); border: 1px solid var(--cream-dark); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; color: var(--muted); font-family: inherit; }
+  .copy-btn:hover { background: var(--gold-light); color: var(--dark); }
+
+  /* MARKET CARDS */
+  .market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .market-card { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--gold); }
+  .market-flag { font-size: 28px; margin-bottom: 8px; }
+  .market-name { font-size: 14px; font-weight: bold; color: var(--dark); margin-bottom: 4px; }
+  .market-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .market-price { margin-top: 10px; font-size: 13px; }
+  .market-price span { color: var(--teal); font-weight: bold; }
+
+  /* HASHTAG GRID */
+  .hashtag-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hashtag { background: #F0E8FF; color: #5B3FB5; border: 1px solid #C0A8F0; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .hashtag:hover { background: #5B3FB5; color: white; }
+
+  /* PLATFORM CARDS */
+  .platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .platform-card { background: var(--cream); border-radius: 12px; padding: 16px; border: 2px solid var(--cream-dark); }
+  .platform-name { font-size: 14px; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .platform-tip { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .platform-score { float: right; background: var(--teal); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+
+  /* SOCIAL CAPTION */
+  .caption-box { background: var(--dark); color: white; border-radius: 12px; padding: 20px; font-size: 14px; line-height: 1.8; position: relative; }
+  .caption-copy { position: absolute; top: 12px; right: 12px; background: var(--gold); border: none; color: var(--dark); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-family: inherit; font-weight: bold; }
+
+  /* TIPS */
+  .tip { background: linear-gradient(135deg, #E0F0F0, #F0F8F8); border-left: 4px solid var(--teal); border-radius: 8px; padding: 14px 16px; margin-top: 16px; font-size: 13px; color: var(--teal); line-height: 1.6; }
+  .tip strong { color: var(--dark); }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 10px; }
+  .check-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.15s; }
+  .check-item:hover { background: var(--cream-dark); }
+  .check-item input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
+  .check-item.checked { background: #E0F4F0; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .progress-bar { height: 10px; background: var(--cream-dark); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--gold)); border-radius: 10px; transition: width 0.5s ease; }
+
+  /* NOTIFICATION */
+  .notif { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 14px 20px; border-radius: 12px; font-size: 14px; box-shadow: var(--shadow-lg); z-index: 999; display: none; }
+  .notif.show { display: block; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* PRINT styles */
+  @media print {
+    header, .steps-bar, .btn-actions, .notif { display: none !important; }
+    .catalog-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-logo">🏔️</div>
+    <div class="header-title">
+      <h1>Vitrina Andina IA</h1>
+      <p>Expo Perú Los Andes · Mancomunidad de los Andes</p>
+    </div>
+  </div>
+  <div class="header-badge">✨ ARTESANÍA INTELIGENTE</div>
+</header>
+
+<div class="steps-bar">
+  <div class="step-tab active" onclick="goStep(1)" id="tab1">
+    <span class="step-num">1</span> Perfil del Artesano
+  </div>
+  <div class="step-tab" onclick="goStep(2)" id="tab2">
+    <span class="step-num">2</span> Catálogo Digital
+  </div>
+  <div class="step-tab" onclick="goStep(3)" id="tab3">
+    <span class="step-num">3</span> Inteligencia Comercial
+  </div>
+  <div class="step-tab" onclick="goStep(4)" id="tab4">
+    <span class="step-num">4</span> Contenido para Redes
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PASO 1: PERFIL -->
+  <div class="section active" id="step1">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">👤</span>
+        <div>
+          <div class="card-title">Perfil del Artesano / Empresa</div>
+          <div class="card-subtitle">Completa los datos para generar tu catálogo digital con IA</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del artesano o marca <span class="req">*</span></label>
+          <input type="text" id="f_name" placeholder="Ej: María Condori / Textiles Pachamama" />
+        </div>
+        <div class="form-group">
+          <label>Región <span class="req">*</span></label>
+          <select id="f_region">
+            <option value="">Selecciona...</option>
+            <option value="Huancavelica">Huancavelica</option>
+            <option value="Cusco">Cusco</option>
+            <option value="Apurímac">Apurímac</option>
+            <option value="Junín">Junín</option>
+            <option value="Ayacucho">Ayacucho</option>
+            <option value="Puno">Puno</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Producto principal <span class="req">*</span></label>
+          <select id="f_product">
+            <option value="">Selecciona...</option>
+            <option value="Pullover de alpaca">Pullover de alpaca</option>
+            <option value="Chullo andino">Chullo andino</option>
+            <option value="Tapiz textil">Tapiz textil</option>
+            <option value="Chalina de vicuña">Chalina de vicuña</option>
+            <option value="Poncho tradicional">Poncho tradicional</option>
+            <option value="Tapete ceremonial">Tapete ceremonial</option>
+            <option value="Ajuar para bebé">Ajuar para bebé en alpaca</option>
+            <option value="Bolso andino">Bolso andino</option>
+            <option value="Otro textil">Otro textil</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fibra principal <span class="req">*</span></label>
+          <select id="f_fiber">
+            <option value="">Selecciona...</option>
+            <option value="Alpaca baby">Alpaca baby (la más suave)</option>
+            <option value="Alpaca suri">Alpaca suri (brillo sedoso)</option>
+            <option value="Vicuña">Vicuña (fibra más fina del mundo)</option>
+            <option value="Llama">Llama (resistente y cálida)</option>
+            <option value="Alpaca huacaya">Alpaca huacaya (voluminosa)</option>
+            <option value="Mezcla de camélidos">Mezcla de camélidos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Técnica de elaboración</label>
+          <select id="f_technique">
+            <option value="tejido a mano con agujas">Tejido a mano con agujas</option>
+            <option value="tejido en telar andino">Tejido en telar andino</option>
+            <option value="tejido a crochet">Tejido a crochet</option>
+            <option value="bordado a mano">Bordado a mano</option>
+            <option value="tejido con palillos">Tejido con palillos tradicionales</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio de exportación (USD)</label>
+          <select id="f_price">
+            <option value="50–120">50 – 120 USD</option>
+            <option value="120–300">120 – 300 USD</option>
+            <option value="300–600">300 – 600 USD</option>
+            <option value="600+">600+ USD (artículo de lujo)</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>¿Qué hace especial tu producto? (2–3 características)</label>
+          <textarea id="f_special" placeholder="Ej: Cada pieza toma 3 semanas, usamos tintes naturales de plantas, los diseños son patrones preincaicos heredados de mi abuela..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Años de experiencia</label>
+          <select id="f_years">
+            <option value="menos de 5">Menos de 5 años</option>
+            <option value="5 a 15">5 a 15 años</option>
+            <option value="más de 15">Más de 15 años</option>
+            <option value="más de 30">Más de 30 años (maestro artesano)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Capacidad de producción mensual</label>
+          <select id="f_capacity">
+            <option value="1 a 5 piezas">1 a 5 piezas</option>
+            <option value="5 a 20 piezas">5 a 20 piezas</option>
+            <option value="20 a 50 piezas">20 a 50 piezas</option>
+            <option value="más de 50 piezas">Más de 50 piezas</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-actions">
+        <button class="btn btn-primary" onclick="generateCatalog()">✨ Generar Catálogo con IA →</button>
+      </div>
+    </div>
+
+    <div class="tip">
+      <strong>💡 ¿Por qué esto importa?</strong> Un catálogo digital bilingüe con IA puede aumentar tu visibilidad en mercados internacionales hasta 5 veces. Los compradores de EE.UU., Japón y Europa buscan autenticidad — tu historia es tu ventaja competitiva.
+    </div>
+  </div>
+
+  <!-- PASO 2: CATÁLOGO -->
+  <div class="section" id="step2">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🎨</span>
+        <div>
+          <div class="card-title">Tu Catálogo Digital</div>
+          <div class="card-subtitle">Generado con IA · Listo para compartir con compradores internacionales</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" id="catalogCard">
+        <div class="catalog-top">
+          <div>
+            <div class="catalog-badge">🦙 PERÚ · ANDES</div>
+          </div>
+          <div class="catalog-region" id="c_region">— · —</div>
+        </div>
+        <div class="catalog-name" id="c_name">—</div>
+        <div class="catalog-product" id="c_product">—</div>
+        <div class="catalog-desc-es" id="c_desc_es">Tu descripción aparecerá aquí...</div>
+        <div class="catalog-divider"></div>
+        <div class="catalog-desc-en" id="c_desc_en">Your description will appear here...</div>
+        <div class="catalog-footer">
+          <div class="catalog-tags" id="c_tags"></div>
+          <div class="catalog-price">
+            <div class="price-label">Precio de exportación</div>
+            <div class="price-val" id="c_price">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px;">
+          <span class="card-icon" style="font-size:20px;">📝</span>
+          <div>
+            <div class="card-title" style="font-size:15px;">Descripción completa del producto</div>
+          </div>
+        </div>
+        <div class="lang-tabs">
+          <button class="lang-tab active" onclick="switchLang('es')" id="lbtn_es">🇵🇪 Español</button>
+          <button class="lang-tab" onclick="switchLang('en')" id="lbtn_en">🇺🇸 English</button>
+        </div>
+        <div id="desc_es_box" class="content-box">
+          <button class="copy-btn" onclick="copyText('full_es')">Copiar</button>
+          <div id="full_es">Completa el formulario anterior para generar tu descripción.</div>
+        </div>
+        <div id="desc_en_box" class="content-box" style="display:none;">
+          <button class="copy-btn" onclick="copyText('full_en')">Copy</button>
+          <div id="full_en">Fill out the form above to generate your description.</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--cream-dark);">
+          <span class="card-icon" style="font-size:20px;">✅</span>
+          <div><div class="card-title" style="font-size:15px;">Lista de verificación para exportar</div></div>
+        </div>
+        <div class="checklist" id="exportChecklist">
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Certificado de origen (PROMPERÚ / SUNAT)</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Etiquetado en inglés (fibra, cuidado, origen)</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Fotografías de alta resolución (mínimo 5 fotos)</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Fichas técnicas del producto en español e inglés</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Precio FOB establecido</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Capacidad de producción mínima para pedidos internacionales</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Cuenta bancaria para cobros en dólares</label>
+          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Perfil en plataforma de exportación (Etsy/Amazon Handmade/Faire)</label>
+        </div>
+      </div>
+
+      <div class="btn-actions">
+        <button class="btn btn-outline" onclick="goStep(1)">← Editar perfil</button>
+        <button class="btn btn-gold" onclick="goStep(3)">Ver mercados objetivo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 3: MERCADOS -->
+  <div class="section" id="step3">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">🌍</span>
+        <div>
+          <div class="card-title">Inteligencia Comercial</div>
+          <div class="card-subtitle">Mercados internacionales más rentables para textiles andinos de camélidos</div>
+        </div>
+      </div>
+
+      <div class="market-grid">
+        <div class="market-card">
+          <div class="market-flag">🇺🇸</div>
+          <div class="market-name">Estados Unidos</div>
+          <div class="market-desc">Mayor mercado importador de alpaca. Alta demanda en invierno (Oct–Mar). Consumidor valora lo artesanal y sostenible.</div>
+          <div class="market-price">Precio promedio: <span>$180–400 USD</span></div>
+        </div>
+        <div class="market-card">
+          <div class="market-flag">🇯🇵</div>
+          <div class="market-name">Japón</div>
+          <div class="market-desc">Comprador premium. Valora calidad extrema y empaque. Paga hasta 3× más si el producto es auténtico y bien presentado.</div>
+          <div class="market-price">Precio promedio: <span>$250–600 USD</span></div>
+        </div>
+        <div class="market-card">
+          <div class="market-flag">🇩🇪</div>
+          <div class="market-name">Alemania / Europa</div>
+          <div class="market-desc">Fuerte tendencia eco y comercio justo. Buscan certificaciones. Plataformas: Faire, Wolf & Badger.</div>
+          <div class="market-price">Precio promedio: <span>$150–350 USD</span></div>
+        </div>
+        <div class="market-card">
+          <div class="market-flag">🇦🇺</div>
+          <div class="market-name">Australia</div>
+          <div class="market-desc">Mercado creciente. Clima frío en el sur. Valora lana de alpaca como alternativa a la lana merino local.</div>
+          <div class="market-price">Precio promedio: <span>$120–300 USD</span></div>
+        </div>
+        <div class="market-card">
+          <div class="market-flag">🇨🇦</div>
+          <div class="market-name">Canadá</div>
+          <div class="market-desc">Alta capacidad adquisitiva. Tendencia hacia productos sostenibles y artesanales. Plataformas: Etsy CA, mercados locales.</div>
+          <div class="market-price">Precio promedio: <span>$160–380 USD</span></div>
+        </div>
+        <div class="market-card">
+          <div class="market-flag">🇰🇷</div>
+          <div class="market-name">Corea del Sur</div>
+          <div class="market-desc">Mercado emergente con influencia K-fashion. Alta adopción de productos "slow fashion" y sostenibles de lujo.</div>
+          <div class="market-price">Precio promedio: <span>$200–450 USD</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--cream-dark);">
+          <span class="card-icon" style="font-size:20px;">🛒</span>
+          <div><div class="card-title" style="font-size:15px;">Plataformas recomendadas para vender</div></div>
+        </div>
+        <div class="platform-grid">
+          <div class="platform-card">
+            <div class="platform-name">🛍️ Etsy <span class="platform-score">MUY ALTO</span></div>
+            <div class="platform-tip">Ideal para artesanos individuales. 90M+ compradores globales. Crea tu tienda en 1 hora. Enfócate en fotos premium y la historia detrás de cada pieza.</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">📦 Amazon Handmade <span class="platform-score">ALTO</span></div>
+            <div class="platform-tip">Llega a compradores de 180+ países. Mayor volumen de pedidos. Requiere registro como artesano verificado por Amazon.</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">🏪 Faire.com <span class="platform-score">ALTO</span></div>
+            <div class="platform-tip">Plataforma B2B para tiendas boutique de EE.UU. y Europa. Pedidos mínimos más altos pero precios mayoristas estables.</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">📸 Instagram Shopping <span class="platform-score">MEDIO</span></div>
+            <div class="platform-tip">Construye comunidad + vende directamente. Usa Reels mostrando el proceso de tejido — el contenido "detrás de cámara" viraliza bien.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="margin-top: 16px;">
+        <strong>🤖 IA aplicada a inteligencia comercial:</strong> Herramientas como Google Trends, Jungle Scout y ChatGPT permiten identificar qué colores, diseños y tallas son tendencia en cada mercado antes de producir. Anticipa la demanda antes de invertir en producción.
+      </div>
+
+      <div class="btn-actions">
+        <button class="btn btn-outline" onclick="goStep(2)">← Catálogo</button>
+        <button class="btn btn-teal" onclick="goStep(4)">Crear contenido para redes →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 4: SOCIAL MEDIA -->
+  <div class="section" id="step4">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">📱</span>
+        <div>
+          <div class="card-title">Contenido para Redes Sociales</div>
+          <div class="card-subtitle">Generado con IA para Instagram, Facebook y TikTok</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; color: var(--dark);">🎯 Tipo de publicación:</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('producto')" id="cbtn_producto">🧶 Presentar producto</button>
+          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('proceso')" id="cbtn_proceso">🪡 Mostrar proceso</button>
+          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('historia')" id="cbtn_historia">📖 Contar mi historia</button>
+          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('exportacion')" id="cbtn_exportacion">✈️ Anunciar exportación</button>
+        </div>
+      </div>
+
+      <div class="caption-box" id="captionBox">
+        <button class="caption-copy" onclick="copyCaptionFn()">📋 Copiar</button>
+        <div id="captionText" style="white-space: pre-line;">Selecciona un tipo de publicación arriba para generar el contenido ✨</div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--dark);">#️⃣ Hashtags recomendados:</div>
+        <div class="hashtag-grid">
+          <span class="hashtag">#AlpacaPeru</span>
+          <span class="hashtag">#AndesTextiles</span>
+          <span class="hashtag">#PeruvianCraft</span>
+          <span class="hashtag">#AlpacaFashion</span>
+          <span class="hashtag">#HandmadeWithLove</span>
+          <span class="hashtag">#SlowFashion</span>
+          <span class="hashtag">#SustainableFashion</span>
+          <span class="hashtag">#PeruMade</span>
+          <span class="hashtag">#AlpacaWool</span>
+          <span class="hashtag">#ArtesaníaPeruana</span>
+          <span class="hashtag">#TextilesAndinos</span>
+          <span class="hashtag">#CameloidFiber</span>
+          <span class="hashtag">#LuxuryKnitwear</span>
+          <span class="hashtag">#InstaFashion</span>
+          <span class="hashtag">#ExpoPeruLosAndes</span>
+          <span class="hashtag">#ArtesaníaInteligente</span>
+          <span class="hashtag">#MadeinPeru</span>
+          <span class="hashtag">#EthicalFashion</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--dark);">📅 Calendario de contenido sugerido:</div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center;">
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">LUN</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">MAR</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">MIÉ</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">JUE</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">VIE</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">SÁB</div>
+          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">DOM</div>
+          <div style="background: #E0F4F0; border-radius: 8px; padding: 8px 4px; font-size: 11px;">🧶 Producto</div>
+          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
+          <div style="background: #FFF4D6; border-radius: 8px; padding: 8px 4px; font-size: 11px;">🪡 Proceso</div>
+          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
+          <div style="background: #F0E8FF; border-radius: 8px; padding: 8px 4px; font-size: 11px;">📖 Historia</div>
+          <div style="background: #FDE8E8; border-radius: 8px; padding: 8px 4px; font-size: 11px;">✈️ Exportar</div>
+          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
+        </div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 8px;">3 publicaciones por semana es suficiente para construir presencia digital efectiva.</div>
+      </div>
+
+      <div class="tip">
+        <strong>🎥 Consejo de oro:</strong> Los videos cortos (15–30 seg) mostrando tus manos tejiendo generan 10× más interacciones que solo mostrar el producto final. TikTok e Instagram Reels son gratuitos y alcanzan audiencias globales sin pagar publicidad.
+      </div>
+
+      <div class="btn-actions">
+        <button class="btn btn-outline" onclick="goStep(3)">← Mercados</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir mi ficha</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="notif" id="notif">✅ ¡Copiado al portapapeles!</div>
+
+<script>
+let artisanData = {};
+let currentStep = 1;
+
+function goStep(n) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.remove('active', 'done');
+    if (i + 1 === n) t.classList.add('active');
+    else if (i + 1 < n) t.classList.add('done');
+  });
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function generateCatalog() {
+  const name = document.getElementById('f_name').value.trim();
+  const region = document.getElementById('f_region').value;
+  const product = document.getElementById('f_product').value;
+  const fiber = document.getElementById('f_fiber').value;
+  const technique = document.getElementById('f_technique').value;
+  const price = document.getElementById('f_price').value;
+  const special = document.getElementById('f_special').value.trim();
+  const years = document.getElementById('f_years').value;
+  const capacity = document.getElementById('f_capacity').value;
+
+  if (!name || !region || !product || !fiber) {
+    alert('Por favor completa los campos obligatorios: Nombre, Región, Producto y Fibra.');
+    return;
+  }
+
+  artisanData = { name, region, product, fiber, technique, price, special, years, capacity };
+
+  // --- Generate Spanish description ---
+  const specialNote = special ? ` ${special}.` : '';
+  const descES = `${name} es ${years === 'menos de 5' ? 'una artesana emergente' : years === 'más de 30' ? 'una maestra artesana con más de 30 años de tradición' : `una artesana con ${years} de experiencia`} de la región de ${region}, Perú. Especializada en la creación de ${product.toLowerCase()} elaborado con ${fiber.toLowerCase()}, cada pieza es una obra de arte tejida ${technique}.${specialNote} Con una producción de ${capacity} por mes, cada creación garantiza exclusividad y la más alta calidad de la fibra de camélido andino. Un símbolo de identidad cultural y elegancia atemporal.`;
+
+  // --- Generate English description ---
+  const fiberEN = {
+    'Alpaca baby': 'baby alpaca fiber — the softest fiber in the world',
+    'Alpaca suri': 'suri alpaca fiber — known for its silky shine',
+    'Vicuña': 'vicuña fiber — the finest and rarest natural fiber on earth',
+    'Llama': 'llama fiber — warm, durable and naturally hypoallergenic',
+    'Alpaca huacaya': 'huacaya alpaca fiber — voluminous and cloud-soft',
+    'Mezcla de camélidos': 'a blend of Andean camelid fibers'
+  }[fiber] || fiber;
+
+  const productEN = {
+    'Pullover de alpaca': 'handcrafted alpaca pullover',
+    'Chullo andino': 'traditional Andean chullo hat',
+    'Tapiz textil': 'hand-woven textile tapestry',
+    'Chalina de vicuña': 'vicuña fiber shawl',
+    'Poncho tradicional': 'traditional Andean poncho',
+    'Tapete ceremonial': 'ceremonial textile rug',
+    'Ajuar para bebé': 'baby alpaca layette',
+    'Bolso andino': 'handcrafted Andean bag',
+    'Otro textil': 'handcrafted Andean textile'
+  }[product] || product;
+
+  const descEN = `${name} is a ${years === 'más de 30' ? 'master artisan with over 30 years of tradition' : `skilled artisan with ${years} of experience`} from the ${region} region of Peru. Each ${productEN} is crafted using ${fiberEN}, ${technique} with meticulous care and ancestral techniques passed down through generations. ${special ? special + ' ' : ''}Every piece is a unique, wearable work of art — a fusion of Andean heritage and contemporary luxury. Production capacity: ${capacity} per month, ensuring exclusivity and uncompromising quality.`;
+
+  // Update catalog card
+  document.getElementById('c_name').textContent = name;
+  document.getElementById('c_region').textContent = `${region} · Perú`;
+  document.getElementById('c_product').textContent = `${product} · ${fiber}`;
+  document.getElementById('c_desc_es').textContent = `"${descES.substring(0, 140)}..."`;
+  document.getElementById('c_desc_en').textContent = `"${descEN.substring(0, 140)}..."`;
+  document.getElementById('c_price').textContent = price + ' USD';
+
+  const tagsContainer = document.getElementById('c_tags');
+  const tags = [region, fiber.split(' ')[0], 'Hecho a mano', 'Perú'];
+  tagsContainer.innerHTML = tags.map(t => `<span class="catalog-tag">${t}</span>`).join('');
+
+  // Update full descriptions
+  document.getElementById('full_es').textContent = descES;
+  document.getElementById('full_en').textContent = descEN;
+
+  goStep(2);
+}
+
+function switchLang(lang) {
+  document.getElementById('desc_es_box').style.display = lang === 'es' ? 'block' : 'none';
+  document.getElementById('desc_en_box').style.display = lang === 'en' ? 'block' : 'none';
+  document.getElementById('lbtn_es').classList.toggle('active', lang === 'es');
+  document.getElementById('lbtn_en').classList.toggle('active', lang === 'en');
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => showNotif());
+}
+
+function copyCaptionFn() {
+  const text = document.getElementById('captionText').textContent;
+  navigator.clipboard.writeText(text).then(() => showNotif());
+}
+
+function showNotif() {
+  const n = document.getElementById('notif');
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2000);
+}
+
+function genCaption(type) {
+  const d = artisanData;
+  const name = d.name || '[Tu nombre]';
+  const region = d.region || 'los Andes';
+  const product = d.product || 'textiles andinos';
+  const fiber = d.fiber || 'alpaca';
+
+  const captions = {
+    producto: `✨ Cada hilo cuenta una historia.
+
+Este ${product ? product.toLowerCase() : 'tejido'} fue elaborado a mano en ${region}, Perú, con ${fiber ? fiber.toLowerCase() : 'fibra de alpaca'} de la más alta calidad.
+
+No es solo una prenda — es cultura, identidad y siglos de tradición andina que puedes llevar puesto.
+
+🦙 Hecho con amor por ${name}
+📍 ${region}, Perú
+✈️ Envíos internacionales disponibles
+
+#AlpacaPeru #HandmadeTextiles #PeruvianCraft #SlowFashion`,
+
+    proceso: `🪡 ¿Sabías que cada una de mis piezas toma días de trabajo artesanal?
+
+Desde la selección de la fibra de ${fiber ? fiber.toLowerCase() : 'alpaca'} hasta el tejido final — cada detalle importa.
+
+Este es el proceso detrás de mis ${product ? product.toLowerCase() + 's' : 'tejidos'}: lavar, cardar, hilar y tejer con técnicas heredadas de generación en generación en ${region}.
+
+Esto es artesanía real. Esto es Perú.
+
+👐 ${name} · ${region}
+#BehindTheScenes #ArtesaníaPeruana #TextilesAndinos`,
+
+    historia: `📖 Mi historia comenzó con las manos de mi abuela.
+
+Soy ${name}, artesana de ${region}. Desde pequeña aprendí a tejer en telar andino, a distinguir la mejor fibra de ${fiber ? fiber.split(' ')[0].toLowerCase() : 'alpaca'} y a plasmar los colores de mis montañas en cada pieza.
+
+Hoy llevo esa tradición al mundo. Cada ${product ? product.toLowerCase() : 'textil'} que creo es un pedazo de mi tierra, de mi familia y de la cultura que me formó.
+
+¿Quieres llevar un pedazo de los Andes contigo?
+
+💬 Escríbeme para pedidos personalizados
+#MiHistoria #ArtesanaPeruana #CulturaAndina`,
+
+    exportacion: `🌍 ¡Mis creaciones ya llegan al mundo!
+
+${name}, de ${region} · Perú, ahora exporta ${product ? product.toLowerCase() + 's' : 'textiles'} de ${fiber ? fiber.toLowerCase() : 'alpaca'} a compradores internacionales.
+
+Si estás en 🇺🇸 🇯🇵 🇩🇪 🇦🇺 y buscas textiles de alpaca auténticos, hechos a mano con los más altos estándares de calidad — estás en el lugar correcto.
+
+📦 Envíos internacionales
+💎 Producto premium de exportación
+🤝 Contáctame para pedidos y precios mayoristas
+
+#ExportPeru #AlpacaExport #PeruvianTextiles #MadeinPeru`
+  };
+
+  document.getElementById('captionText').textContent = captions[type];
+}
+</script>
+</body>
+</html>
