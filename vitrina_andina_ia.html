@@ -3,740 +3,560 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vitrina Andina IA — Expo Perú Los Andes</title>
+<title>Vitrina Andina IA — Darse a conocer al mundo</title>
 <style>
-  :root {
-    --crimson: #7B1E1E;
-    --gold: #C4A035;
-    --gold-light: #E8C96A;
-    --teal: #1A5E5E;
-    --teal-light: #2A8080;
-    --cream: #F8F0DC;
-    --cream-dark: #EDE0C4;
-    --dark: #1A1A2E;
-    --text: #2C2C2C;
-    --muted: #6B6B6B;
-    --white: #FFFFFF;
-    --shadow: 0 4px 24px rgba(0,0,0,0.12);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.18);
+  :root{
+    --night:#14121f; --night2:#1e1b2e; --night3:#272238;
+    --cream:#f4efe4; --cream2:#e9e1d1;
+    --vicuna:#c9a26b; --gold:#e0b352;
+    --terra:#c85a3c; --cochi:#9e2b4e; --jade:#2f8f80;
+    --line:rgba(244,239,228,.12);
+    --txt:#f4efe4; --muted:#b3aab9;
+    --brand:linear-gradient(135deg,var(--terra),var(--cochi));
+    --brand2:linear-gradient(135deg,var(--gold),var(--terra));
+    --radius:18px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Georgia', serif; background: var(--cream); color: var(--text); min-height: 100vh; }
-
-  /* HEADER */
-  header {
-    background: linear-gradient(135deg, var(--dark) 0%, var(--crimson) 50%, #4A0E0E 100%);
-    color: var(--white); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: var(--shadow-lg);
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans); color:var(--txt); line-height:1.5;
+    background:var(--night);
+    background-image:
+      radial-gradient(900px 500px at 12% -10%, rgba(158,43,78,.22), transparent 60%),
+      radial-gradient(800px 500px at 100% 0%, rgba(47,143,128,.18), transparent 55%),
+      radial-gradient(700px 600px at 50% 120%, rgba(224,179,82,.10), transparent 60%);
+    min-height:100vh; -webkit-font-smoothing:antialiased;
   }
-  .header-brand { display: flex; align-items: center; gap: 14px; }
-  .header-logo { font-size: 32px; }
-  .header-title h1 { font-size: 20px; font-weight: bold; letter-spacing: 0.5px; }
-  .header-title p { font-size: 12px; color: var(--gold-light); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-  .header-badge { background: var(--gold); color: var(--dark); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
-
-  /* STEPS */
-  .steps-bar { background: var(--dark); padding: 0 32px; display: flex; gap: 0; }
-  .step-tab {
-    padding: 14px 20px; cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.5);
-    border-bottom: 3px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-    white-space: nowrap;
+  .band{height:8px;width:100%;
+    background:
+      repeating-linear-gradient(135deg, var(--terra) 0 10px, var(--cochi) 10px 20px, var(--gold) 20px 30px, var(--jade) 30px 40px);
+    opacity:.9}
+  header{
+    padding:22px 20px 14px; max-width:1080px; margin:0 auto;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
   }
-  .step-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .step-tab.done { color: rgba(255,255,255,0.7); }
-  .step-tab .step-num {
-    width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15);
-    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;
-  }
-  .step-tab.active .step-num { background: var(--gold); color: var(--dark); }
-  .step-tab.done .step-num { background: var(--teal); color: white; }
-
-  /* MAIN */
-  .main { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
-  .section { display: none; }
-  .section.active { display: block; }
-
-  /* CARDS */
-  .card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; }
-  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--cream-dark); }
-  .card-icon { font-size: 28px; }
-  .card-title { font-size: 18px; font-weight: bold; color: var(--crimson); }
-  .card-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
-
-  /* FORM */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group.full { grid-column: 1 / -1; }
-  label { font-size: 13px; font-weight: bold; color: var(--dark); }
-  label .req { color: var(--crimson); }
-  input, select, textarea {
-    border: 2px solid var(--cream-dark); border-radius: 8px; padding: 10px 14px;
-    font-size: 14px; font-family: inherit; color: var(--text); background: var(--cream);
-    transition: border-color 0.2s;
-  }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); background: white; }
-  textarea { resize: vertical; min-height: 80px; }
-  select option { background: white; }
-
-  /* BUTTONS */
-  .btn { padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; letter-spacing: 0.3px; }
-  .btn-primary { background: linear-gradient(135deg, var(--crimson), #9B2E2E); color: white; box-shadow: 0 4px 15px rgba(123,30,30,0.3); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(123,30,30,0.4); }
-  .btn-gold { background: linear-gradient(135deg, var(--gold), #A8882A); color: var(--dark); box-shadow: 0 4px 15px rgba(196,160,53,0.3); }
-  .btn-gold:hover { transform: translateY(-2px); }
-  .btn-teal { background: linear-gradient(135deg, var(--teal), var(--teal-light)); color: white; }
-  .btn-teal:hover { transform: translateY(-2px); }
-  .btn-outline { background: transparent; border: 2px solid var(--cream-dark); color: var(--muted); }
-  .btn-outline:hover { border-color: var(--crimson); color: var(--crimson); }
-  .btn-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
-
-  /* TAG */
-  .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-  .tag-gold { background: #FFF4D6; color: #8A6C10; border: 1px solid var(--gold-light); }
-  .tag-teal { background: #E0F0F0; color: var(--teal); border: 1px solid #A0D0D0; }
-  .tag-red { background: #FDE8E8; color: var(--crimson); border: 1px solid #F0B0B0; }
-
-  /* CATALOG CARD */
-  .catalog-card {
-    background: linear-gradient(145deg, var(--dark) 0%, #2A1A3E 100%);
-    border-radius: 20px; padding: 32px; color: white; position: relative; overflow: hidden;
-    box-shadow: var(--shadow-lg);
-  }
-  .catalog-card::before {
-    content: ''; position: absolute; top: -50px; right: -50px;
-    width: 200px; height: 200px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(196,160,53,0.15) 0%, transparent 70%);
-  }
-  .catalog-card::after {
-    content: ''; position: absolute; bottom: -30px; left: -30px;
-    width: 150px; height: 150px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(26,94,94,0.2) 0%, transparent 70%);
-  }
-  .catalog-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-  .catalog-badge { background: var(--gold); color: var(--dark); padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
-  .catalog-region { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; }
-  .catalog-name { font-size: 26px; font-weight: bold; margin-bottom: 6px; color: var(--gold-light); }
-  .catalog-product { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 16px; }
-  .catalog-desc-es { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 14px; font-style: italic; }
-  .catalog-divider { height: 1px; background: rgba(196,160,53,0.3); margin: 16px 0; }
-  .catalog-desc-en { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.6); font-style: italic; }
-  .catalog-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; }
-  .catalog-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-  .catalog-tag { background: rgba(196,160,53,0.2); color: var(--gold-light); padding: 4px 10px; border-radius: 12px; font-size: 11px; }
-  .catalog-price { text-align: right; }
-  .catalog-price .price-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
-  .catalog-price .price-val { font-size: 22px; font-weight: bold; color: var(--gold); }
-
-  /* LANG TABS */
-  .lang-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-  .lang-tab { padding: 6px 16px; border-radius: 8px; border: 2px solid var(--cream-dark); background: var(--cream); font-size: 13px; cursor: pointer; font-family: inherit; font-weight: bold; color: var(--muted); transition: all 0.2s; }
-  .lang-tab.active { border-color: var(--gold); background: #FFF4D6; color: #8A6C10; }
-
-  /* TEXT CONTENT BOX */
-  .content-box { background: var(--cream); border: 2px solid var(--cream-dark); border-radius: 12px; padding: 16px 20px; font-size: 14px; line-height: 1.8; color: var(--text); position: relative; }
-  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--white); border: 1px solid var(--cream-dark); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; color: var(--muted); font-family: inherit; }
-  .copy-btn:hover { background: var(--gold-light); color: var(--dark); }
-
-  /* MARKET CARDS */
-  .market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .market-card { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--gold); }
-  .market-flag { font-size: 28px; margin-bottom: 8px; }
-  .market-name { font-size: 14px; font-weight: bold; color: var(--dark); margin-bottom: 4px; }
-  .market-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .market-price { margin-top: 10px; font-size: 13px; }
-  .market-price span { color: var(--teal); font-weight: bold; }
-
-  /* HASHTAG GRID */
-  .hashtag-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-  .hashtag { background: #F0E8FF; color: #5B3FB5; border: 1px solid #C0A8F0; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
-  .hashtag:hover { background: #5B3FB5; color: white; }
-
-  /* PLATFORM CARDS */
-  .platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .platform-card { background: var(--cream); border-radius: 12px; padding: 16px; border: 2px solid var(--cream-dark); }
-  .platform-name { font-size: 14px; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-  .platform-tip { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .platform-score { float: right; background: var(--teal); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
-
-  /* SOCIAL CAPTION */
-  .caption-box { background: var(--dark); color: white; border-radius: 12px; padding: 20px; font-size: 14px; line-height: 1.8; position: relative; }
-  .caption-copy { position: absolute; top: 12px; right: 12px; background: var(--gold); border: none; color: var(--dark); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-family: inherit; font-weight: bold; }
-
-  /* TIPS */
-  .tip { background: linear-gradient(135deg, #E0F0F0, #F0F8F8); border-left: 4px solid var(--teal); border-radius: 8px; padding: 14px 16px; margin-top: 16px; font-size: 13px; color: var(--teal); line-height: 1.6; }
-  .tip strong { color: var(--dark); }
-
-  /* CHECKLIST */
-  .checklist { display: flex; flex-direction: column; gap: 10px; }
-  .check-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 14px; cursor: pointer; transition: background 0.15s; }
-  .check-item:hover { background: var(--cream-dark); }
-  .check-item input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
-  .check-item.checked { background: #E0F4F0; }
-
-  /* PROGRESS BAR */
-  .progress-wrap { margin-bottom: 20px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-  .progress-bar { height: 10px; background: var(--cream-dark); border-radius: 10px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--gold)); border-radius: 10px; transition: width 0.5s ease; }
-
-  /* NOTIFICATION */
-  .notif { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 14px 20px; border-radius: 12px; font-size: 14px; box-shadow: var(--shadow-lg); z-index: 999; display: none; }
-  .notif.show { display: block; animation: slideIn 0.3s ease; }
-  @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-  /* PRINT styles */
-  @media print {
-    header, .steps-bar, .btn-actions, .notif { display: none !important; }
-    .catalog-card { break-inside: avoid; }
+  .logo{display:flex;align-items:center;gap:13px}
+  .chakana{width:46px;height:46px;flex:none}
+  .brandname{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;
+    background:var(--brand2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{font-size:.78rem;color:var(--muted);font-weight:500;margin-top:2px}
+  .head-actions{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ai-pill{
+    display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;
+    padding:8px 13px;border-radius:999px;border:1px solid var(--line);
+    background:rgba(255,255,255,.04);cursor:pointer;color:var(--txt);transition:.2s}
+  .ai-pill:hover{background:rgba(255,255,255,.08)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+  .dot.on{background:#43d17a;box-shadow:0 0 10px #43d17a}
+  .dot.off{background:var(--vicuna)}
+  main{max-width:1080px;margin:0 auto;padding:8px 20px 70px}
+  .hero{padding:14px 4px 24px}
+  .hero h1{font-size:clamp(1.7rem,4.5vw,2.7rem);font-weight:800;letter-spacing:-.03em;line-height:1.08}
+  .hero h1 em{font-style:normal;background:var(--brand2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:640px;margin-top:12px;font-size:1.02rem}
+  .steps{display:flex;gap:8px;margin:22px 0 26px;flex-wrap:wrap}
+  .step-chip{display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:12px;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;
+    font-size:.86rem;font-weight:600;color:var(--muted);transition:.2s;flex:1 1 160px}
+  .step-chip:hover{border-color:rgba(224,179,82,.4)}
+  .step-chip .n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+    background:var(--night3);font-size:.8rem;font-weight:800;flex:none}
+  .step-chip.active{color:var(--txt);background:var(--brand);border-color:transparent;
+    box-shadow:0 8px 26px -10px var(--cochi)}
+  .step-chip.active .n{background:rgba(0,0,0,.25)}
+  .step-chip.done .n{background:var(--jade);color:#fff}
+  .panel{display:none;animation:rise .35s ease}
+  .panel.show{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .card{background:rgba(244,239,228,.04);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px;backdrop-filter:blur(6px)}
+  .card + .card{margin-top:18px}
+  h2.sec{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:.92rem;margin-bottom:18px}
+  label{display:block;font-size:.82rem;font-weight:600;color:var(--cream2);margin:0 0 6px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr}}
+  input,select,textarea{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--line);
+    background:rgba(20,18,31,.6);color:var(--txt);font-family:inherit;font-size:.95rem;transition:.15s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);background:rgba(20,18,31,.9)}
+  textarea{resize:vertical;min-height:84px}
+  .field{margin-bottom:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    padding:13px 22px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;
+    font-size:.95rem;font-weight:700;color:#fff;background:var(--brand);transition:.2s;
+    box-shadow:0 10px 30px -12px var(--cochi)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 38px -14px var(--cochi)}
+  .btn:disabled{opacity:.55;cursor:wait;transform:none}
+  .btn.ghost{background:rgba(255,255,255,.05);color:var(--txt);box-shadow:none;border:1px solid var(--line)}
+  .btn.ghost:hover{background:rgba(255,255,255,.1)}
+  .btn.sm{padding:9px 15px;font-size:.84rem;border-radius:10px}
+  .nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .result{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative}
+  .result h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:9px;font-weight:700}
+  .result p,.result .body{font-size:.97rem;line-height:1.62;color:var(--cream)}
+  .lang-tabs{display:inline-flex;gap:6px;background:rgba(20,18,31,.6);padding:5px;border-radius:11px;border:1px solid var(--line);margin-bottom:14px}
+  .lang-tabs button{padding:8px 16px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:700;cursor:pointer;font-family:inherit;font-size:.85rem}
+  .lang-tabs button.active{background:var(--brand);color:#fff}
+  .copy-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);
+    color:var(--muted);border-radius:9px;padding:6px 11px;font-size:.76rem;cursor:pointer;font-weight:600}
+  .copy-btn:hover{color:var(--txt);background:rgba(255,255,255,.12)}
+  .src-tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;vertical-align:middle}
+  .src-ai{background:rgba(67,209,122,.15);color:#7ee6a6;border:1px solid rgba(67,209,122,.3)}
+  .src-tpl{background:rgba(201,162,107,.15);color:var(--gold);border:1px solid rgba(201,162,107,.3)}
+  .checklist{list-style:none;display:grid;gap:9px}
+  .checklist li{display:flex;gap:11px;align-items:flex-start;font-size:.92rem;color:var(--cream)}
+  .checklist .ic{flex:none;width:22px;height:22px;border-radius:7px;background:rgba(47,143,128,.2);
+    color:var(--jade);display:grid;place-items:center;font-weight:800;font-size:.78rem}
+  .mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:6px}
+  .mkt{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:16px;transition:.2s}
+  .mkt:hover{border-color:rgba(224,179,82,.45);transform:translateY(-3px)}
+  .mkt .flag{font-size:1.7rem}
+  .mkt h4{font-size:1.05rem;font-weight:800;margin:8px 0 2px}
+  .mkt .price{font-size:1.25rem;font-weight:800;background:var(--brand2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .mkt .meta{font-size:.8rem;color:var(--muted);margin:8px 0}
+  .mkt .plat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .tag{font-size:.72rem;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--cream2)}
+  .note{font-size:.83rem;color:var(--muted);background:rgba(47,143,128,.08);border-left:3px solid var(--jade);
+    padding:11px 14px;border-radius:0 10px 10px 0;margin-top:16px;line-height:1.55}
+  .cap-types{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .cap-types button{padding:10px 15px;border-radius:10px;border:1px solid var(--line);
+    background:rgba(255,255,255,.03);color:var(--muted);font-weight:600;cursor:pointer;font-family:inherit;font-size:.85rem}
+  .cap-types button.active{background:var(--brand);color:#fff;border-color:transparent}
+  .hashtags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .hashtags span{font-size:.8rem;color:var(--gold);font-weight:600}
+  .passport{background:linear-gradient(160deg,#1b1828,#272036);border:1px solid rgba(224,179,82,.3);
+    border-radius:18px;padding:26px;display:grid;grid-template-columns:1fr auto;gap:24px;position:relative;overflow:hidden}
+  .passport::before{content:"";position:absolute;inset:0;background:
+    repeating-linear-gradient(135deg,transparent 0 16px,rgba(224,179,82,.04) 16px 17px);pointer-events:none}
+  @media(max-width:620px){.passport{grid-template-columns:1fr;text-align:center}}
+  .passport .pp-label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .passport h3{font-size:1.5rem;font-weight:800;margin:6px 0 2px;letter-spacing:-.02em}
+  .passport .pp-region{color:var(--vicuna);font-weight:700;font-size:.95rem}
+  .pp-rows{display:grid;gap:7px;margin:16px 0 14px}
+  .pp-rows div{display:flex;gap:10px;font-size:.88rem}
+  .pp-rows .k{color:var(--muted);min-width:96px;font-weight:600}
+  .pp-rows .v{color:var(--cream);font-weight:600}
+  .pp-story{font-size:.9rem;color:var(--cream2);font-style:italic;line-height:1.6;border-top:1px solid var(--line);padding-top:13px;margin-top:4px}
+  .pp-qr{background:#fff;border-radius:14px;padding:12px;display:grid;place-items:center;align-self:start;justify-self:center}
+  .pp-qr canvas{display:block;border-radius:6px;image-rendering:pixelated;width:170px;height:170px}
+  .pp-qr .code{font-size:.74rem;font-weight:800;color:#14121f;margin-top:8px;letter-spacing:.05em}
+  .spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+  .empty{color:var(--muted);text-align:center;padding:30px;font-size:.92rem}
+  .modal{position:fixed;inset:0;background:rgba(10,8,16,.78);backdrop-filter:blur(4px);display:none;
+    place-items:center;z-index:50;padding:20px}
+  .modal.open{display:grid}
+  .modal-card{background:var(--night2);border:1px solid var(--line);border-radius:18px;padding:26px;max-width:480px;width:100%}
+  .modal-card h3{font-size:1.2rem;font-weight:800;margin-bottom:8px}
+  .modal-card p{font-size:.88rem;color:var(--muted);line-height:1.55;margin-bottom:16px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+    background:var(--jade);color:#fff;padding:13px 22px;border-radius:12px;font-weight:700;font-size:.9rem;
+    box-shadow:0 14px 40px -10px rgba(0,0,0,.6);transition:.35s;z-index:60;opacity:0}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .demo-hint{font-size:.8rem;color:var(--muted);margin-top:14px;background:rgba(255,255,255,.03);
+    border:1px dashed var(--line);border-radius:11px;padding:12px 14px;line-height:1.5}
+  .demo-hint b{color:var(--gold)}
+  @media print{
+    body{background:#fff!important;color:#000}
+    header,.steps,.hero,.nav-row,.head-actions,.band,.no-print{display:none!important}
+    .panel{display:block!important}
+    .passport{border:1px solid #999;background:#fff!important;color:#000}
+    .passport h3,.pp-rows .v,.pp-story,.passport .pp-region{color:#000}
+    .passport::before{display:none}
   }
 </style>
 </head>
 <body>
-
+<div class="band"></div>
 <header>
-  <div class="header-brand">
-    <div class="header-logo">🏔️</div>
-    <div class="header-title">
-      <h1>Vitrina Andina IA</h1>
-      <p>Expo Perú Los Andes · Mancomunidad de los Andes</p>
+  <div class="logo">
+    <svg class="chakana" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#e0b352"/><stop offset=".5" stop-color="#c85a3c"/><stop offset="1" stop-color="#9e2b4e"/>
+      </linearGradient></defs>
+      <path fill="url(#g1)" d="M40 0h20v20h20v20h20v20H80v20H60v20H40V80H20V60H0V40h20V20h20z"/>
+      <rect x="40" y="40" width="20" height="20" fill="#14121f"/>
+    </svg>
+    <div>
+      <div class="brandname">Vitrina Andina IA</div>
+      <div class="tagline">Darse a conocer · Artesanía Inteligente</div>
     </div>
   </div>
-  <div class="header-badge">✨ ARTESANÍA INTELIGENTE</div>
+  <div class="head-actions">
+    <button class="ai-pill" id="aiStatus" onclick="openSettings()">
+      <span class="dot off" id="aiDot"></span><span id="aiStatusTxt">IA: configurar</span>
+    </button>
+  </div>
 </header>
 
-<div class="steps-bar">
-  <div class="step-tab active" onclick="goStep(1)" id="tab1">
-    <span class="step-num">1</span> Perfil del Artesano
-  </div>
-  <div class="step-tab" onclick="goStep(2)" id="tab2">
-    <span class="step-num">2</span> Catálogo Digital
-  </div>
-  <div class="step-tab" onclick="goStep(3)" id="tab3">
-    <span class="step-num">3</span> Inteligencia Comercial
-  </div>
-  <div class="step-tab" onclick="goStep(4)" id="tab4">
-    <span class="step-num">4</span> Contenido para Redes
+<main>
+  <section class="hero">
+    <h1>Que el mundo conozca <em>tu arte andino</em></h1>
+    <p>Convierte tu perfil de artesano en un catálogo bilingüe, inteligencia de mercados, contenido para redes y un Pasaporte Digital con QR — en minutos, con o sin internet.</p>
+  </section>
+
+  <nav class="steps" id="steps"></nav>
+
+  <!-- STEP 1 -->
+  <section class="panel show" data-step="1">
+    <div class="card">
+      <h2 class="sec">1 · Perfil del artesano</h2>
+      <p class="sub">Cuéntanos quién eres y qué creas. Con esto generamos todo lo demás.</p>
+      <div class="grid2">
+        <div class="field"><label>Nombre o marca</label><input id="f_name" placeholder="Ej. María Quispe / Hilos del Ande"></div>
+        <div class="field"><label>Región</label>
+          <select id="f_region"><option>Huancavelica</option><option>Cusco</option><option>Apurímac</option><option>Junín</option><option>Puno</option><option>Ayacucho</option><option>Arequipa</option></select></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Producto principal</label>
+          <select id="f_product"><option>Chal</option><option>Poncho</option><option>Chompa / suéter</option><option>Chullo</option><option>Bufanda</option><option>Manta</option><option>Guantes</option><option>Tapiz</option></select></div>
+        <div class="field"><label>Fibra</label>
+          <select id="f_fiber"><option>Alpaca</option><option>Alpaca baby</option><option>Vicuña</option><option>Llama</option><option>Lana de oveja</option><option>Mezcla de alpaca</option></select></div>
+        <div class="field"><label>Técnica</label>
+          <select id="f_technique"><option value="tejido a mano con telar tradicional">Telar tradicional</option><option value="tejido a palitos a mano">A palitos (a mano)</option><option value="tejido a crochet">Crochet</option><option value="bordado a mano">Bordado a mano</option></select></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Años de experiencia</label>
+          <select id="f_years"><option>menos de 5 años</option><option>5 a 15 años</option><option>15 a 30 años</option><option>más de 30 años</option></select></div>
+        <div class="field"><label>Producción / mes</label>
+          <select id="f_capacity"><option>1 a 5 piezas</option><option>5 a 20 piezas</option><option>20 a 50 piezas</option><option>más de 50 piezas</option></select></div>
+        <div class="field"><label>Precio referencial (S/)</label><input id="f_price" type="number" placeholder="Ej. 180"></div>
+      </div>
+      <div class="field"><label>¿Qué hace especial tu trabajo? (opcional)</label>
+        <textarea id="f_special" placeholder="Ej. Uso tintes naturales de cochinilla; aprendí de mi abuela; cada pieza lleva un símbolo de mi comunidad."></textarea></div>
+      <div class="field"><label>Contacto (WhatsApp / Instagram, opcional)</label><input id="f_contact" placeholder="Ej. wa.me/51987654321"></div>
+      <div class="nav-row"><span></span><button class="btn" onclick="saveProfile()">Guardar y continuar →</button></div>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="panel" data-step="2">
+    <div class="card">
+      <h2 class="sec">2 · Catálogo digital bilingüe</h2>
+      <p class="sub">Descripción profesional en español e inglés, lista para Etsy, Faire o tu Instagram. La IA real se usa si hay internet; si no, generamos una versión offline.</p>
+      <button class="btn" id="genCatBtn" onclick="generateCatalog()">✦ Generar descripción</button>
+      <div id="catOut" style="margin-top:20px"></div>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="panel" data-step="3">
+    <div class="card">
+      <h2 class="sec">3 · Inteligencia comercial</h2>
+      <p class="sub">Mercados premium que pagan por prendas terminadas de fibra de camélidos — y dónde venderles.</p>
+      <div class="mkt-grid" id="mktGrid"></div>
+      <div class="note"><b>Clave del informe:</b> China e Italia compran la mayor parte de la fibra peruana, pero como <b>materia prima barata</b>. El valor está en la prenda terminada premium (Japón, EE.UU., norte de Europa). No compitas en precio con lo industrial: compite con autenticidad e historia.</div>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="panel" data-step="4">
+    <div class="card">
+      <h2 class="sec">4 · Contenido para redes</h2>
+      <p class="sub">Captions listos para Instagram y TikTok. Elige el ángulo y genera.</p>
+      <div class="cap-types" id="capTypes"></div>
+      <div id="capOut"></div>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="panel" data-step="5">
+    <div class="card">
+      <h2 class="sec">5 · Pasaporte Digital del producto</h2>
+      <p class="sub">El artefacto que ningún artesano individual tiene: una ficha de trazabilidad con QR escaneable que el comprador lee con su celular — <b>funciona sin internet</b>. Imprímela y adjúntala a tu producto.</p>
+      <button class="btn" id="genPassBtn" onclick="generatePassport()">✦ Generar Pasaporte</button>
+      <div id="passOut" style="margin-top:20px"></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="settings">
+  <div class="modal-card">
+    <h3>Configurar IA real (opcional)</h3>
+    <p>Pega tu clave de la API de Claude para activar generación real de textos. Sin clave o sin internet, la app sigue funcionando con plantillas offline. La clave se guarda solo en este navegador.</p>
+    <div class="field"><label>Clave API de Claude (sk-ant-…)</label><input id="apiKey" type="password" placeholder="sk-ant-..."></div>
+    <div class="nav-row">
+      <button class="btn ghost sm" onclick="clearKey()">Borrar clave</button>
+      <button class="btn sm" onclick="saveKey()">Guardar</button>
+    </div>
+    <div class="demo-hint">💡 <b>Para la demo en el domo:</b> si el internet falla, todo funciona igual con plantillas. La etiqueta <b>IA real</b> aparece cuando hay conexión y clave; <b>offline</b> cuando se usa la plantilla.</div>
   </div>
 </div>
 
-<div class="main">
-
-  <!-- PASO 1: PERFIL -->
-  <div class="section active" id="step1">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">👤</span>
-        <div>
-          <div class="card-title">Perfil del Artesano / Empresa</div>
-          <div class="card-subtitle">Completa los datos para generar tu catálogo digital con IA</div>
-        </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Nombre del artesano o marca <span class="req">*</span></label>
-          <input type="text" id="f_name" placeholder="Ej: María Condori / Textiles Pachamama" />
-        </div>
-        <div class="form-group">
-          <label>Región <span class="req">*</span></label>
-          <select id="f_region">
-            <option value="">Selecciona...</option>
-            <option value="Huancavelica">Huancavelica</option>
-            <option value="Cusco">Cusco</option>
-            <option value="Apurímac">Apurímac</option>
-            <option value="Junín">Junín</option>
-            <option value="Ayacucho">Ayacucho</option>
-            <option value="Puno">Puno</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Producto principal <span class="req">*</span></label>
-          <select id="f_product">
-            <option value="">Selecciona...</option>
-            <option value="Pullover de alpaca">Pullover de alpaca</option>
-            <option value="Chullo andino">Chullo andino</option>
-            <option value="Tapiz textil">Tapiz textil</option>
-            <option value="Chalina de vicuña">Chalina de vicuña</option>
-            <option value="Poncho tradicional">Poncho tradicional</option>
-            <option value="Tapete ceremonial">Tapete ceremonial</option>
-            <option value="Ajuar para bebé">Ajuar para bebé en alpaca</option>
-            <option value="Bolso andino">Bolso andino</option>
-            <option value="Otro textil">Otro textil</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Fibra principal <span class="req">*</span></label>
-          <select id="f_fiber">
-            <option value="">Selecciona...</option>
-            <option value="Alpaca baby">Alpaca baby (la más suave)</option>
-            <option value="Alpaca suri">Alpaca suri (brillo sedoso)</option>
-            <option value="Vicuña">Vicuña (fibra más fina del mundo)</option>
-            <option value="Llama">Llama (resistente y cálida)</option>
-            <option value="Alpaca huacaya">Alpaca huacaya (voluminosa)</option>
-            <option value="Mezcla de camélidos">Mezcla de camélidos</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Técnica de elaboración</label>
-          <select id="f_technique">
-            <option value="tejido a mano con agujas">Tejido a mano con agujas</option>
-            <option value="tejido en telar andino">Tejido en telar andino</option>
-            <option value="tejido a crochet">Tejido a crochet</option>
-            <option value="bordado a mano">Bordado a mano</option>
-            <option value="tejido con palillos">Tejido con palillos tradicionales</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Precio de exportación (USD)</label>
-          <select id="f_price">
-            <option value="50–120">50 – 120 USD</option>
-            <option value="120–300">120 – 300 USD</option>
-            <option value="300–600">300 – 600 USD</option>
-            <option value="600+">600+ USD (artículo de lujo)</option>
-          </select>
-        </div>
-        <div class="form-group full">
-          <label>¿Qué hace especial tu producto? (2–3 características)</label>
-          <textarea id="f_special" placeholder="Ej: Cada pieza toma 3 semanas, usamos tintes naturales de plantas, los diseños son patrones preincaicos heredados de mi abuela..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Años de experiencia</label>
-          <select id="f_years">
-            <option value="menos de 5">Menos de 5 años</option>
-            <option value="5 a 15">5 a 15 años</option>
-            <option value="más de 15">Más de 15 años</option>
-            <option value="más de 30">Más de 30 años (maestro artesano)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Capacidad de producción mensual</label>
-          <select id="f_capacity">
-            <option value="1 a 5 piezas">1 a 5 piezas</option>
-            <option value="5 a 20 piezas">5 a 20 piezas</option>
-            <option value="20 a 50 piezas">20 a 50 piezas</option>
-            <option value="más de 50 piezas">Más de 50 piezas</option>
-          </select>
-        </div>
-      </div>
-      <div class="btn-actions">
-        <button class="btn btn-primary" onclick="generateCatalog()">✨ Generar Catálogo con IA →</button>
-      </div>
-    </div>
-
-    <div class="tip">
-      <strong>💡 ¿Por qué esto importa?</strong> Un catálogo digital bilingüe con IA puede aumentar tu visibilidad en mercados internacionales hasta 5 veces. Los compradores de EE.UU., Japón y Europa buscan autenticidad — tu historia es tu ventaja competitiva.
-    </div>
-  </div>
-
-  <!-- PASO 2: CATÁLOGO -->
-  <div class="section" id="step2">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">🎨</span>
-        <div>
-          <div class="card-title">Tu Catálogo Digital</div>
-          <div class="card-subtitle">Generado con IA · Listo para compartir con compradores internacionales</div>
-        </div>
-      </div>
-
-      <div class="catalog-card" id="catalogCard">
-        <div class="catalog-top">
-          <div>
-            <div class="catalog-badge">🦙 PERÚ · ANDES</div>
-          </div>
-          <div class="catalog-region" id="c_region">— · —</div>
-        </div>
-        <div class="catalog-name" id="c_name">—</div>
-        <div class="catalog-product" id="c_product">—</div>
-        <div class="catalog-desc-es" id="c_desc_es">Tu descripción aparecerá aquí...</div>
-        <div class="catalog-divider"></div>
-        <div class="catalog-desc-en" id="c_desc_en">Your description will appear here...</div>
-        <div class="catalog-footer">
-          <div class="catalog-tags" id="c_tags"></div>
-          <div class="catalog-price">
-            <div class="price-label">Precio de exportación</div>
-            <div class="price-val" id="c_price">—</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top: 24px;">
-        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px;">
-          <span class="card-icon" style="font-size:20px;">📝</span>
-          <div>
-            <div class="card-title" style="font-size:15px;">Descripción completa del producto</div>
-          </div>
-        </div>
-        <div class="lang-tabs">
-          <button class="lang-tab active" onclick="switchLang('es')" id="lbtn_es">🇵🇪 Español</button>
-          <button class="lang-tab" onclick="switchLang('en')" id="lbtn_en">🇺🇸 English</button>
-        </div>
-        <div id="desc_es_box" class="content-box">
-          <button class="copy-btn" onclick="copyText('full_es')">Copiar</button>
-          <div id="full_es">Completa el formulario anterior para generar tu descripción.</div>
-        </div>
-        <div id="desc_en_box" class="content-box" style="display:none;">
-          <button class="copy-btn" onclick="copyText('full_en')">Copy</button>
-          <div id="full_en">Fill out the form above to generate your description.</div>
-        </div>
-      </div>
-
-      <div style="margin-top: 20px;">
-        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--cream-dark);">
-          <span class="card-icon" style="font-size:20px;">✅</span>
-          <div><div class="card-title" style="font-size:15px;">Lista de verificación para exportar</div></div>
-        </div>
-        <div class="checklist" id="exportChecklist">
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Certificado de origen (PROMPERÚ / SUNAT)</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Etiquetado en inglés (fibra, cuidado, origen)</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Fotografías de alta resolución (mínimo 5 fotos)</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Fichas técnicas del producto en español e inglés</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Precio FOB establecido</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Capacidad de producción mínima para pedidos internacionales</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Cuenta bancaria para cobros en dólares</label>
-          <label class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('checked',this.checked)"> Perfil en plataforma de exportación (Etsy/Amazon Handmade/Faire)</label>
-        </div>
-      </div>
-
-      <div class="btn-actions">
-        <button class="btn btn-outline" onclick="goStep(1)">← Editar perfil</button>
-        <button class="btn btn-gold" onclick="goStep(3)">Ver mercados objetivo →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PASO 3: MERCADOS -->
-  <div class="section" id="step3">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">🌍</span>
-        <div>
-          <div class="card-title">Inteligencia Comercial</div>
-          <div class="card-subtitle">Mercados internacionales más rentables para textiles andinos de camélidos</div>
-        </div>
-      </div>
-
-      <div class="market-grid">
-        <div class="market-card">
-          <div class="market-flag">🇺🇸</div>
-          <div class="market-name">Estados Unidos</div>
-          <div class="market-desc">Mayor mercado importador de alpaca. Alta demanda en invierno (Oct–Mar). Consumidor valora lo artesanal y sostenible.</div>
-          <div class="market-price">Precio promedio: <span>$180–400 USD</span></div>
-        </div>
-        <div class="market-card">
-          <div class="market-flag">🇯🇵</div>
-          <div class="market-name">Japón</div>
-          <div class="market-desc">Comprador premium. Valora calidad extrema y empaque. Paga hasta 3× más si el producto es auténtico y bien presentado.</div>
-          <div class="market-price">Precio promedio: <span>$250–600 USD</span></div>
-        </div>
-        <div class="market-card">
-          <div class="market-flag">🇩🇪</div>
-          <div class="market-name">Alemania / Europa</div>
-          <div class="market-desc">Fuerte tendencia eco y comercio justo. Buscan certificaciones. Plataformas: Faire, Wolf & Badger.</div>
-          <div class="market-price">Precio promedio: <span>$150–350 USD</span></div>
-        </div>
-        <div class="market-card">
-          <div class="market-flag">🇦🇺</div>
-          <div class="market-name">Australia</div>
-          <div class="market-desc">Mercado creciente. Clima frío en el sur. Valora lana de alpaca como alternativa a la lana merino local.</div>
-          <div class="market-price">Precio promedio: <span>$120–300 USD</span></div>
-        </div>
-        <div class="market-card">
-          <div class="market-flag">🇨🇦</div>
-          <div class="market-name">Canadá</div>
-          <div class="market-desc">Alta capacidad adquisitiva. Tendencia hacia productos sostenibles y artesanales. Plataformas: Etsy CA, mercados locales.</div>
-          <div class="market-price">Precio promedio: <span>$160–380 USD</span></div>
-        </div>
-        <div class="market-card">
-          <div class="market-flag">🇰🇷</div>
-          <div class="market-name">Corea del Sur</div>
-          <div class="market-desc">Mercado emergente con influencia K-fashion. Alta adopción de productos "slow fashion" y sostenibles de lujo.</div>
-          <div class="market-price">Precio promedio: <span>$200–450 USD</span></div>
-        </div>
-      </div>
-
-      <div style="margin-top: 24px;">
-        <div class="card-header" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--cream-dark);">
-          <span class="card-icon" style="font-size:20px;">🛒</span>
-          <div><div class="card-title" style="font-size:15px;">Plataformas recomendadas para vender</div></div>
-        </div>
-        <div class="platform-grid">
-          <div class="platform-card">
-            <div class="platform-name">🛍️ Etsy <span class="platform-score">MUY ALTO</span></div>
-            <div class="platform-tip">Ideal para artesanos individuales. 90M+ compradores globales. Crea tu tienda en 1 hora. Enfócate en fotos premium y la historia detrás de cada pieza.</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">📦 Amazon Handmade <span class="platform-score">ALTO</span></div>
-            <div class="platform-tip">Llega a compradores de 180+ países. Mayor volumen de pedidos. Requiere registro como artesano verificado por Amazon.</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">🏪 Faire.com <span class="platform-score">ALTO</span></div>
-            <div class="platform-tip">Plataforma B2B para tiendas boutique de EE.UU. y Europa. Pedidos mínimos más altos pero precios mayoristas estables.</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">📸 Instagram Shopping <span class="platform-score">MEDIO</span></div>
-            <div class="platform-tip">Construye comunidad + vende directamente. Usa Reels mostrando el proceso de tejido — el contenido "detrás de cámara" viraliza bien.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip" style="margin-top: 16px;">
-        <strong>🤖 IA aplicada a inteligencia comercial:</strong> Herramientas como Google Trends, Jungle Scout y ChatGPT permiten identificar qué colores, diseños y tallas son tendencia en cada mercado antes de producir. Anticipa la demanda antes de invertir en producción.
-      </div>
-
-      <div class="btn-actions">
-        <button class="btn btn-outline" onclick="goStep(2)">← Catálogo</button>
-        <button class="btn btn-teal" onclick="goStep(4)">Crear contenido para redes →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PASO 4: SOCIAL MEDIA -->
-  <div class="section" id="step4">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">📱</span>
-        <div>
-          <div class="card-title">Contenido para Redes Sociales</div>
-          <div class="card-subtitle">Generado con IA para Instagram, Facebook y TikTok</div>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; color: var(--dark);">🎯 Tipo de publicación:</div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('producto')" id="cbtn_producto">🧶 Presentar producto</button>
-          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('proceso')" id="cbtn_proceso">🪡 Mostrar proceso</button>
-          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('historia')" id="cbtn_historia">📖 Contar mi historia</button>
-          <button class="btn btn-outline" style="font-size:13px; padding: 8px 16px;" onclick="genCaption('exportacion')" id="cbtn_exportacion">✈️ Anunciar exportación</button>
-        </div>
-      </div>
-
-      <div class="caption-box" id="captionBox">
-        <button class="caption-copy" onclick="copyCaptionFn()">📋 Copiar</button>
-        <div id="captionText" style="white-space: pre-line;">Selecciona un tipo de publicación arriba para generar el contenido ✨</div>
-      </div>
-
-      <div style="margin-top: 24px;">
-        <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--dark);">#️⃣ Hashtags recomendados:</div>
-        <div class="hashtag-grid">
-          <span class="hashtag">#AlpacaPeru</span>
-          <span class="hashtag">#AndesTextiles</span>
-          <span class="hashtag">#PeruvianCraft</span>
-          <span class="hashtag">#AlpacaFashion</span>
-          <span class="hashtag">#HandmadeWithLove</span>
-          <span class="hashtag">#SlowFashion</span>
-          <span class="hashtag">#SustainableFashion</span>
-          <span class="hashtag">#PeruMade</span>
-          <span class="hashtag">#AlpacaWool</span>
-          <span class="hashtag">#ArtesaníaPeruana</span>
-          <span class="hashtag">#TextilesAndinos</span>
-          <span class="hashtag">#CameloidFiber</span>
-          <span class="hashtag">#LuxuryKnitwear</span>
-          <span class="hashtag">#InstaFashion</span>
-          <span class="hashtag">#ExpoPeruLosAndes</span>
-          <span class="hashtag">#ArtesaníaInteligente</span>
-          <span class="hashtag">#MadeinPeru</span>
-          <span class="hashtag">#EthicalFashion</span>
-        </div>
-      </div>
-
-      <div style="margin-top: 24px;">
-        <div style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--dark);">📅 Calendario de contenido sugerido:</div>
-        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center;">
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">LUN</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">MAR</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">MIÉ</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">JUE</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">VIE</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">SÁB</div>
-          <div style="font-size: 11px; font-weight: bold; color: var(--muted);">DOM</div>
-          <div style="background: #E0F4F0; border-radius: 8px; padding: 8px 4px; font-size: 11px;">🧶 Producto</div>
-          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
-          <div style="background: #FFF4D6; border-radius: 8px; padding: 8px 4px; font-size: 11px;">🪡 Proceso</div>
-          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
-          <div style="background: #F0E8FF; border-radius: 8px; padding: 8px 4px; font-size: 11px;">📖 Historia</div>
-          <div style="background: #FDE8E8; border-radius: 8px; padding: 8px 4px; font-size: 11px;">✈️ Exportar</div>
-          <div style="background: var(--cream-dark); border-radius: 8px; padding: 8px 4px; font-size: 11px;">—</div>
-        </div>
-        <div style="font-size: 12px; color: var(--muted); margin-top: 8px;">3 publicaciones por semana es suficiente para construir presencia digital efectiva.</div>
-      </div>
-
-      <div class="tip">
-        <strong>🎥 Consejo de oro:</strong> Los videos cortos (15–30 seg) mostrando tus manos tejiendo generan 10× más interacciones que solo mostrar el producto final. TikTok e Instagram Reels son gratuitos y alcanzan audiencias globales sin pagar publicidad.
-      </div>
-
-      <div class="btn-actions">
-        <button class="btn btn-outline" onclick="goStep(3)">← Mercados</button>
-        <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir mi ficha</button>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="notif" id="notif">✅ ¡Copiado al portapapeles!</div>
+<div class="toast" id="toast"></div>
 
 <script>
-let artisanData = {};
-let currentStep = 1;
-
-function goStep(n) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('step' + n).classList.add('active');
-  document.querySelectorAll('.step-tab').forEach((t, i) => {
-    t.classList.remove('active', 'done');
-    if (i + 1 === n) t.classList.add('active');
-    else if (i + 1 < n) t.classList.add('done');
-  });
-  currentStep = n;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function generateCatalog() {
-  const name = document.getElementById('f_name').value.trim();
-  const region = document.getElementById('f_region').value;
-  const product = document.getElementById('f_product').value;
-  const fiber = document.getElementById('f_fiber').value;
-  const technique = document.getElementById('f_technique').value;
-  const price = document.getElementById('f_price').value;
-  const special = document.getElementById('f_special').value.trim();
-  const years = document.getElementById('f_years').value;
-  const capacity = document.getElementById('f_capacity').value;
-
-  if (!name || !region || !product || !fiber) {
-    alert('Por favor completa los campos obligatorios: Nombre, Región, Producto y Fibra.');
-    return;
+/* ===== QR ENCODER (verificado con jsQR, byte-mode, v1–10, nivel L) ===== */
+const QR=(function(){
+  const EXP=new Array(256),LOG=new Array(256);
+  (function(){let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&0x100)x^=0x11d;}})();
+  function gmul(a,b){if(a===0||b===0)return 0;return EXP[(LOG[a]+LOG[b])%255];}
+  const ECL={1:[7,1,19,0,0],2:[10,1,34,0,0],3:[15,1,55,0,0],4:[20,1,80,0,0],5:[26,1,108,0,0],6:[18,2,68,0,0],7:[20,2,78,0,0],8:[24,2,97,0,0],9:[30,2,116,0,0],10:[18,2,68,2,69]};
+  const CAP={1:17,2:32,3:53,4:78,5:106,6:134,7:154,8:192,9:230,10:271};
+  const ALIGN={1:[],2:[6,18],3:[6,22],4:[6,26],5:[6,30],6:[6,34],7:[6,22,38],8:[6,24,42],9:[6,26,46],10:[6,28,50]};
+  function rsDivisor(deg){const res=new Array(deg).fill(0);res[deg-1]=1;let root=1;for(let i=0;i<deg;i++){for(let j=0;j<res.length;j++){res[j]=gmul(res[j],root);if(j+1<res.length)res[j]^=res[j+1];}root=gmul(root,2);}return res;}
+  function rsRemainder(data,divisor){const res=new Array(divisor.length).fill(0);for(const b of data){const factor=b^res[0];res.shift();res.push(0);for(let j=0;j<res.length;j++)res[j]^=gmul(divisor[j],factor);}return res;}
+  function bytesOf(str){return Array.from(new TextEncoder().encode(str));}
+  function encode(text){
+    const data=bytesOf(text);let ver=0;for(let v=1;v<=10;v++)if(data.length<=CAP[v]){ver=v;break;}
+    if(!ver)throw new Error('Texto demasiado largo para el QR');
+    const size=ver*4+17;const[ecLen,g1n,g1d,g2n,g2d]=ECL[ver];const totalData=g1n*g1d+g2n*g2d;
+    const bits=[];const put=(val,len)=>{for(let i=len-1;i>=0;i--)bits.push((val>>i)&1);};
+    put(0b0100,4);put(data.length,ver<10?8:16);for(const b of data)put(b,8);
+    const cap=totalData*8;for(let i=0;i<4&&bits.length<cap;i++)bits.push(0);while(bits.length%8!==0)bits.push(0);
+    const dcw=[];for(let i=0;i<bits.length;i+=8){let b=0;for(let j=0;j<8;j++)b=(b<<1)|bits[i+j];dcw.push(b);}
+    const pad=[0xEC,0x11];let pi=0;while(dcw.length<totalData)dcw.push(pad[pi++%2]);
+    const blocks=[];let pos=0;for(let i=0;i<g1n;i++){blocks.push(dcw.slice(pos,pos+g1d));pos+=g1d;}for(let i=0;i<g2n;i++){blocks.push(dcw.slice(pos,pos+g2d));pos+=g2d;}
+    const divisor=rsDivisor(ecLen);const ecBlocks=blocks.map(b=>rsRemainder(b,divisor));
+    const final=[];const maxData=Math.max(g1d,g2d);for(let i=0;i<maxData;i++)for(const b of blocks)if(i<b.length)final.push(b[i]);for(let i=0;i<ecLen;i++)for(const e of ecBlocks)final.push(e[i]);
+    const m=Array.from({length:size},()=>new Array(size).fill(null));const reserved=Array.from({length:size},()=>new Array(size).fill(false));
+    function placeFinder(r,c){for(let dr=-1;dr<=7;dr++)for(let dc=-1;dc<=7;dc++){const rr=r+dr,cc=c+dc;if(rr<0||rr>=size||cc<0||cc>=size)continue;const inner=(dr>=0&&dr<=6&&dc>=0&&dc<=6);let dark=false;if(inner){if(dr===0||dr===6||dc===0||dc===6)dark=true;else if(dr>=2&&dr<=4&&dc>=2&&dc<=4)dark=true;}m[rr][cc]=dark;reserved[rr][cc]=true;}}
+    placeFinder(0,0);placeFinder(0,size-7);placeFinder(size-7,0);
+    for(let i=8;i<size-8;i++){const v=(i%2===0);if(m[6][i]===null){m[6][i]=v;reserved[6][i]=true;}if(m[i][6]===null){m[i][6]=v;reserved[i][6]=true;}}
+    const ac=ALIGN[ver];const last=ac[ac.length-1];
+    for(const r of ac)for(const c of ac){if((r===6&&c===6)||(r===6&&c===last)||(r===last&&c===6))continue;for(let dr=-2;dr<=2;dr++)for(let dc=-2;dc<=2;dc++){const dark=(Math.abs(dr)===2||Math.abs(dc)===2||(dr===0&&dc===0));m[r+dr][c+dc]=dark;reserved[r+dr][c+dc]=true;}}
+    m[size-8][8]=true;reserved[size-8][8]=true;
+    for(let i=0;i<9;i++){reserved[8][i]=true;reserved[i][8]=true;}for(let i=0;i<8;i++){reserved[8][size-1-i]=true;reserved[size-1-i][8]=true;}
+    if(ver>=7){for(let i=0;i<6;i++)for(let j=0;j<3;j++){reserved[i][size-11+j]=true;reserved[size-11+j][i]=true;}}
+    const dataBits=[];for(const b of final)for(let i=7;i>=0;i--)dataBits.push((b>>i)&1);let bitIdx=0,dir=-1;
+    for(let col=size-1;col>0;col-=2){if(col===6)col--;for(let i=0;i<size;i++){const row=dir===-1?size-1-i:i;for(let c=0;c<2;c++){const cc=col-c;if(reserved[row][cc])continue;m[row][cc]=bitIdx<dataBits.length?(dataBits[bitIdx]===1):false;bitIdx++;}}dir=-dir;}
+    function maskFn(k,r,c){switch(k){case 0:return(r+c)%2===0;case 1:return r%2===0;case 2:return c%3===0;case 3:return(r+c)%3===0;case 4:return(Math.floor(r/2)+Math.floor(c/3))%2===0;case 5:return((r*c)%2)+((r*c)%3)===0;case 6:return(((r*c)%2)+((r*c)%3))%2===0;case 7:return(((r+c)%2)+((r*c)%3))%2===0;}}
+    function applyMask(mat,k){const out=mat.map(r=>r.slice());for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!reserved[r][c]&&out[r][c]!==null&&maskFn(k,r,c))out[r][c]=!out[r][c];return out;}
+    function fmtBits(mask){const d0=(0b01<<3)|mask;let d=d0<<10;for(let i=14;i>=10;i--)if((d>>i)&1)d^=0x537<<(i-10);return(((d0<<10)|d)^0x5412)&0x7fff;}
+    function placeFormat(mat,mask){const b=fmtBits(mask);const g=i=>((b>>i)&1)===1;for(let i=0;i<=5;i++)mat[i][8]=g(i);mat[7][8]=g(6);mat[8][8]=g(7);mat[8][7]=g(8);for(let i=9;i<15;i++)mat[8][14-i]=g(i);for(let i=0;i<8;i++)mat[8][size-1-i]=g(i);for(let i=8;i<15;i++)mat[size-15+i][8]=g(i);mat[size-8][8]=true;}
+    function placeVersion(mat){if(ver<7)return;let d=ver<<12;for(let i=17;i>=12;i--)if((d>>i)&1)d^=0x1f25<<(i-12);const b=(ver<<12)|d;for(let i=0;i<18;i++){const bit=((b>>i)&1)===1;const r=Math.floor(i/3),c=i%3;mat[r][size-11+c]=bit;mat[size-11+c][r]=bit;}}
+    function penalty(mat){let p=0;for(let r=0;r<size;r++){let run=1;for(let c=1;c<size;c++){if(mat[r][c]===mat[r][c-1]){run++;if(run===5)p+=3;else if(run>5)p++;}else run=1;}}for(let c=0;c<size;c++){let run=1;for(let r=1;r<size;r++){if(mat[r][c]===mat[r-1][c]){run++;if(run===5)p+=3;else if(run>5)p++;}else run=1;}}for(let r=0;r<size-1;r++)for(let c=0;c<size-1;c++)if(mat[r][c]===mat[r][c+1]&&mat[r][c]===mat[r+1][c]&&mat[r][c]===mat[r+1][c+1])p+=3;let dark=0;for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(mat[r][c])dark++;p+=Math.floor(Math.abs(dark*100/(size*size)-50)/5)*10;return p;}
+    let best=null,bestP=Infinity,bestK=0;for(let k=0;k<8;k++){const mk=applyMask(m,k);placeFormat(mk,k);placeVersion(mk);const pen=penalty(mk);if(pen<bestP){bestP=pen;best=mk;bestK=k;}}
+    return{matrix:best,size,version:ver,mask:bestK};
   }
-
-  artisanData = { name, region, product, fiber, technique, price, special, years, capacity };
-
-  // --- Generate Spanish description ---
-  const specialNote = special ? ` ${special}.` : '';
-  const descES = `${name} es ${years === 'menos de 5' ? 'una artesana emergente' : years === 'más de 30' ? 'una maestra artesana con más de 30 años de tradición' : `una artesana con ${years} de experiencia`} de la región de ${region}, Perú. Especializada en la creación de ${product.toLowerCase()} elaborado con ${fiber.toLowerCase()}, cada pieza es una obra de arte tejida ${technique}.${specialNote} Con una producción de ${capacity} por mes, cada creación garantiza exclusividad y la más alta calidad de la fibra de camélido andino. Un símbolo de identidad cultural y elegancia atemporal.`;
-
-  // --- Generate English description ---
-  const fiberEN = {
-    'Alpaca baby': 'baby alpaca fiber — the softest fiber in the world',
-    'Alpaca suri': 'suri alpaca fiber — known for its silky shine',
-    'Vicuña': 'vicuña fiber — the finest and rarest natural fiber on earth',
-    'Llama': 'llama fiber — warm, durable and naturally hypoallergenic',
-    'Alpaca huacaya': 'huacaya alpaca fiber — voluminous and cloud-soft',
-    'Mezcla de camélidos': 'a blend of Andean camelid fibers'
-  }[fiber] || fiber;
-
-  const productEN = {
-    'Pullover de alpaca': 'handcrafted alpaca pullover',
-    'Chullo andino': 'traditional Andean chullo hat',
-    'Tapiz textil': 'hand-woven textile tapestry',
-    'Chalina de vicuña': 'vicuña fiber shawl',
-    'Poncho tradicional': 'traditional Andean poncho',
-    'Tapete ceremonial': 'ceremonial textile rug',
-    'Ajuar para bebé': 'baby alpaca layette',
-    'Bolso andino': 'handcrafted Andean bag',
-    'Otro textil': 'handcrafted Andean textile'
-  }[product] || product;
-
-  const descEN = `${name} is a ${years === 'más de 30' ? 'master artisan with over 30 years of tradition' : `skilled artisan with ${years} of experience`} from the ${region} region of Peru. Each ${productEN} is crafted using ${fiberEN}, ${technique} with meticulous care and ancestral techniques passed down through generations. ${special ? special + ' ' : ''}Every piece is a unique, wearable work of art — a fusion of Andean heritage and contemporary luxury. Production capacity: ${capacity} per month, ensuring exclusivity and uncompromising quality.`;
-
-  // Update catalog card
-  document.getElementById('c_name').textContent = name;
-  document.getElementById('c_region').textContent = `${region} · Perú`;
-  document.getElementById('c_product').textContent = `${product} · ${fiber}`;
-  document.getElementById('c_desc_es').textContent = `"${descES.substring(0, 140)}..."`;
-  document.getElementById('c_desc_en').textContent = `"${descEN.substring(0, 140)}..."`;
-  document.getElementById('c_price').textContent = price + ' USD';
-
-  const tagsContainer = document.getElementById('c_tags');
-  const tags = [region, fiber.split(' ')[0], 'Hecho a mano', 'Perú'];
-  tagsContainer.innerHTML = tags.map(t => `<span class="catalog-tag">${t}</span>`).join('');
-
-  // Update full descriptions
-  document.getElementById('full_es').textContent = descES;
-  document.getElementById('full_en').textContent = descEN;
-
-  goStep(2);
+  return{encode};
+})();
+function drawQR(canvas,text){
+  const r=QR.encode(text);const quiet=4;const scale=Math.max(2,Math.floor(168/(r.size+quiet*2)));
+  const dim=(r.size+quiet*2)*scale;canvas.width=dim;canvas.height=dim;
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,dim,dim);ctx.fillStyle='#14121f';
+  for(let i=0;i<r.size;i++)for(let c=0;c<r.size;c++)if(r.matrix[i][c])ctx.fillRect((c+quiet)*scale,(i+quiet)*scale,scale,scale);
 }
 
-function switchLang(lang) {
-  document.getElementById('desc_es_box').style.display = lang === 'es' ? 'block' : 'none';
-  document.getElementById('desc_en_box').style.display = lang === 'en' ? 'block' : 'none';
-  document.getElementById('lbtn_es').classList.toggle('active', lang === 'es');
-  document.getElementById('lbtn_en').classList.toggle('active', lang === 'en');
+/* ===== HYBRID AI ===== */
+const AI={
+  getKey:()=>localStorage.getItem('va_key')||'',
+  online:()=>navigator.onLine,
+  available:()=>!!AI.getKey()&&navigator.onLine,
+  async call(system,user,maxTokens=900){
+    if(!AI.available())return null;
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'content-type':'application/json','x-api-key':AI.getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-opus-4-8',max_tokens:maxTokens,output_config:{effort:'low'},system,messages:[{role:'user',content:user}]})
+      });
+      if(!res.ok)return null;
+      const data=await res.json();
+      const block=(data.content||[]).find(b=>b.type==='text');
+      return block?block.text.trim():null;
+    }catch(e){return null;}
+  }
+};
+
+/* ===== STATE & NAV ===== */
+let D={};let currentStep=1;
+const STEPS=[{n:1,t:'Perfil'},{n:2,t:'Catálogo'},{n:3,t:'Mercados'},{n:4,t:'Redes'},{n:5,t:'Pasaporte'}];
+function renderSteps(){
+  document.getElementById('steps').innerHTML=STEPS.map(s=>
+    `<div class="step-chip ${s.n===currentStep?'active':''} ${s.n<currentStep?'done':''}" onclick="goStep(${s.n})">
+      <span class="n">${s.n<currentStep?'✓':s.n}</span>${s.t}</div>`).join('');
+}
+function goStep(n){
+  currentStep=n;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',+p.dataset.step===n));
+  renderSteps();window.scrollTo({top:0,behavior:'smooth'});
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ===== SETTINGS ===== */
+function refreshAiStatus(){
+  const dot=document.getElementById('aiDot'),txt=document.getElementById('aiStatusTxt');
+  if(AI.available()){dot.className='dot on';txt.textContent='IA real activa';}
+  else if(AI.getKey()&&!AI.online()){dot.className='dot off';txt.textContent='Offline (plantillas)';}
+  else{dot.className='dot off';txt.textContent='IA: configurar';}
+}
+function openSettings(){document.getElementById('apiKey').value=AI.getKey();document.getElementById('settings').classList.add('open');}
+function saveKey(){localStorage.setItem('va_key',document.getElementById('apiKey').value.trim());document.getElementById('settings').classList.remove('open');refreshAiStatus();toast('Configuración guardada');}
+function clearKey(){localStorage.removeItem('va_key');document.getElementById('apiKey').value='';refreshAiStatus();toast('Clave borrada');}
+window.addEventListener('online',refreshAiStatus);window.addEventListener('offline',refreshAiStatus);
+
+/* ===== STEP 1 ===== */
+function saveProfile(){
+  const g=id=>document.getElementById(id);
+  D={name:g('f_name').value.trim()||'Artesano andino',region:g('f_region').value,product:g('f_product').value,
+     fiber:g('f_fiber').value,technique:g('f_technique').value,years:g('f_years').value,capacity:g('f_capacity').value,
+     price:g('f_price').value,special:g('f_special').value.trim(),contact:g('f_contact').value.trim()};
+  toast('Perfil guardado');goStep(2);
+}
+function srcTag(ai){return ai?'<span class="src-tag src-ai">● IA real</span>':'<span class="src-tag src-tpl">● plantilla offline</span>';}
+
+/* ===== STEP 2: CATALOGO ===== */
+function tplDescES(){
+  const exp=D.years.startsWith('más de 30')?'maestra artesana con más de 30 años de tradición':`artesana con ${D.years} de experiencia`;
+  const sp=D.special?` ${D.special}.`:'';
+  return `${D.name} es una ${exp} de la región de ${D.region}, Perú. Especializada en ${D.product.toLowerCase()} elaborado con ${D.fiber.toLowerCase()}, cada pieza es una obra ${D.technique}.${sp} Con una producción de ${D.capacity} al mes, cada creación garantiza exclusividad y la más alta calidad de la fibra de camélido andino — un símbolo de identidad cultural y elegancia atemporal.`;
+}
+function tplDescEN(){
+  const fiberEN={'Alpaca':'alpaca fiber','Alpaca baby':'baby alpaca fiber','Vicuña':'vicuña fiber — the rarest natural fiber in the world','Llama':'llama fiber','Lana de oveja':'sheep wool','Mezcla de alpaca':'an alpaca blend'}[D.fiber]||'alpaca fiber';
+  const prodEN={'Chal':'shawl','Poncho':'poncho','Chompa / suéter':'sweater','Chullo':'chullo hat','Bufanda':'scarf','Manta':'blanket','Guantes':'gloves','Tapiz':'tapestry'}[D.product]||'piece';
+  const exp=D.years.startsWith('más de 30')?'a master artisan with over 30 years of tradition':`a skilled artisan with ${D.years.replace('años','years')} of experience`;
+  const sp=D.special?` ${D.special}`:'';
+  return `${D.name} is ${exp} from the ${D.region} region of Peru. Each ${prodEN} is handcrafted using ${fiberEN}, made with meticulous care and ancestral techniques passed down through generations.${sp} Every piece is a unique, wearable work of art — a fusion of Andean heritage and contemporary luxury. Monthly capacity: ${D.capacity}, ensuring exclusivity and uncompromising quality.`;
+}
+async function generateCatalog(){
+  if(!D.name){toast('Completa el perfil primero');goStep(1);return;}
+  const btn=document.getElementById('genCatBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando…';
+  const sys='Eres un copywriter experto en lujo textil y exportación de artesanía andina. Escribes descripciones de producto cálidas, evocadoras y orientadas a compradores internacionales premium. Devuelves SOLO las dos descripciones separadas por la línea "---EN---": primero el español, luego el inglés. Sin títulos ni comentarios. Máximo 90 palabras cada una.';
+  const usr=`Artesano: ${D.name}\nRegión: ${D.region}, Perú\nProducto: ${D.product}\nFibra: ${D.fiber}\nTécnica: ${D.technique}\nExperiencia: ${D.years}\nProducción mensual: ${D.capacity}\n${D.special?'Detalle especial: '+D.special:''}\n\nEscribe la descripción en español y luego en inglés, separadas por "---EN---".`;
+  let es,en,ai=false;
+  const out=await AI.call(sys,usr,700);
+  if(out&&out.includes('---EN---')){const parts=out.split('---EN---');es=parts[0].trim();en=parts[1].trim();ai=true;}
+  else{es=tplDescES();en=tplDescEN();}
+  D.descES=es;D.descEN=en;
+  document.getElementById('catOut').innerHTML=`
+    <div class="lang-tabs"><button class="active" onclick="switchLang('es',this)">Español</button><button onclick="switchLang('en',this)">English</button></div>
+    ${srcTag(ai)}
+    <div class="result" style="margin-top:12px">
+      <button class="copy-btn" onclick="copyText('descBody')">Copiar</button>
+      <h3 id="descTitle">Descripción · Español</h3>
+      <div class="body" id="descBody">${es.replace(/\n/g,'<br>')}</div>
+    </div>
+    <div class="result" style="margin-top:16px">
+      <h3>Checklist de exportación</h3>
+      <ul class="checklist">
+        <li><span class="ic">1</span> Foto en luz natural, fondo neutro, mostrando la textura de la fibra</li>
+        <li><span class="ic">2</span> Ficha técnica: composición, medidas, peso y cuidado</li>
+        <li><span class="ic">3</span> Descripción bilingüe (✓ ya la tienes)</li>
+        <li><span class="ic">4</span> Pasaporte Digital con QR (paso 5)</li>
+        <li><span class="ic">5</span> Precio en USD y política de envío</li>
+      </ul>
+    </div>`;
+  btn.disabled=false;btn.innerHTML='✦ Regenerar descripción';
+}
+function switchLang(lang,el){
+  document.querySelectorAll('.lang-tabs button').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  document.getElementById('descTitle').textContent='Descripción · '+(lang==='es'?'Español':'English');
+  document.getElementById('descBody').innerHTML=(lang==='es'?D.descES:D.descEN).replace(/\n/g,'<br>');
+}
+function copyText(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Copiado al portapapeles'));}
+
+/* ===== STEP 3: MERCADOS ===== */
+const MARKETS=[
+  {flag:'🇯🇵',c:'Japón',price:'US$ 280–600',meta:'Valora lo hecho a mano y la trazabilidad. Paga por exclusividad.',plat:['Boutiques de lujo','Rakuten','Instagram']},
+  {flag:'🇺🇸',c:'Estados Unidos',price:'US$ 180–450',meta:'Mayor mercado de e-commerce artesanal del mundo.',plat:['Etsy','Faire','Amazon Handmade']},
+  {flag:'🇩🇪',c:'Alemania',price:'US$ 200–480',meta:'Exige sostenibilidad y certificaciones. Cliente fiel.',plat:['Etsy','Avocadostore','Ferias']},
+  {flag:'🇳🇴',c:'Noruega / Suecia',price:'US$ 220–520',meta:'Clima frío + alto poder adquisitivo = demanda premium de alpaca.',plat:['Boutiques','Instagram','Faire']},
+  {flag:'🇦🇺',c:'Australia',price:'US$ 170–400',meta:'Creciente interés en fibras naturales de lujo.',plat:['Etsy','Markets','Instagram']},
+  {flag:'🇨🇦',c:'Canadá',price:'US$ 175–420',meta:'Aprecia el comercio justo y el origen indígena.',plat:['Etsy','Faire','Shopify']},
+];
+function renderMarkets(){
+  document.getElementById('mktGrid').innerHTML=MARKETS.map(m=>`
+    <div class="mkt"><div class="flag">${m.flag}</div><h4>${m.c}</h4>
+      <div class="price">${m.price}</div><div class="meta">${m.meta}</div>
+      <div class="plat">${m.plat.map(p=>`<span class="tag">${p}</span>`).join('')}</div></div>`).join('');
 }
 
-function copyText(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(() => showNotif());
+/* ===== STEP 4: REDES ===== */
+const CAP_TYPES=[{k:'producto',t:'🧶 Producto'},{k:'proceso',t:'⚙️ Proceso'},{k:'historia',t:'📖 Historia'},{k:'exportacion',t:'🌎 Exportación'}];
+function renderCapTypes(){
+  document.getElementById('capTypes').innerHTML=CAP_TYPES.map((c,i)=>`<button class="${i===0?'active':''}" onclick="genCaption('${c.k}',this)">${c.t}</button>`).join('');
 }
-
-function copyCaptionFn() {
-  const text = document.getElementById('captionText').textContent;
-  navigator.clipboard.writeText(text).then(() => showNotif());
-}
-
-function showNotif() {
-  const n = document.getElementById('notif');
-  n.classList.add('show');
-  setTimeout(() => n.classList.remove('show'), 2000);
-}
-
-function genCaption(type) {
-  const d = artisanData;
-  const name = d.name || '[Tu nombre]';
-  const region = d.region || 'los Andes';
-  const product = d.product || 'textiles andinos';
-  const fiber = d.fiber || 'alpaca';
-
-  const captions = {
-    producto: `✨ Cada hilo cuenta una historia.
-
-Este ${product ? product.toLowerCase() : 'tejido'} fue elaborado a mano en ${region}, Perú, con ${fiber ? fiber.toLowerCase() : 'fibra de alpaca'} de la más alta calidad.
-
-No es solo una prenda — es cultura, identidad y siglos de tradición andina que puedes llevar puesto.
-
-🦙 Hecho con amor por ${name}
-📍 ${region}, Perú
-✈️ Envíos internacionales disponibles
-
-#AlpacaPeru #HandmadeTextiles #PeruvianCraft #SlowFashion`,
-
-    proceso: `🪡 ¿Sabías que cada una de mis piezas toma días de trabajo artesanal?
-
-Desde la selección de la fibra de ${fiber ? fiber.toLowerCase() : 'alpaca'} hasta el tejido final — cada detalle importa.
-
-Este es el proceso detrás de mis ${product ? product.toLowerCase() + 's' : 'tejidos'}: lavar, cardar, hilar y tejer con técnicas heredadas de generación en generación en ${region}.
-
-Esto es artesanía real. Esto es Perú.
-
-👐 ${name} · ${region}
-#BehindTheScenes #ArtesaníaPeruana #TextilesAndinos`,
-
-    historia: `📖 Mi historia comenzó con las manos de mi abuela.
-
-Soy ${name}, artesana de ${region}. Desde pequeña aprendí a tejer en telar andino, a distinguir la mejor fibra de ${fiber ? fiber.split(' ')[0].toLowerCase() : 'alpaca'} y a plasmar los colores de mis montañas en cada pieza.
-
-Hoy llevo esa tradición al mundo. Cada ${product ? product.toLowerCase() : 'textil'} que creo es un pedazo de mi tierra, de mi familia y de la cultura que me formó.
-
-¿Quieres llevar un pedazo de los Andes contigo?
-
-💬 Escríbeme para pedidos personalizados
-#MiHistoria #ArtesanaPeruana #CulturaAndina`,
-
-    exportacion: `🌍 ¡Mis creaciones ya llegan al mundo!
-
-${name}, de ${region} · Perú, ahora exporta ${product ? product.toLowerCase() + 's' : 'textiles'} de ${fiber ? fiber.toLowerCase() : 'alpaca'} a compradores internacionales.
-
-Si estás en 🇺🇸 🇯🇵 🇩🇪 🇦🇺 y buscas textiles de alpaca auténticos, hechos a mano con los más altos estándares de calidad — estás en el lugar correcto.
-
-📦 Envíos internacionales
-💎 Producto premium de exportación
-🤝 Contáctame para pedidos y precios mayoristas
-
-#ExportPeru #AlpacaExport #PeruvianTextiles #MadeinPeru`
+function tplCaption(type){
+  const n=D.name||'[Tu nombre]',r=D.region||'los Andes',p=(D.product||'textiles andinos').toLowerCase(),f=(D.fiber||'alpaca').toLowerCase();
+  const m={
+    producto:`✨ ${D.product||'Pieza'} en ${f}, tejido a mano en ${r}, Perú. 🇵🇪\n\nCada fibra cuenta una historia de más de 5,000 años de tradición andina. Calidad premium, exclusividad garantizada.\n\n📩 Escríbeme para pedidos internacionales.`,
+    proceso:`Del ande a tus manos 🤲\n\nAsí nace cada ${p}: fibra de camélido seleccionada, hilada y tejida ${D.technique||'a mano'}. Horas de trabajo en cada detalle.\n\nEsto es lo que lo industrial nunca podrá copiar. ❤️`,
+    historia:`Soy ${n}, de ${r} 🏔️\n\n${D.special||'Aprendí este arte de mi familia, y cada pieza lleva la identidad de mi comunidad.'}\n\nCuando compras artesanía andina, sostienes una cultura viva. Gracias por ser parte. 🙏`,
+    exportacion:`🌎 Envíos a todo el mundo.\n\n${D.product||'Piezas'} de ${f} 100% natural, hechas a mano en ${r}, Perú. Producto de lujo a precio justo, directo del artesano.\n\n📦 Pregunta por envíos a tu país. #HechoEnPeru`
   };
-
-  document.getElementById('captionText').textContent = captions[type];
+  return m[type];
 }
+function hashtagsFor(){
+  const base=['#AlpacaPeruana','#HechoAMano','#ArtesaniaAndina','#MadeInPeru','#SlowFashion','#AndeanTextiles','#FibraDeAlpaca'];
+  const f=(D.fiber||'').toLowerCase();if(f.includes('vicu'))base.push('#Vicuña','#LuxuryFiber');
+  base.push('#'+(D.region||'Peru').replace(/\s/g,''));return base;
+}
+async function genCaption(type,el){
+  document.querySelectorAll('.cap-types button').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');
+  const out=document.getElementById('capOut');out.innerHTML='<div class="empty"><span class="spinner"></span> Generando caption…</div>';
+  const angles={producto:'destacando la calidad y exclusividad del producto',proceso:'mostrando el proceso artesanal y el valor del trabajo a mano',historia:'contando la historia personal del artesano y su comunidad',exportacion:'enfocado en venta y envío internacional'};
+  const sys='Eres un experto en marketing de redes sociales para marcas artesanales premium. Escribes captions en español para Instagram/TikTok: cálidos, auténticos, con emojis bien usados y una llamada a la acción. Devuelves SOLO el caption, sin hashtags al final ni comentarios. Máximo 60 palabras.';
+  const usr=`Artesano: ${D.name||'artesano andino'} de ${D.region||'los Andes'}, Perú.\nProducto: ${D.product} en ${D.fiber}, ${D.technique}.\n${D.special?'Detalle: '+D.special:''}\nEscribe un caption ${angles[type]}.`;
+  let cap=await AI.call(sys,usr,400),ai=true;
+  if(!cap){cap=tplCaption(type);ai=false;}
+  out.innerHTML=`${srcTag(ai)}
+    <div class="result" style="margin-top:12px">
+      <button class="copy-btn" onclick="copyText('capBody')">Copiar</button>
+      <h3>Caption</h3><div class="body" id="capBody" style="white-space:pre-wrap">${cap}</div>
+      <div class="hashtags">${hashtagsFor().map(h=>`<span>${h}</span>`).join('')}</div>
+    </div>`;
+}
+
+/* ===== STEP 5: PASAPORTE ===== */
+function genCode(){
+  const seed=(D.name+D.region+Date.now()).split('').reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+  const pre={'Vicuña':'VIC','Alpaca baby':'ABY'}[D.fiber]||'AND';
+  return `${pre}-2026-${(seed%10000).toString().padStart(4,'0')}`;
+}
+async function generatePassport(){
+  if(!D.name){toast('Completa el perfil primero');goStep(1);return;}
+  const btn=document.getElementById('genPassBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando…';
+  if(!D.code)D.code=genCode();
+  const sys='Eres un narrador de marca de lujo. Escribe UNA sola frase (máximo 28 palabras), evocadora y de primera calidad, que capture la autenticidad de esta pieza artesanal andina. Devuelve solo la frase, sin comillas.';
+  const usr=`${D.name}, ${D.region}, Perú. ${D.product} en ${D.fiber}, ${D.technique}. ${D.special||''}`;
+  let story=await AI.call(sys,usr,160),ai=true;
+  if(!story){story=`Cada hilo de esta pieza guarda la memoria de ${D.region} y las manos que la tejieron, ${D.technique}.`;ai=false;}
+  D.story=story;
+  const payload=
+`PASAPORTE ANDINO DE AUTENTICIDAD
+Artesano: ${D.name}
+Origen: ${D.region}, Peru
+Producto: ${D.product} en ${D.fiber}
+Tecnica: ${D.technique}
+Experiencia: ${D.years}
+Codigo: ${D.code}${D.contact?'\nContacto: '+D.contact:''}`;
+  document.getElementById('passOut').innerHTML=`
+    ${srcTag(ai)} <span style="font-size:.82rem;color:var(--muted);margin-left:8px">QR escaneable · funciona sin internet</span>
+    <div class="passport" id="passportCard" style="margin-top:14px">
+      <div>
+        <div class="pp-label">Pasaporte Digital · Producto</div>
+        <h3>${D.name}</h3>
+        <div class="pp-region">📍 ${D.region}, Perú</div>
+        <div class="pp-rows">
+          <div><span class="k">Producto</span><span class="v">${D.product} en ${D.fiber}</span></div>
+          <div><span class="k">Técnica</span><span class="v">${D.technique}</span></div>
+          <div><span class="k">Experiencia</span><span class="v">${D.years}</span></div>
+          <div><span class="k">Código</span><span class="v">${D.code}</span></div>
+          ${D.contact?`<div><span class="k">Contacto</span><span class="v">${D.contact}</span></div>`:''}
+        </div>
+        <div class="pp-story">“${D.story}”</div>
+      </div>
+      <div class="pp-qr"><canvas id="qrCanvas"></canvas><div class="code">${D.code}</div></div>
+    </div>
+    <div class="nav-row no-print">
+      <button class="btn ghost sm" onclick="downloadQR()">⬇ Descargar QR (PNG)</button>
+      <button class="btn sm" onclick="window.print()">🖨 Imprimir Pasaporte</button>
+    </div>
+    <div class="demo-hint no-print">El comprador escanea este QR con la cámara de su celular y ve el origen, el artesano y la técnica — <b>sin necesidad de internet</b>. Es la trazabilidad simple que el informe identificó como el vacío más desatendido.</div>`;
+  try{drawQR(document.getElementById('qrCanvas'),payload);}
+  catch(e){document.querySelector('.pp-qr').innerHTML='<div style="color:#14121f;font-size:.8rem;padding:20px;text-align:center">Texto demasiado largo para el QR. Acorta el contacto.</div>';}
+  btn.disabled=false;btn.innerHTML='✦ Regenerar Pasaporte';
+}
+function downloadQR(){
+  const c=document.getElementById('qrCanvas');const a=document.createElement('a');
+  a.download=`pasaporte_${D.code||'andino'}.png`;a.href=c.toDataURL('image/png');a.click();toast('QR descargado');
+}
+
+/* ===== INIT ===== */
+renderSteps();renderMarkets();renderCapTypes();refreshAiStatus();
+document.getElementById('settings').addEventListener('click',e=>{if(e.target.id==='settings')e.target.classList.remove('open');});
 </script>
 </body>
 </html>
