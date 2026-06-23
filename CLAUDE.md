@@ -10,22 +10,27 @@ A two-app toolkit built for a live session ("Artesanía Inteligente") at **Expo 
 
 ## Architecture — critical constraints
 
-Each app is a **single self-contained `.html` file** with inline `<style>` and `<script>` (vanilla JS, no framework, no dependencies, no build step). This is deliberate, not legacy:
+Three self-contained `.html` files, each with inline `<style>` and `<script>` (vanilla JS, no framework, no dependencies, no build step): `index.html` (landing page linking both apps + a self-URL share QR) and the two apps below. This is deliberate, not legacy:
 
-- **Offline-first is a hard requirement** — internet in the dome is unreliable. Never add a CDN link, external font/script, `fetch()` to a live API, or anything requiring network. Everything must work from `file://`.
-- **No build tooling.** Do not introduce npm/bundlers/transpilation. To run: open the `.html` file directly in a browser. To "test": open it and click through the flows.
+- **Offline-first is a hard requirement** — internet in the dome is unreliable. Every feature must degrade gracefully to a working offline path. Don't add CDN links, external fonts, or build tooling. Open the `.html` directly to run; "test" = open it and click through (plus the Node verification harness below for the QR encoder).
+- **Deployment model: static, "each user brings their own key" (decided with the user).** No backend, no proxy. Hosting = GitHub Pages from `main`/root (repo already exists). The Anthropic API key is never shipped — each user pastes their own into the in-app settings; it lives only in their browser's `localStorage`.
 - Keep each app one file. Don't split into separate JS/CSS unless explicitly asked.
 
-### `vitrina_andina_ia.html` — "Darse a conocer" (visibility & commercialization)
-4-step linear wizard. State lives in the in-memory `artisanData` object + `currentStep` (no persistence — it's a fresh demo each time). `goStep(n)` drives navigation. Steps: profile → bilingual catalog description (template-based "AI" generation in `generateCatalog`, ES/EN via `switchLang`) → commercial intelligence (6 international markets with hardcoded reference prices) → social captions (`genCaption(type)` for 4 caption types + hashtags).
+### Hybrid AI (`AI` helper, present in both apps)
+The "IA" is **real, not decorative**: an `AI` object calls the Claude API directly from the browser (`model: claude-opus-4-8`, `output_config.effort: low`, header `anthropic-dangerous-direct-browser-access: true`). `AI.available()` gates every call on having a key **and** `navigator.onLine`; on no-key / offline / any error it returns `null` and the caller **falls back to a local template / manual path**. Keys are per-app in `localStorage`: `va_key` (Vitrina), `gti_key` (Gestión). The header status pill shows IA real / Offline. When adding an AI feature, always write the offline fallback first and tag the result with `srcTag(ai)` (IA real vs plantilla/manual).
 
-### `gestion_textil_ia.html` — "Optimizar procesos" (process optimization)
-4 modules switched via `showPanel(name)`. **This app persists to `localStorage`** under keys prefixed `gti_` (`gti_orders`, `gti_oid`). Modules: orders/clients (CRUD + kanban status, `saveOrder`/`deleteOrder`/`updateStatus`/`renderOrders`) → quality control (15-point camelid-fiber checklist, scored ring via `updateScore`, `.txt` export in `exportQuality`) → cost/price calculator (`recalculate`, outputs S/ and USD + per-market projection) → packaging tiers (`selectPack`).
+### `vitrina_andina_ia.html` — "Darse a conocer"
+5-step wizard; state in the in-memory `D` object (no persistence). `goStep(n)` drives nav. Steps: profile → bilingual catalog (`generateCatalog`, hybrid AI → `tplDescES/EN` fallback, ES/EN via `switchLang`) → commercial intelligence (`MARKETS`, hardcoded) → social captions (`genCaption(type)`, hybrid → `tplCaption`) → **Pasaporte Digital** (`generatePassport`): a traceability card + a genuinely scannable offline **QR** encoding a compact text payload.
 
-When changing persisted data shapes in the gestión app, account for existing `localStorage` data on returning users (migrate or guard reads of `gti_*`).
+### `gestion_textil_ia.html` — "Optimizar procesos"
+4 modules switched via `showPanel(name)`. Persists to `localStorage` under `gti_` keys (`gti_orders`, `gti_oid`). Modules: **quality control by AI vision** (`onPhoto` → camera capture via `<input capture>`, image resized in `fileToResized`, `AI.vision` with the `QA_SCHEMA` structured-output schema → `renderQAResult`; offline fallback = 15-point manual checklist `showManualChecklist`/`CHECKLIST`) → orders/clients (`saveOrder`/`deleteOrder`/`updateStatus`/`renderOrders`) → cost/price calculator (`calcCost`, S/ + USD + `marketPositioning`) → packaging tiers (`selectPack`/`PACKS`). When changing persisted shapes, guard reads of `gti_*` for returning users.
+
+### The QR encoder (verified — do not "tidy" casually)
+Both `vitrina` and `index` embed a hand-written byte-mode QR encoder (`QR.encode`, versions 1–10, EC level L) — no external library, for offline use. It was **verified by decoding its output with jsQR** (94/94 cases incl. accents/UTF-8). Two real bugs were fixed during that process: format-info bits were row/col transposed, and alignment patterns on the timing row/col (v7+) were wrongly skipped. If you touch it, re-run the verification: `qrtest.js` / `decode_test.js` in the session scratchpad render the matrix to a pixel buffer and decode with `jsqr` — never trust structural checks (finders/dark-ratio) alone; they passed even when the QR was unscannable.
 
 ## Conventions
 
-- All user-facing copy is Spanish; keep tone accessible (the audience is not technical). Bilingual ES/EN only where buyer-facing.
-- Reference data (export prices, target markets, certifications) should trace back to `INVESTIGACION_TECNOLOGIA_TEXTIL_PERU.md`; that file cites its sources. Don't invent market figures.
-- Function naming is plain camelCase verbs tied to UI actions (`genCaption`, `selectPack`, `exportQuality`); match that style.
+- All user-facing copy is Spanish; keep tone accessible (audience is not technical). Bilingual ES/EN only where buyer-facing.
+- Reference data (export prices, target markets) should trace back to `INVESTIGACION_TECNOLOGIA_TEXTIL_PERU.md`; that file cites its sources. Don't invent market figures.
+- Shared visual identity across all three files (Andean roots + vanguard): deep-indigo dark theme, natural-fiber palette (`--vicuna`/`--terra`/`--cochi`/`--jade`/`--gold`), chakana SVG logo, diamond textile band. Keep new UI consistent with these CSS variables.
+- Function naming is plain camelCase verbs tied to UI actions; match that style.
