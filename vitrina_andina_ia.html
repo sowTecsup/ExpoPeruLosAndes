@@ -64,6 +64,7 @@
   .field{margin-bottom:16px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 22px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;color:#fff;background:var(--brand);transition:.2s;box-shadow:0 10px 30px -12px var(--cochi);text-decoration:none}
   .btn:hover{transform:translateY(-2px);box-shadow:0 16px 38px -14px var(--cochi)}
+  .btn:active:not(:disabled){transform:translateY(0) scale(.98)}
   .btn:disabled{opacity:.55;cursor:wait;transform:none}
   .btn.ghost{background:rgba(255,255,255,.05);color:var(--txt);box-shadow:none;border:1px solid var(--line)}
   .btn.ghost:hover{background:rgba(255,255,255,.1)}
@@ -220,7 +221,7 @@
       <div class="field"><label>¿Qué hace especial tu trabajo? (opcional)</label>
         <textarea id="f_special" placeholder="Ej. Uso tintes naturales de cochinilla; aprendí de mi abuela; cada pieza lleva un símbolo de mi comunidad."></textarea></div>
       <div class="field"><label>Contacto (WhatsApp / Instagram, opcional)</label><input id="f_contact" placeholder="Ej. wa.me/51987654321"></div>
-      <div class="nav-row"><span></span><button class="btn" onclick="saveProfile()">Guardar y continuar →</button></div>
+      <div class="nav-row"><button class="btn ghost" onclick="loadExample()">✨ Ver ejemplo</button><button class="btn" onclick="saveProfile()">Guardar y continuar →</button></div>
     </div>
   </section>
 
@@ -307,6 +308,18 @@
       </div>
     </div>
     <div style="display:flex;justify-content:flex-end"><button class="btn sm" onclick="document.getElementById('help').classList.remove('open')">Entendido</button></div>
+  </div>
+</div>
+
+<div class="modal" id="welcome">
+  <div class="modal-card">
+    <h3>👋 Bienvenido/a a Vitrina Andina</h3>
+    <p>Esta herramienta ayuda a que el mundo conozca tu arte: un <b>catálogo en español e inglés</b>, los <b>mercados</b> a dónde apuntar, <b>publicaciones para redes</b> y un <b>Pasaporte Digital con QR</b>. Todo <b>funciona sin internet</b>.</p>
+    <p style="margin-bottom:10px">¿Primera vez? Carga un ejemplo y mira cómo funciona, o toca <b>❓ Ayuda</b> arriba cuando lo necesites.</p>
+    <div class="nav-row">
+      <button class="btn ghost sm" onclick="closeWelcome()">Empezar de cero</button>
+      <button class="btn sm" onclick="closeWelcome();goStep(1);loadExample()">✨ Ver un ejemplo</button>
+    </div>
   </div>
 </div>
 
@@ -401,10 +414,13 @@ function renderProgress(){
   document.getElementById('progressLbl').textContent=done+' / 5';
   const pend=keys.find(k=>!progress[k]);
   document.getElementById('progressHint').textContent=pend?('Siguiente: '+PNEXT[pend]):'¡Completaste todo! Tu artesanía está lista para el mundo 🎉';
+  if(done===5&&!progress._celebrated){progress._celebrated=true;confetti();toast('¡Tu artesanía está lista para el mundo! 🎉');}
 }
 function renderSteps(){document.getElementById('steps').innerHTML=STEPS.map(s=>{const d=progress[PKEY[s.n]];return `<div class="step-chip ${s.n===currentStep?'active':''} ${d?'done':''}" onclick="goStep(${s.n})"><span class="n">${d?'✓':s.n}</span>${s.t}</div>`;}).join('');}
-function goStep(n){currentStep=n;document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',+p.dataset.step===n));if(n===3)markDone('mercados');renderSteps();window.scrollTo({top:0,behavior:'smooth'});}
+function goStep(n){currentStep=n;document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show',+p.dataset.step===n));if(n===3){markDone('mercados');animateMarketBars();}renderSteps();window.scrollTo({top:0,behavior:'smooth'});}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function animateMarketBars(){const bars=document.querySelectorAll('#mktChart .bar-fill');bars.forEach(el=>el.style.width='0');requestAnimationFrame(()=>requestAnimationFrame(()=>{bars.forEach(el=>{el.style.width=(el.getAttribute('data-w')||'0')+'%';});}));}
+function confetti(){const colors=['#e0b352','#c85a3c','#9e2b4e','#2f8f80','#c9a26b'];for(let i=0;i<48;i++){const d=document.createElement('div');const rot=Math.random()*360;d.style.cssText=`position:fixed;z-index:80;top:-14px;left:${Math.random()*100}vw;width:9px;height:${7+Math.random()*7}px;background:${colors[i%colors.length]};border-radius:${Math.random()<.5?'50%':'2px'};pointer-events:none;transform:rotate(${rot}deg)`;document.body.appendChild(d);const dx=(Math.random()-.5)*260,dur=2300+Math.random()*1500;d.animate([{transform:`translate(0,0) rotate(${rot}deg)`,opacity:1},{transform:`translate(${dx}px,106vh) rotate(${rot+Math.random()*720}deg)`,opacity:.9}],{duration:dur,easing:'cubic-bezier(.2,.6,.3,1)'});setTimeout(()=>d.remove(),dur);}}
 
 /* ===== SETTINGS ===== */
 function refreshAiStatus(){const dot=document.getElementById('aiDot'),txt=document.getElementById('aiStatusTxt');if(AI.available()){dot.className='dot on';txt.textContent='IA real activa';}else if(AI.getKey()&&!AI.online()){dot.className='dot off';txt.textContent='Offline (plantillas)';}else{dot.className='dot off';txt.textContent='IA: configurar';}}
@@ -412,6 +428,7 @@ function openSettings(){document.getElementById('apiKey').value=AI.getKey();docu
 function saveKey(){localStorage.setItem('va_key',document.getElementById('apiKey').value.trim());document.getElementById('settings').classList.remove('open');refreshAiStatus();toast('Configuración guardada');}
 function clearKey(){localStorage.removeItem('va_key');document.getElementById('apiKey').value='';refreshAiStatus();toast('Clave borrada');}
 function openHelp(){document.getElementById('help').classList.add('open');}
+function closeWelcome(){document.getElementById('welcome').classList.remove('open');}
 window.addEventListener('online',refreshAiStatus);window.addEventListener('offline',refreshAiStatus);
 
 /* ===== STEP 1 ===== */
@@ -421,6 +438,15 @@ function saveProfile(){
      fiber:g('f_fiber').value,technique:g('f_technique').value,years:g('f_years').value,capacity:g('f_capacity').value,
      price:g('f_price').value,special:g('f_special').value.trim(),contact:g('f_contact').value.trim()};
   markDone('perfil');toast('Perfil guardado');goStep(2);
+}
+function loadExample(){
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
+  set('f_name','María Quispe — Hilos del Ande');set('f_region','Cusco');set('f_product','Chal');
+  set('f_fiber','Alpaca baby');set('f_technique','tejido a mano con telar tradicional');
+  set('f_years','más de 30 años');set('f_capacity','5 a 20 piezas');set('f_price','180');
+  set('f_special','Uso tintes naturales de cochinilla y aprendí el telar de mi abuela; cada pieza lleva el símbolo de mi comunidad.');
+  set('f_contact','wa.me/51987654321');
+  toast('Ejemplo cargado — pulsa “Guardar y continuar”');
 }
 function srcTag(ai){return ai?'<span class="src-tag src-ai">● IA real</span>':'<span class="src-tag src-tpl">● plantilla offline</span>';}
 
@@ -480,7 +506,7 @@ function renderMarkets(){
   const bars=EXPORT_DATA.paises.map((p,i)=>`
     <div class="bar-row" onclick="toggleBar(${i})">
       <div class="bar-label">${p.flag} ${p.c}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(p.val/max*100)}%"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-w="${Math.round(p.val/max*100)}"></div></div>
       <div class="bar-val">US$ ${p.val}M · ${p.pct}%</div>
     </div>
     <div class="bar-detail" id="bd${i}" style="display:none">${p.nota} <a href="${EXPORT_DATA.fuente}" target="_blank" rel="noopener">Fuente: ADEX →</a></div>`).join('');
@@ -621,6 +647,7 @@ function downloadPassport(){let cv;try{cv=composePassportImage();}catch(e){toast
 /* ===== INIT ===== */
 renderSteps();renderProgress();renderMarkets();renderCapTypes();refreshAiStatus();
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+if(!localStorage.getItem('va_seen')){document.getElementById('welcome').classList.add('open');localStorage.setItem('va_seen','1');}
 </script>
 </body>
 </html>

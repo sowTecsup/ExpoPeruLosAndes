@@ -38,8 +38,13 @@
   .app::after{content:"→";position:absolute;top:24px;right:24px;font-size:1.3rem;color:var(--muted);transition:.22s}
   .app:hover{transform:translateY(-4px);border-color:rgba(224,179,82,.45);box-shadow:0 24px 50px -24px var(--cochi)}
   .app:hover::after{color:var(--gold);transform:translateX(4px)}
+  .app:active{transform:translateY(-1px)}
+  .app.b:hover{border-color:rgba(47,143,128,.5);box-shadow:0 24px 50px -24px var(--jade)}
+  .app.b:hover::after{color:var(--jade)}
   .app .ico{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:1.7rem;background:var(--brand);margin-bottom:16px}
   .app.b .ico{background:linear-gradient(135deg,var(--jade),#1f5e57)}
+  .app-kicker{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--gold);margin-bottom:14px}
+  .app-kicker.jade{color:var(--jade)}
   .app h2{font-size:1.35rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
   .app p{color:var(--muted);font-size:.92rem;margin-bottom:14px}
   .app .feats{display:flex;flex-wrap:wrap;gap:7px}
@@ -77,12 +82,14 @@
 
   <div class="apps">
     <a class="app a" href="vitrina_andina_ia.html">
+      <div class="app-kicker">Proceso 1 · Darse a conocer 🌎</div>
       <div class="ico">🌎</div>
       <h2>Vitrina Andina IA</h2>
       <p>Darse a conocer al mundo: catálogo bilingüe, mercados internacionales, contenido para redes y Pasaporte Digital con QR.</p>
       <div class="feats"><span class="feat">Catálogo ES/EN</span><span class="feat">Inteligencia comercial</span><span class="feat">Pasaporte QR</span></div>
     </a>
     <a class="app b" href="gestion_textil_ia.html">
+      <div class="app-kicker jade">Proceso 2 · Optimizar procesos ⚙️</div>
       <div class="ico">⚙️</div>
       <h2>Gestión Textil IA</h2>
       <p>Optimizar procesos: control de calidad con visión IA, pedidos y clientes, calculadora de precios y guía de packaging premium.</p>
@@ -100,7 +107,7 @@
   </div>
 
   <div class="foot">
-    <b>Sesión "Artesanía Inteligente"</b> — Domingo 28, 9:40–11:00am. Estas apps funcionan 100% offline; la <b>IA real</b> (descripciones, captions, control de calidad por visión) se activa si configuras una clave de la API de Claude dentro de cada app. Sin clave, todo sigue funcionando con plantillas.
+    <b>Sesión "Artesanía Inteligente"</b> — Domingo 28, 9:40–11:00am. Estas apps funcionan 100% offline; la <b>IA real</b> (descripciones, captions, control de calidad por visión) se activa si configuras una clave <b>gratuita</b> de Google AI Studio (Gemini) dentro de cada app. Sin clave, todo sigue funcionando con plantillas.
   </div>
 </div>
 
