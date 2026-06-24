@@ -147,15 +147,7 @@
   .recos{list-style:none;display:grid;gap:8px;margin-top:8px}
   .recos li{display:flex;gap:10px;font-size:.9rem;color:var(--cream)}
   .recos li::before{content:"→";color:var(--jade);font-weight:800}
-  /* ===== PACKAGING ===== */
-  .pack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-  .pack{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:.2s}
-  .pack:hover,.pack.active{border-color:var(--gold);transform:translateY(-3px)}
-  .pack .pt{font-size:1.1rem;font-weight:800}
-  .pack .pp{font-size:.82rem;color:var(--gold);font-weight:700;margin:4px 0 10px}
-  .pack ul{list-style:none;display:grid;gap:6px}
-  .pack li{font-size:.84rem;color:var(--cream);display:flex;gap:8px}
-  .pack li::before{content:"•";color:var(--jade)}
+  /* (estilos de packaging "unboxing" definidos más abajo) */
   /* ===== INTEGRACIONES ===== */
   .integ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
   .integ{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
@@ -172,6 +164,67 @@
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   .demo-hint{font-size:.8rem;color:var(--muted);margin-top:14px;background:rgba(255,255,255,.03);border:1px dashed var(--line);border-radius:11px;padding:12px 14px;line-height:1.5}
   .demo-hint b{color:var(--gold)}
+  /* tags de cliente */
+  .tag-chip{display:inline-block;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.02em}
+  /* gráfico de ventas */
+  .vchart{display:flex;gap:10px;align-items:flex-end;height:150px;padding:4px 0}
+  .vcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+  .vbar{width:72%;max-width:42px;border-radius:7px 7px 0 0;background:linear-gradient(180deg,#43d17a,#1f5e57);transition:height .9s cubic-bezier(.22,1,.36,1);min-height:3px}
+  .vbar.proj{background:repeating-linear-gradient(45deg,var(--gold),var(--gold) 6px,rgba(224,179,82,.5) 6px,rgba(224,179,82,.5) 12px)}
+  .vval{font-size:.7rem;color:var(--cream2);font-weight:700}
+  .vlab{font-size:.72rem;color:var(--muted)}
+  .vlegend{display:flex;gap:18px;font-size:.74rem;color:var(--muted);margin-top:10px}
+  .vlegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  .vlegend i.real{background:#43d17a}
+  .vlegend i.proj{background:var(--gold)}
+  /* ruta del pedido / camión */
+  .journey{margin-top:12px;padding:14px 8px 4px}
+  .road{position:relative;height:6px;background:rgba(255,255,255,.08);border-radius:99px}
+  .road .fill{position:absolute;left:0;top:0;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .9s cubic-bezier(.4,1.2,.5,1)}
+  .road .truck{position:absolute;top:-13px;font-size:1.15rem;transform:translateX(-55%);transition:left .9s cubic-bezier(.4,1.2,.5,1)}
+  .road .dest{position:absolute;right:-4px;top:-12px;font-size:1rem}
+  .stages{display:flex;justify-content:space-between;margin-top:10px;font-size:.6rem;color:var(--muted);gap:2px;text-align:center}
+  .stages span{flex:1}
+  .stages span.on{color:var(--jade);font-weight:800}
+  /* badges de estado extra */
+  .b-camino{background:rgba(0,132,255,.18);color:#6fb8ff}
+  .b-confirmado{background:rgba(67,209,122,.22);color:#7ee6a6}
+  /* grilla de precios por país */
+  .mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+  .mkt{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .mkt .mf{font-size:1.6rem}
+  .mkt .mc{font-size:.82rem;font-weight:700;margin-top:2px}
+  .mkt .mp{font-size:1.25rem;font-weight:800;color:var(--gold);margin-top:4px}
+  .mkt .mn{font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.3}
+  /* packaging — unboxing visual */
+  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  .pkg{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:16px;padding:18px 18px 8px;cursor:pointer;transition:transform .2s,border-color .2s,background .2s;overflow:hidden}
+  .pkg:hover{transform:translateY(-3px);border-color:var(--gold)}
+  .pkg.open{border-color:var(--gold);background:rgba(224,179,82,.06)}
+  .pkg-head{display:flex;justify-content:space-between;align-items:baseline}
+  .pkg-tier{font-size:1.15rem;font-weight:800}
+  .pkg-lvl{font-size:.78rem;color:var(--gold);font-weight:700}
+  .boxwrap{height:104px;display:grid;place-items:center;margin:6px 0 2px}
+  .box3d{position:relative;width:92px;height:66px}
+  .box-body{position:absolute;left:0;right:0;bottom:0;height:50px;border-radius:5px;box-shadow:inset 0 -10px 16px rgba(0,0,0,.28);overflow:hidden}
+  .box-lid{position:absolute;left:-4px;right:-4px;top:8px;height:18px;border-radius:5px;transform-origin:center bottom;transition:transform .55s cubic-bezier(.4,1.3,.5,1);z-index:2;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+  .pkg.open .box-lid{transform:translateY(-30px) rotate(-14deg)}
+  .ribbon-v{position:absolute;left:50%;top:0;bottom:0;width:9px;background:rgba(255,255,255,.32);transform:translateX(-50%)}
+  .ribbon-h{position:absolute;left:0;right:0;top:14px;height:9px;background:rgba(255,255,255,.26)}
+  .spark{position:absolute;top:-8px;right:-4px;opacity:0;transform:scale(.4);transition:.4s .15s}
+  .pkg.open .spark{opacity:1;transform:scale(1)}
+  .pkg-hint{text-align:center;font-size:.74rem;color:var(--muted);margin-bottom:6px}
+  .pkg.open .pkg-hint{color:var(--gold)}
+  .pkg-items{list-style:none;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s ease,opacity .4s ease;display:grid;gap:7px}
+  .pkg.open .pkg-items{max-height:360px;opacity:1;margin-top:6px}
+  .pkg-items li{display:flex;gap:8px;font-size:.85rem;color:var(--cream);transform:translateY(6px);opacity:0;transition:transform .35s ease,opacity .35s ease}
+  .pkg-items li::before{content:"•";color:var(--jade);font-weight:800}
+  .pkg.open .pkg-items li{transform:none;opacity:1}
+  .pkg.open .pkg-items li:nth-child(2){transition-delay:.06s}
+  .pkg.open .pkg-items li:nth-child(3){transition-delay:.12s}
+  .pkg.open .pkg-items li:nth-child(4){transition-delay:.18s}
+  .pkg.open .pkg-items li:nth-child(5){transition-delay:.24s}
+  .pkg.open .pkg-items li:nth-child(6){transition-delay:.30s}
 </style>
 </head>
 <body>
@@ -255,9 +308,11 @@
   <section class="panel" data-tab="packaging">
     <div class="card">
       <h2 class="sec">🎁 Packaging premium</h2>
-      <p class="sub">Cómo presentar tu producto de lujo. Elige un nivel para ver la guía y el checklist de pre-envío.</p>
-      <div class="pack-grid" id="packGrid"></div>
-      <div id="packDetail" style="margin-top:18px"></div>
+      <p class="sub">Cómo presentar tu producto de lujo. <b>Toca cada caja</b> para ver qué incluye — el empaque es parte del producto.</p>
+      <div class="pkg-grid" id="packGrid"></div>
+      <div class="note" style="margin-top:18px"><b>Recuerda:</b> un comprador de Japón o Alemania que paga US$ 300 espera abrir algo que se sienta de lujo. El empaque comunica el valor.</div>
+      <div class="chk-cat" style="margin-top:18px">✅ Checklist pre-envío (exportación)</div>
+      <ul class="recos" id="preShip"></ul>
     </div>
   </section>
 
@@ -281,7 +336,7 @@
       <div class="field"><label>Valor (US$)</label><input id="o_value" type="number" placeholder="120"></div>
       <div class="field"><label>Fecha de entrega</label><input id="o_due" type="date"></div>
     </div>
-    <div class="field"><label>Estado</label><select id="o_status"><option value="nuevo">Nuevo</option><option value="proceso">En proceso</option><option value="terminado">Terminado</option><option value="entregado">Entregado</option></select></div>
+    <div class="field"><label>Estado</label><select id="o_status"><option value="nuevo">Nuevo</option><option value="proceso">En proceso</option><option value="terminado">Listo</option><option value="camino">En camino</option><option value="entregado">Entregado</option><option value="confirmado">Confirmado</option></select></div>
     <div style="display:flex;justify-content:space-between;gap:12px;margin-top:6px">
       <button class="btn ghost sm" onclick="closeOrderModal()">Cancelar</button>
       <button class="btn sm" onclick="saveOrder()">Guardar pedido</button>
@@ -408,20 +463,21 @@ function srcTag(ai){return ai?'<span class="src-tag src-ai">● IA real</span>':
 /* ===== DATOS CRM (maqueta) ===== */
 const LANGS={en:{name:'inglés',flag:'🇬🇧'},de:{name:'alemán',flag:'🇩🇪'},ja:{name:'japonés',flag:'🇯🇵'},fr:{name:'francés',flag:'🇫🇷'},it:{name:'italiano',flag:'🇮🇹'}};
 const PLAT={whatsapp:{name:'WhatsApp',color:'#25d366',icon:'🟢'},instagram:{name:'Instagram',color:'#e1306c',icon:'📷'},messenger:{name:'Messenger',color:'#0084ff',icon:'💬'}};
+const TAGS={interesado:{t:'Interesado',c:'#e0b352'},cliente:{t:'Cliente · adelanto',c:'#2f8f80'},mayorista:{t:'Mayorista',c:'#9e2b4e'}};
 let convos=[
-  {id:1,name:'Emma Johnson',platform:'whatsapp',lang:'en',unread:2,msgs:[
+  {id:1,name:'Emma Johnson',platform:'whatsapp',lang:'en',unread:2,tag:'interesado',msgs:[
     {from:'client',text:"Hi! I love your alpaca shawls 😍 Do you ship to the United States?",es:"¡Hola! Me encantan tus chales de alpaca 😍 ¿Envías a Estados Unidos?",time:'09:12'},
     {from:'client',text:"And how long would delivery take?",es:"¿Y cuánto tardaría la entrega?",time:'09:13'}
   ]},
-  {id:2,name:'Boutique Aurora',platform:'instagram',lang:'de',unread:1,msgs:[
+  {id:2,name:'Boutique Aurora',platform:'instagram',lang:'de',unread:1,tag:'mayorista',msgs:[
     {from:'client',text:"Guten Tag! Können Sie 10 Schals bis Ende Juli liefern?",es:"¡Buenos días! ¿Puede entregar 10 chales para fin de julio?",time:'Ayer'},
     {from:'me',text:"¡Hola! Sí, puedo entregar 10 chales para fin de julio.",sent:"Guten Tag! Ja, ich kann 10 Schals bis Ende Juli liefern.",time:'Ayer'},
     {from:'client',text:"Perfekt. Welche Farben sind verfügbar?",es:"Perfecto. ¿Qué colores hay disponibles?",time:'08:30'}
   ]},
-  {id:3,name:'Yuki Tanaka',platform:'instagram',lang:'ja',unread:1,msgs:[
+  {id:3,name:'Yuki Tanaka',platform:'instagram',lang:'ja',unread:1,tag:'interesado',msgs:[
     {from:'client',text:"こんにちは。ビクーニャのストールはありますか？",es:"Hola. ¿Tienen estolas de vicuña?",time:'10:40'}
   ]},
-  {id:4,name:'Camille Dubois',platform:'messenger',lang:'fr',unread:0,msgs:[
+  {id:4,name:'Camille Dubois',platform:'messenger',lang:'fr',unread:0,tag:'cliente',msgs:[
     {from:'client',text:"Bonjour, le poncho est-il encore disponible ?",es:"Hola, ¿el poncho sigue disponible?",time:'Lun'},
     {from:'me',text:"¡Hola! Sí, el poncho está disponible. Te envío fotos.",sent:"Bonjour ! Oui, le poncho est disponible. Je vous envoie des photos.",time:'Lun'}
   ]}
@@ -433,32 +489,43 @@ function totalUnread(){return convos.reduce((a,c)=>a+(c.unread||0),0);}
 async function translate(text,langName){
   return await AI.call(`Eres un traductor profesional. Traduce el texto del usuario al ${langName}. Devuelve SOLO la traducción, sin comillas, sin notas, sin el texto original.`,text);
 }
-function tplSuggestions(){return [
-  '¡Hola! Muchas gracias por escribir. Con gusto te ayudo 🙂',
-  'Claro, te cuento los detalles de envío y el tiempo de entrega.',
-  '¡Gracias por tu interés! ¿Quieres que te envíe fotos y precios?'
-];}
+/* respuestas sugeridas con traducción pre-cargada (funciona sin internet) */
+const SUG={
+  base:[
+    '¡Hola! Muchas gracias por escribir. Con gusto te ayudo 🙂',
+    'Claro, te cuento los detalles de envío y el tiempo de entrega.',
+    '¡Gracias por tu interés! ¿Quieres que te envíe fotos y precios?'
+  ],
+  tr:{
+    en:['Hi! Thank you so much for writing. I’d be happy to help 🙂','Of course, let me share the shipping details and delivery time.','Thanks for your interest! Would you like me to send photos and prices?'],
+    de:['Hallo! Vielen Dank für Ihre Nachricht. Ich helfe Ihnen gerne 🙂','Natürlich, ich erkläre Ihnen die Versanddetails und die Lieferzeit.','Danke für Ihr Interesse! Soll ich Ihnen Fotos und Preise schicken?'],
+    fr:['Bonjour ! Merci beaucoup de votre message. Je serai ravie de vous aider 🙂','Bien sûr, je vous donne les détails d’expédition et le délai de livraison.','Merci de votre intérêt ! Voulez-vous que je vous envoie des photos et des prix ?'],
+    it:['Ciao! Grazie mille per il messaggio. Sarò felice di aiutarti 🙂','Certo, ti spiego i dettagli di spedizione e i tempi di consegna.','Grazie per l’interesse! Vuoi che ti invii foto e prezzi?'],
+    ja:['こんにちは！ご連絡ありがとうございます。喜んでお手伝いします🙂','もちろんです。配送の詳細とお届け時期をご案内します。','ご関心ありがとうございます！写真と価格をお送りしましょうか？']
+  }
+};
+function tplSuggestions(c){const tr=SUG.tr[c.lang]||[];return SUG.base.map((es,i)=>({es,tr:tr[i]||''}));}
 async function suggestReplies(c){
   const ctx=c.msgs.map(m=>(m.from==='client'?'Cliente: '+(m.es||m.text):'Yo (artesana): '+m.text)).join('\n');
   const sys='Eres asistente de un artesano textil andino que vende a clientes internacionales. Propón 3 respuestas breves, cálidas y profesionales EN ESPAÑOL que el artesano podría enviar ahora, según la conversación. Devuelve SOLO las 3 opciones separadas por la línea "###", sin numeración ni comillas.';
   const out=await AI.call(sys,ctx);
-  if(out){const a=out.split('###').map(s=>s.trim()).filter(Boolean);if(a.length)return a.slice(0,3);}
-  return tplSuggestions();
+  if(out){const a=out.split('###').map(s=>s.trim()).filter(Boolean);if(a.length)return a.slice(0,3).map(es=>({es,tr:''}));}
+  return tplSuggestions(c);
 }
 
 /* ===== BANDEJA / CHAT ===== */
 function renderInbox(){
   const wrap=document.getElementById('crm');if(!wrap)return;
   wrap.className='crm'+(crmShowChat?' show-chat':'');
-  const list=convos.map(c=>{const p=PLAT[c.platform],lg=LANGS[c.lang],last=c.msgs[c.msgs.length-1];const lt=last?esc((last.from==='me'?'Tú: ':'')+last.text):'';return `
+  const list=convos.map(c=>{const p=PLAT[c.platform],lg=LANGS[c.lang],tg=TAGS[c.tag]||TAGS.interesado,last=c.msgs[c.msgs.length-1];const lt=last?esc((last.from==='me'?'Tú: ':'')+last.text):'';return `
     <div class="conv ${c.id===activeConvoId?'active':''}" onclick="openConvo(${c.id})">
       <div class="conv-av" style="background:${p.color}">${esc(c.name.charAt(0))}</div>
-      <div class="conv-meta"><div class="conv-name">${esc(c.name)} <span class="lang-flag" title="${lg.name}">${lg.flag}</span></div><div class="conv-last">${lt}</div></div>
+      <div class="conv-meta"><div class="conv-name">${esc(c.name)} <span class="lang-flag" title="${lg.name}">${lg.flag}</span></div><div class="conv-last">${lt}</div><span class="tag-chip" style="background:${tg.c}22;color:${tg.c};margin-top:4px">${tg.t}</span></div>
       ${c.unread?`<span class="unread">${c.unread}</span>`:''}
     </div>`;}).join('');
   const c=convos.find(x=>x.id===activeConvoId);
   let chat;
-  if(c){const p=PLAT[c.platform],lg=LANGS[c.lang];
+  if(c){const p=PLAT[c.platform],lg=LANGS[c.lang],hasOrder=orders.some(o=>o.client&&o.client.toLowerCase().includes(c.name.toLowerCase()));
     const body=c.msgs.map(m=>{
       if(m.from==='client')return `<div class="bub client">${esc(m.text)}${m.es?`<span class="tr">🌐 ${esc(m.es)}</span>`:''}<div class="tm">${esc(m.time||'')}</div></div>`;
       return `<div class="bub me">${esc(m.text)}${m.sent?`<span class="tr">→ ${lg.flag} ${esc(m.sent)}</span>`:''}<div class="tm">${esc(m.time||'Ahora')}</div></div>`;
@@ -468,11 +535,15 @@ function renderInbox(){
         <button class="ai-pill chat-back" onclick="crmBack()">←</button>
         <div class="conv-av" style="background:${p.color};width:34px;height:34px;font-size:.9rem">${esc(c.name.charAt(0))}</div>
         <div><div style="font-weight:700">${esc(c.name)}</div><div style="font-size:.76rem;color:var(--muted)"><span class="plat" style="background:${p.color}22;color:${p.color}">${p.icon} ${p.name}</span> · escribe en ${lg.name} ${lg.flag}</div></div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <select onchange="changeTag(${c.id},this.value)" style="width:auto;padding:6px 10px;font-size:.74rem">${Object.keys(TAGS).map(k=>`<option value="${k}" ${c.tag===k?'selected':''}>${TAGS[k].t}</option>`).join('')}</select>
+          ${hasOrder?'<span style="font-size:.7rem;color:var(--jade)">📦 Tiene pedido activo</span>':''}
+        </div>
       </div>
       <div class="chat-body" id="chatBody">${body}</div>
       <div class="composer">
         <div class="sugg" id="suggBox"></div>
-        <textarea id="msgInput" rows="2" placeholder="Escribe en español… la IA lo traduce al ${lg.name}"></textarea>
+        <textarea id="msgInput" rows="2" oninput="this.dataset.tr=''" placeholder="Escribe en español… la IA lo traduce al ${lg.name}"></textarea>
         <div style="display:flex;gap:9px;flex-wrap:wrap">
           <button class="btn sm" onclick="sendMsg()">Traducir y enviar →</button>
           <button class="btn ghost sm" onclick="doSuggest()">✨ Sugerir respuestas</button>
@@ -485,35 +556,46 @@ function renderInbox(){
 function openConvo(id){activeConvoId=id;const c=convos.find(x=>x.id===id);if(c)c.unread=0;crmShowChat=true;renderInbox();renderTabs();}
 function crmBack(){crmShowChat=false;renderInbox();}
 function goConvo(id){showPanel('mensajes');openConvo(id);}
+function changeTag(id,t){const c=convos.find(x=>x.id===id);if(c){c.tag=t;renderInbox();toast('Cliente marcado como: '+TAGS[t].t);}}
 async function doSuggest(){
   const c=convos.find(x=>x.id===activeConvoId);if(!c)return;
   const box=document.getElementById('suggBox');if(!box)return;
   box.innerHTML='<span class="empty" style="padding:6px;text-align:left"><span class="spinner"></span> Pensando respuestas…</span>';
   const ops=await suggestReplies(c);
-  box.innerHTML=ops.map(o=>`<button onclick="useSuggestion(this)">${esc(o)}</button>`).join('');
+  box.innerHTML=ops.map(o=>`<button onclick="useSuggestion(this)" data-tr="${o.tr?esc(o.tr).replace(/"/g,'&quot;'):''}">${esc(o.es)}</button>`).join('');
 }
-function useSuggestion(el){const ta=document.getElementById('msgInput');if(ta){ta.value=el.textContent;ta.focus();}}
+function useSuggestion(el){const ta=document.getElementById('msgInput');if(ta){ta.value=el.textContent;ta.dataset.tr=el.getAttribute('data-tr')||'';ta.focus();}}
 async function sendMsg(){
   const c=convos.find(x=>x.id===activeConvoId);if(!c)return;
   const ta=document.getElementById('msgInput');const txt=ta.value.trim();if(!txt){toast('Escribe un mensaje');return;}
+  const preset=ta.dataset.tr||'';
   const lg=LANGS[c.lang];
   const msg={from:'me',text:txt,time:'Ahora',sent:null};
-  c.msgs.push(msg);ta.value='';const sb=document.getElementById('suggBox');if(sb)sb.innerHTML='';renderInbox();
-  const tr=await translate(txt,lg.name);
+  c.msgs.push(msg);ta.value='';ta.dataset.tr='';const sb=document.getElementById('suggBox');if(sb)sb.innerHTML='';renderInbox();
+  const tr=preset||await translate(txt,lg.name);
   msg.sent=tr||('(traducción al '+lg.name+' pendiente — conéctate a internet)');
   renderInbox();
   toast(tr?('Enviado y traducido al '+lg.name+' '+lg.flag):'Enviado (traducción pendiente sin conexión)');
 }
 
 /* ===== DASHBOARD CRM ===== */
+const salesHistory=[{m:'Feb',v:680},{m:'Mar',v:920},{m:'Abr',v:1150},{m:'May',v:1040},{m:'Jun',v:1380}];
+function buildSalesChart(potential){
+  const data=[...salesHistory,{m:'Jul',v:Math.round(potential),proj:true}];
+  const max=Math.max(1,...data.map(d=>d.v));
+  return `<div class="chart-block"><div class="cb-title">📈 Ventas por mes (US$) — realizado y potencial</div>
+    <div class="vchart">${data.map(d=>`<div class="vcol"><div class="vval">${d.v}</div><div class="vbar ${d.proj?'proj':''}" style="height:0" data-h="${Math.round(d.v/max*100)}" title="${d.m}: US$ ${d.v}"></div><div class="vlab">${d.m}</div></div>`).join('')}</div>
+    <div class="vlegend"><span><i class="real"></i>Realizado</span><span><i class="proj"></i>Potencial (por cobrar este mes)</span></div>
+  </div>`;
+}
 function renderDashboard(){
   const el=document.getElementById('dashboard');if(!el)return;
-  const pend=orders.filter(o=>o.status!=='entregado');
+  const pend=orders.filter(isOpen);
   const porCobrar=pend.reduce((a,o)=>a+o.value,0);
   const enProceso=orders.filter(o=>o.status==='proceso'||o.status==='nuevo').length;
   const unread=totalUnread();
   const conectadas=Object.values(integ).filter(Boolean).length;
-  const future=orders.filter(o=>o.due&&o.status!=='entregado').slice().sort((a,b)=>a.due<b.due?-1:1);
+  const future=orders.filter(o=>o.due&&isOpen(o)).slice().sort((a,b)=>a.due<b.due?-1:1);
   const next=future[0];
   const recent=convos.slice(0,3).map(c=>{const p=PLAT[c.platform],lg=LANGS[c.lang],last=c.msgs[c.msgs.length-1];return `<div class="conv" onclick="goConvo(${c.id})"><div class="conv-av" style="background:${p.color};width:34px;height:34px;font-size:.85rem">${esc(c.name.charAt(0))}</div><div class="conv-meta"><div class="conv-name" style="font-size:.85rem">${esc(c.name)} ${lg.flag}</div><div class="conv-last">${last?esc((last.from==='me'?'Tú: ':'')+last.text):''}</div></div>${c.unread?`<span class="unread">${c.unread}</span>`:''}</div>`;}).join('');
   el.innerHTML=`
@@ -523,6 +605,7 @@ function renderDashboard(){
       <div class="stat"><div class="v">${enProceso}</div><div class="l">Pedidos en proceso</div></div>
       <div class="stat"><div class="v">US$ ${porCobrar.toFixed(0)}</div><div class="l">Por cobrar</div></div>
     </div>
+    ${buildSalesChart(porCobrar)}
     <div class="grid2" style="align-items:start">
       <div class="chart-block"><div class="cb-title">💬 Conversaciones recientes</div>${convos.length?recent:'<div class="empty">—</div>'}<button class="btn ghost sm" style="margin-top:12px" onclick="showPanel('mensajes')">Abrir bandeja →</button></div>
       <div class="chart-block"><div class="cb-title">🚚 Próxima entrega</div>${next?`<div style="font-size:1.15rem;font-weight:800">${esc(next.client)}</div><div style="color:var(--muted);font-size:.86rem;margin-top:2px">${esc(next.product||'')} · entrega ${esc(next.due)}</div>${next.reminder?'<div class="rem-badge" style="margin-top:10px">🔔 Recordatorio automático programado</div>':`<button class="btn sm" style="margin-top:12px" onclick="openReminder(${next.id})">🔔 Programar recordatorio</button>`}`:'<div class="empty" style="padding:14px">Sin entregas próximas. Registra pedidos en 📦 Pedidos.</div>'}</div>
@@ -535,6 +618,7 @@ function renderDashboard(){
       <button class="btn ghost sm" onclick="seedDemo()">Cargar pedidos de ejemplo</button>
       ${orders.length?'<button class="btn ghost sm" onclick="clearDemo()">Vaciar pedidos</button>':''}
     </div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('#dashboard .vbar').forEach(b=>b.style.height=(b.getAttribute('data-h')||'0')+'%');}));
 }
 
 /* ===== DEMO / DATOS DE EJEMPLO ===== */
@@ -567,30 +651,52 @@ function saveOrder(){
   closeOrderModal();renderOrders();toast('Pedido guardado');
 }
 function deleteOrder(id){orders=orders.filter(o=>o.id!==id);saveOrders();renderOrders();}
-function updateStatus(id,st){const o=orders.find(o=>o.id===id);if(o){o.status=st;saveOrders();renderOrders();}}
-const STLABEL={nuevo:'Nuevo',proceso:'En proceso',terminado:'Terminado',entregado:'Entregado'};
-function renderOrders(){
-  const pend=orders.filter(o=>o.status!=='entregado');
-  const totalVal=pend.reduce((a,o)=>a+o.value,0);
+function updateStatus(id,st){
+  const o=orders.find(o=>o.id===id);if(!o)return;o.status=st;saveOrders();renderOrderStats();
+  const el=document.querySelector('#orderList [data-order="'+id+'"]');
+  if(!el){renderOrders();return;}
+  const pos=journeyPos(st),ji=JOURNEY.indexOf(st);
+  const f=el.querySelector('.fill'),t=el.querySelector('.truck'),b=el.querySelector('.badge');
+  if(f)f.style.width=pos+'%';if(t)t.style.left=pos+'%';
+  if(b){b.className='badge b-'+st;b.textContent=STLABEL[st];}
+  el.querySelectorAll('.stages span').forEach((s,i)=>s.classList.toggle('on',i<=ji));
+  if(st==='confirmado')toast('¡Pedido confirmado por el cliente! 🎉');
+}
+const JOURNEY=['nuevo','proceso','terminado','camino','entregado','confirmado'];
+const STLABEL={nuevo:'Nuevo',proceso:'En proceso',terminado:'Listo',camino:'En camino',entregado:'Entregado',confirmado:'Confirmado ✓'};
+function journeyPos(st){const i=Math.max(0,JOURNEY.indexOf(st));return Math.round(i/(JOURNEY.length-1)*100);}
+function isOpen(o){return o.status!=='entregado'&&o.status!=='confirmado';}
+function renderOrderStats(){
+  const pend=orders.filter(isOpen);const totalVal=pend.reduce((a,o)=>a+o.value,0);
   document.getElementById('orderStats').innerHTML=`
     <div class="stat"><div class="v">${orders.length}</div><div class="l">Pedidos totales</div></div>
-    <div class="stat"><div class="v">${pend.length}</div><div class="l">Pendientes</div></div>
+    <div class="stat"><div class="v">${pend.length}</div><div class="l">En curso</div></div>
     <div class="stat"><div class="v">US$ ${totalVal.toFixed(0)}</div><div class="l">Por cobrar</div></div>
-    <div class="stat"><div class="v">${orders.filter(o=>o.status==='terminado').length}</div><div class="l">Listos para entregar</div></div>`;
+    <div class="stat"><div class="v">${orders.filter(o=>o.status==='confirmado').length}</div><div class="l">Confirmados</div></div>`;
+}
+function renderOrders(){
+  renderOrderStats();
   const list=document.getElementById('orderList');
   if(!orders.length){list.innerHTML='<div class="empty">Aún no hay pedidos. Crea el primero con “+ Nuevo pedido”.</div>';return;}
-  list.innerHTML=[...orders].reverse().map(o=>`
-    <div class="order">
-      <div class="main"><div class="ot">${esc(o.client)} <span class="badge b-${o.status}">${STLABEL[o.status]}</span></div>
-        <div class="od">${esc(o.product||'—')}${o.due?' · entrega '+esc(o.due):''}</div>
-        ${o.reminder?'<div class="rem-badge">🔔 Recordatorio automático programado</div>':''}</div>
-      <div class="oval">US$ ${o.value.toFixed(0)}</div>
-      <select onchange="updateStatus(${o.id},this.value)">
-        ${Object.keys(STLABEL).map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STLABEL[s]}</option>`).join('')}
-      </select>
-      <button class="rem" onclick="openReminder(${o.id})">🔔 Recordatorio</button>
-      <button class="del" onclick="deleteOrder(${o.id})">Eliminar</button>
-    </div>`).join('');
+  list.innerHTML=[...orders].reverse().map(o=>{const pos=journeyPos(o.status),ji=JOURNEY.indexOf(o.status);return `
+    <div class="order" data-order="${o.id}">
+      <div class="orow">
+        <div class="main"><div class="ot">${esc(o.client)} <span class="badge b-${o.status}">${STLABEL[o.status]}</span></div>
+          <div class="od">${esc(o.product||'—')}${o.due?' · entrega '+esc(o.due):''}</div>
+          ${o.reminder?'<div class="rem-badge">🔔 Recordatorio automático programado</div>':''}</div>
+        <div class="oval">US$ ${o.value.toFixed(0)}</div>
+        <select onchange="updateStatus(${o.id},this.value)">
+          ${JOURNEY.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STLABEL[s]}</option>`).join('')}
+        </select>
+        <button class="rem" onclick="openReminder(${o.id})">🔔 Recordatorio</button>
+        <button class="del" onclick="deleteOrder(${o.id})">Eliminar</button>
+      </div>
+      <div class="journey">
+        <div class="road"><div class="fill" style="width:0" data-pos="${pos}"></div><span class="truck" style="left:0" data-pos="${pos}">🚚</span><span class="dest">📍</span></div>
+        <div class="stages">${JOURNEY.map((s,i)=>`<span class="${i<=ji?'on':''}">${STLABEL[s].replace(' ✓','')}</span>`).join('')}</div>
+      </div>
+    </div>`;}).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('#orderList .order').forEach(el=>{const f=el.querySelector('.fill'),t=el.querySelector('.truck');if(f)f.style.width=(f.getAttribute('data-pos')||'0')+'%';if(t)t.style.left=(t.getAttribute('data-pos')||'0')+'%';});}));
 }
 function openReminder(id){
   const o=orders.find(x=>x.id===id);if(!o)return;reminderOid=id;
@@ -605,7 +711,7 @@ function calcCost(){
   const n=id=>parseFloat(document.getElementById(id).value)||0;
   const mat=n('c_mat'),hours=n('c_hours'),rate=n('c_rate'),pack=n('c_pack'),oh=n('c_oh'),margin=n('c_margin'),fx=n('c_fx')||3.75;
   const labor=hours*rate;const base=mat+labor+pack;const withOh=base*(1+oh/100);const price=withOh*(1+margin/100);
-  const usd=price/fx;
+  const usd=price/fx;lastUsd=usd;
   document.getElementById('costOut').innerHTML=`
     <div class="breakdown">
       <div class="brow"><span>Materiales / fibra</span><span>S/ ${mat.toFixed(2)}</span></div>
@@ -619,14 +725,35 @@ function calcCost(){
       <div class="pcard"><div class="pv" style="color:var(--gold)">S/ ${price.toFixed(0)}</div><div class="pl">Precio en soles</div></div>
       <div class="pcard"><div class="pv" style="color:var(--jade)">US$ ${usd.toFixed(0)}</div><div class="pl">Precio en dólares</div></div>
     </div>
-    ${marketPositioning(usd)}`;
+    <div id="priceGrid">${priceGridHTML(usd,null)}</div>`;
 }
-function marketPositioning(usd){
-  let msg,col;
-  if(usd<60){msg='Estás en rango de mercado local/mayorista. Para exportación premium puedes apuntar más alto — el comprador internacional paga por autenticidad.';col='var(--terra)';}
-  else if(usd<150){msg='Buen rango para Etsy/Faire y mercados como EE.UU. y Australia. Refuerza fotos, ficha bilingüe y trazabilidad para justificar el precio.';col='var(--jade)';}
-  else{msg='Rango premium (Japón, norte de Europa). Asegúrate de respaldarlo con calidad impecable, certificación de origen y packaging de lujo.';col='var(--gold)';}
-  return `<div class="note" style="border-left-color:${col}"><b>Posicionamiento:</b> ${msg}</div>`;
+let lastUsd=0;
+const MARKETS=[
+  {c:'Estados Unidos',flag:'🇺🇸',mult:1.7,note:'Etsy/Faire — paga por autenticidad'},
+  {c:'Japón',flag:'🇯🇵',mult:2.1,note:'Premium, valora lo hecho a mano'},
+  {c:'Alemania',flag:'🇩🇪',mult:1.8,note:'Sostenibilidad, cliente fiel'},
+  {c:'China',flag:'🇨🇳',mult:1.3,note:'Volumen, sensible al precio'},
+  {c:'Rusia',flag:'🇷🇺',mult:1.5,note:'Clima frío, demanda de lana fina'},
+  {c:'Francia',flag:'🇫🇷',mult:1.8,note:'Moda y lujo'}
+];
+function priceGridHTML(usd,ai){
+  return `<div class="cb-title" style="margin-top:22px">🌎 Precio sugerido por mercado ${ai?srcTag(true):''}</div>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:12px">Tu precio justo es el <b>mínimo</b>. Según el país de destino, este es el precio de venta recomendado:</p>
+    <div class="mkt-grid">${MARKETS.map(m=>{const val=(ai&&ai[m.c])?ai[m.c]:Math.round(usd*m.mult);return `<div class="mkt"><div class="mf">${m.flag}</div><div class="mc">${m.c}</div><div class="mp">US$ ${val}</div><div class="mn">${m.note}</div></div>`;}).join('')}</div>
+    <div style="margin-top:12px"><button class="btn ghost sm" onclick="aiPriceGrid()">✨ Afinar precios con IA</button></div>
+    <div class="note">${ai?'Precios ajustados por IA según el mercado actual.':'Estimación referencial. Toca “Afinar con IA” para precios más realistas según el mercado de cada país.'}</div>`;
+}
+async function aiPriceGrid(){
+  const cont=document.getElementById('priceGrid');if(!cont)return;
+  if(!AI.available()){toast('Conéctate y configura tu clave Gemini para afinar con IA');return;}
+  cont.innerHTML='<div class="empty"><span class="spinner"></span> Consultando precios de mercado con IA…</div>';
+  const sys='Eres experto en precios de exportación de textiles artesanales de alpaca/vicuña del Perú. Dado un costo mínimo en dólares, sugiere el precio de venta al público realista (en USD) en cada país listado. Devuelve SOLO líneas con el formato "País=precio" (precio entero, sin símbolos), una por línea. Países: '+MARKETS.map(m=>m.c).join(', ')+'.';
+  const usr='Costo mínimo (piso): US$ '+Math.round(lastUsd)+'. Producto: prenda artesanal de alpaca hecha a mano en los Andes. Da el precio de venta sugerido por país.';
+  const out=await AI.call(sys,usr);
+  let ai=null;
+  if(out){ai={};out.split('\n').forEach(l=>{const idx=l.indexOf('=');if(idx>0){const k=l.slice(0,idx).trim().toLowerCase();const v=parseInt(l.slice(idx+1).replace(/[^0-9]/g,''));const mk=MARKETS.find(x=>x.c.toLowerCase()===k);if(mk&&v)ai[mk.c]=v;}});}
+  cont.innerHTML=priceGridHTML(lastUsd,(ai&&Object.keys(ai).length)?ai:null);
+  toast((ai&&Object.keys(ai).length)?'Precios afinados con IA ✓':'La IA no respondió; mostrando estimación.');
 }
 
 /* ===== PACKAGING ===== */
@@ -637,21 +764,22 @@ const PACKS=[
   {k:'luxury',t:'Luxury',p:'Lujo',items:['Caja de madera o cartón texturizado','Forro de seda / tela andina','Libro/folleto del proceso con fotos','QR a video del tejido','Certificado de autenticidad numerado','Empaque 100% sostenible']}
 ];
 const PRE_SHIP=['Pieza limpia y sin hilos sueltos','Medidas y peso verificados','Ficha técnica bilingüe incluida','Trazabilidad / QR adjunto','Protección contra humedad','Datos de remitente y destinatario claros'];
+const BOXCOL={basico:['#caa46b','#8a6a3c'],estandar:['#3fb59f','#1f5e57'],premium:['#e0b352','#c85a3c'],luxury:['#9e2b4e','#e0b352']};
 function renderPacks(){
-  document.getElementById('packGrid').innerHTML=PACKS.map(p=>`<div class="pack" id="pk_${p.k}" onclick="selectPack('${p.k}')"><div class="pt">${p.t}</div><div class="pp">${p.p}</div><ul>${p.items.slice(0,3).map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+  document.getElementById('packGrid').innerHTML=PACKS.map((p,i)=>{const bc=BOXCOL[p.k]||['#caa46b','#8a6a3c'];return `
+    <div class="pkg ${i===0?'open':''}" onclick="togglePack(this)">
+      <div class="pkg-head"><div class="pkg-tier">${p.t}</div><div class="pkg-lvl">${p.p}</div></div>
+      <div class="boxwrap"><div class="box3d">
+        <div class="box-body" style="background:linear-gradient(160deg,${bc[0]},${bc[1]})"><span class="ribbon-v"></span><span class="ribbon-h"></span></div>
+        <div class="box-lid" style="background:linear-gradient(160deg,${bc[0]},${bc[1]})"></div>
+        <span class="spark">✨</span>
+      </div></div>
+      <div class="pkg-hint">Toca para abrir ▾</div>
+      <ul class="pkg-items">${p.items.map(it=>`<li>${it}</li>`).join('')}</ul>
+    </div>`;}).join('');
+  const ps=document.getElementById('preShip');if(ps)ps.innerHTML=PRE_SHIP.map(i=>`<li>${i}</li>`).join('');
 }
-function selectPack(k){
-  document.querySelectorAll('.pack').forEach(p=>p.classList.remove('active'));document.getElementById('pk_'+k).classList.add('active');
-  const p=PACKS.find(x=>x.k===k);
-  document.getElementById('packDetail').innerHTML=`
-    <div class="card" style="padding:20px">
-      <h2 class="sec" style="font-size:1.15rem">Nivel ${p.t} — ${p.p}</h2>
-      <div class="chk-cat">Qué incluir</div><ul class="recos">${p.items.map(i=>`<li>${i}</li>`).join('')}</ul>
-      <div class="chk-cat" style="margin-top:18px">Checklist pre-envío (exportación)</div>
-      <ul class="recos">${PRE_SHIP.map(i=>`<li>${i}</li>`).join('')}</ul>
-      <div class="note"><b>Recuerda:</b> el empaque comunica el valor. Un comprador de Japón o Alemania que paga US$ 300 espera abrir algo que se sienta de lujo — el packaging es parte del producto.</div>
-    </div>`;
-}
+function togglePack(el){const open=el.classList.contains('open');document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('open'));if(!open)el.classList.add('open');}
 
 /* ===== INTEGRACIONES ===== */
 let integ=JSON.parse(localStorage.getItem('gti_integ')||'null')||{whatsapp:true,instagram:true,messenger:false,telegram:false,gmail:false};
@@ -676,7 +804,7 @@ function renderInteg(){
 function toggleInteg(k){integ[k]=!integ[k];localStorage.setItem('gti_integ',JSON.stringify(integ));renderInteg();renderDashboard();toast(integ[k]?'Canal conectado ✓ (demo)':'Canal desconectado');}
 
 /* ===== INIT ===== */
-renderTabs();renderInbox();renderDashboard();renderOrders();calcCost();renderPacks();selectPack('estandar');renderInteg();refreshAiStatus();
+renderTabs();renderInbox();renderDashboard();renderOrders();calcCost();renderPacks();renderInteg();refreshAiStatus();
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 if(!localStorage.getItem('gti_seen')){document.getElementById('welcome').classList.add('open');localStorage.setItem('gti_seen','1');}
 </script>
