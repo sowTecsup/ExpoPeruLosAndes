@@ -30,7 +30,7 @@
   .brandname{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;background:var(--brand2);-webkit-background-clip:text;background-clip:text;color:transparent}
   .tagline{font-size:.78rem;color:var(--muted);font-weight:500;margin-top:2px}
   .head-actions{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .ai-pill{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;color:var(--txt);transition:.2s}
+  .ai-pill{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;color:var(--txt);transition:.2s;text-decoration:none}
   .ai-pill:hover{background:rgba(255,255,255,.08)}
   .dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
   .dot.on{background:#43d17a;box-shadow:0 0 10px #43d17a}
@@ -173,6 +173,7 @@
     <div><div class="brandname">Vitrina Andina IA</div><div class="tagline">Darse a conocer · Artesanía Inteligente</div></div>
   </div>
   <div class="head-actions">
+    <a class="ai-pill" href="index.html">🏠 Inicio</a>
     <button class="ai-pill" onclick="openHelp()">❓ Ayuda</button>
     <button class="ai-pill" onclick="openSettings()"><span class="dot off" id="aiDot"></span><span id="aiStatusTxt">IA: configurar</span></button>
   </div>
