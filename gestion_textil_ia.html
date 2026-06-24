@@ -182,6 +182,7 @@
   .road{position:relative;height:6px;background:rgba(255,255,255,.08);border-radius:99px}
   .road .fill{position:absolute;left:0;top:0;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .9s cubic-bezier(.4,1.2,.5,1)}
   .road .truck{position:absolute;top:-13px;font-size:1.15rem;transform:translateX(-55%);transition:left .9s cubic-bezier(.4,1.2,.5,1)}
+  .road .truck .ti{display:inline-block;transform:scaleX(-1)}
   .road .dest{position:absolute;right:-4px;top:-12px;font-size:1rem}
   .stages{display:flex;justify-content:space-between;margin-top:10px;font-size:.6rem;color:var(--muted);gap:2px;text-align:center}
   .stages span{flex:1}
@@ -692,7 +693,7 @@ function renderOrders(){
         <button class="del" onclick="deleteOrder(${o.id})">Eliminar</button>
       </div>
       <div class="journey">
-        <div class="road"><div class="fill" style="width:0" data-pos="${pos}"></div><span class="truck" style="left:0" data-pos="${pos}">🚚</span><span class="dest">📍</span></div>
+        <div class="road"><div class="fill" style="width:0" data-pos="${pos}"></div><span class="truck" style="left:0" data-pos="${pos}"><span class="ti">🚚</span></span><span class="dest">📍</span></div>
         <div class="stages">${JOURNEY.map((s,i)=>`<span class="${i<=ji?'on':''}">${STLABEL[s].replace(' ✓','')}</span>`).join('')}</div>
       </div>
     </div>`;}).join('');
