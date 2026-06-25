@@ -125,6 +125,15 @@
   .order select{width:auto;padding:8px 12px;font-size:.84rem}
   .order .del{background:rgba(158,43,78,.15);border:1px solid rgba(158,43,78,.35);color:#e98aa3;border-radius:9px;padding:8px 11px;cursor:pointer;font-size:.78rem;font-weight:600}
   .order .rem{background:rgba(224,179,82,.12);border:1px solid rgba(224,179,82,.35);color:var(--gold);border-radius:9px;padding:8px 11px;cursor:pointer;font-size:.78rem;font-weight:600}
+  .finish-row{margin-top:12px;text-align:center}
+  .finish{background:var(--brand);border:0;color:#fff;border-radius:9px;padding:9px 18px;cursor:pointer;font-size:.82rem;font-weight:700;box-shadow:0 4px 14px rgba(47,143,128,.3);transition:transform .12s,box-shadow .2s}
+  .finish:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(47,143,128,.42)}
+  .finish:active{transform:translateY(0)}
+  .order.done{opacity:.78;border-color:rgba(67,209,122,.3)}
+  .done-badge{background:rgba(67,209,122,.18);color:#7ee6a6;margin-left:4px}
+  .finished-row{flex:1 1 100%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;padding-top:12px;border-top:1px dashed var(--line);font-size:.85rem;color:#7ee6a6;font-weight:700}
+  .reopen{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:7px 13px;cursor:pointer;font-size:.78rem;font-weight:600}
+  .reopen:hover{color:var(--cream);border-color:rgba(244,239,228,.3)}
   .rem-badge{display:inline-block;font-size:.72rem;color:var(--gold);font-weight:700;margin-top:4px}
   .badge{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px}
   .b-nuevo{background:rgba(201,162,107,.18);color:var(--gold)}
@@ -132,7 +141,17 @@
   .b-terminado{background:rgba(67,209,122,.18);color:#7ee6a6}
   .b-entregado{background:rgba(255,255,255,.1);color:var(--cream2)}
   /* ===== COSTOS ===== */
-  .breakdown{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:18px}
+  .cost-top{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;align-items:start;margin-top:18px}
+  @media(max-width:680px){.cost-top{grid-template-columns:1fr}}
+  .cost-side{display:flex;flex-direction:column;gap:14px}
+  .split-card{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .split-bar{display:flex;height:16px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.06)}
+  .split-bar span{display:block;transition:width .6s cubic-bezier(.22,1,.36,1)}
+  .split-bar .sb-cost{background:linear-gradient(90deg,var(--terra),var(--cochi))}
+  .split-bar .sb-profit{background:linear-gradient(90deg,var(--jade),#43d17a)}
+  .split-legend{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.74rem;color:var(--muted);margin-top:10px}
+  .split-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  .breakdown{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:0}
   .brow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
   .brow:last-child{border-bottom:none}
   .brow.total{font-size:1.15rem;font-weight:800;border-top:2px solid var(--gold);margin-top:6px;padding-top:14px}
@@ -177,6 +196,27 @@
   .vlegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:5px}
   .vlegend i.real{background:#43d17a}
   .vlegend i.proj{background:var(--gold)}
+  /* gráfico de líneas: costo de producción vs ganancia */
+  .lchart{width:100%;height:auto;display:block;overflow:visible}
+  .lc-grid{stroke:rgba(244,239,228,.08);stroke-width:1}
+  .lc-axis{fill:var(--muted);font-size:9px;font-weight:600}
+  .lc-xlab{fill:var(--muted);font-size:10px;text-anchor:middle}
+  .lc-xlab.proj{fill:var(--gold)}
+  .lc-line{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:lcDraw 1.15s cubic-bezier(.4,.7,.3,1) forwards}
+  .lc-line.cost{stroke:var(--terra)}
+  .lc-line.profit{stroke:var(--jade);animation-delay:.18s}
+  .lc-line.dash{stroke-dasharray:5 4;animation:none;opacity:.85}
+  @keyframes lcDraw{to{stroke-dashoffset:0}}
+  .lc-dot{opacity:0;animation:lcDot .3s ease forwards}
+  .lc-dot.cost{fill:var(--terra)}
+  .lc-dot.profit{fill:var(--jade)}
+  .lc-dot.hollow{fill:var(--night2);stroke-width:2}
+  .lc-dot.hollow.cost{stroke:var(--terra)}
+  .lc-dot.hollow.profit{stroke:var(--jade)}
+  @keyframes lcDot{to{opacity:1}}
+  .lc-val{font-size:9.5px;font-weight:800;text-anchor:middle;opacity:0;animation:lcDot .4s ease .9s forwards}
+  .lc-val.cost{fill:var(--terra)}
+  .lc-val.profit{fill:#7ee6a6}
   /* ruta del pedido / camión */
   .journey{margin-top:12px;padding:14px 8px 4px}
   .road{position:relative;height:6px;background:rgba(255,255,255,.08);border-radius:99px}
@@ -580,13 +620,39 @@ async function sendMsg(){
 }
 
 /* ===== DASHBOARD CRM ===== */
-const salesHistory=[{m:'Feb',v:680},{m:'Mar',v:920},{m:'Abr',v:1150},{m:'May',v:1040},{m:'Jun',v:1380}];
+// Historial mensual (US$): costo de producción vs ganancia real
+const salesHistory=[
+  {m:'Feb',cost:410,profit:270},
+  {m:'Mar',cost:540,profit:380},
+  {m:'Abr',cost:600,profit:550},
+  {m:'May',cost:560,profit:480},
+  {m:'Jun',cost:700,profit:680}
+];
 function buildSalesChart(potential){
-  const data=[...salesHistory,{m:'Jul',v:Math.round(potential),proj:true}];
-  const max=Math.max(1,...data.map(d=>d.v));
-  return `<div class="chart-block"><div class="cb-title">📈 Ventas por mes (US$) — realizado y potencial</div>
-    <div class="vchart">${data.map(d=>`<div class="vcol"><div class="vval">${d.v}</div><div class="vbar ${d.proj?'proj':''}" style="height:0" data-h="${Math.round(d.v/max*100)}" title="${d.m}: US$ ${d.v}"></div><div class="vlab">${d.m}</div></div>`).join('')}</div>
-    <div class="vlegend"><span><i class="real"></i>Realizado</span><span><i class="proj"></i>Potencial (por cobrar este mes)</span></div>
+  // mes proyectado (Jul) a partir de lo que está por cobrar
+  const proj={m:'Jul',cost:Math.round(potential*0.45),profit:Math.round(potential*0.55),proj:true};
+  const data=[...salesHistory,proj];
+  const W=560,H=200,padL=10,padR=12,padT=16,padB=30;
+  const iw=W-padL-padR, ih=H-padT-padB, n=data.length;
+  const rawMax=Math.max(1,...data.flatMap(d=>[d.cost,d.profit]));
+  const max=Math.ceil(rawMax/100)*100;
+  const X=i=>padL+(n<2?0:i/(n-1)*iw);
+  const Y=v=>padT+ih-(v/max*ih);
+  const grids=[0,.5,1].map(t=>{const v=Math.round(max*t),y=Y(v);return `<line class="lc-grid" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/><text class="lc-axis" x="${padL}" y="${y-3}">${v}</text>`;}).join('');
+  // segmentos: sólido para lo realizado (0..n-2), punteado para la proyección (n-2..n-1)
+  const seg=(key,from,to)=>data.slice(from,to+1).map((d,i)=>`${i?'L':'M'}${X(from+i).toFixed(1)} ${Y(d[key]).toFixed(1)}`).join(' ');
+  const r=n-1; // índice del mes proyectado
+  const path=key=>`<path class="lc-line ${key}" pathLength="1" d="${seg(key,0,r-1)}"/><path class="lc-line ${key} dash" d="${seg(key,r-1,r)}"/>`;
+  const dots=key=>data.map((d,i)=>`<circle class="lc-dot ${key}${d.proj?' hollow':''}" cx="${X(i).toFixed(1)}" cy="${Y(d[key]).toFixed(1)}" r="${d.proj?3.4:3.2}"><title>${d.m} · ${key==='cost'?'Costo':'Ganancia'}: US$ ${d[key]}</title></circle>`).join('');
+  const xlabs=data.map((d,i)=>`<text class="lc-xlab ${d.proj?'proj':''}" x="${X(i).toFixed(1)}" y="${H-10}">${d.m}${d.proj?' (prov.)':''}</text>`).join('');
+  // valores del último mes realizado para legibilidad
+  const last=r-1;
+  const vals=`<text class="lc-val cost" x="${X(last).toFixed(1)}" y="${(Y(data[last].cost)-8).toFixed(1)}">${data[last].cost}</text><text class="lc-val profit" x="${X(last).toFixed(1)}" y="${(Y(data[last].profit)-8).toFixed(1)}">${data[last].profit}</text>`;
+  return `<div class="chart-block"><div class="cb-title">📈 Costo de producción vs ganancia (US$ por mes)</div>
+    <svg class="lchart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Gráfico de líneas: costo de producción contra ganancia por mes">
+      ${grids}${path('cost')}${path('profit')}${dots('cost')}${dots('profit')}${vals}${xlabs}
+    </svg>
+    <div class="vlegend"><span><i style="background:var(--terra)"></i>Costo de producción</span><span><i style="background:var(--jade)"></i>Ganancia</span><span><i class="proj"></i>Jul proyectado (por cobrar)</span></div>
   </div>`;
 }
 function renderDashboard(){
@@ -619,7 +685,6 @@ function renderDashboard(){
       <button class="btn ghost sm" onclick="seedDemo()">Cargar pedidos de ejemplo</button>
       ${orders.length?'<button class="btn ghost sm" onclick="clearDemo()">Vaciar pedidos</button>':''}
     </div>`;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('#dashboard .vbar').forEach(b=>b.style.height=(b.getAttribute('data-h')||'0')+'%');}));
 }
 
 /* ===== DEMO / DATOS DE EJEMPLO ===== */
@@ -663,6 +728,15 @@ function updateStatus(id,st){
   el.querySelectorAll('.stages span').forEach((s,i)=>s.classList.toggle('on',i<=ji));
   if(st==='confirmado')toast('¡Pedido confirmado por el cliente! 🎉');
 }
+function finishTracking(id){
+  const o=orders.find(o=>o.id===id);if(!o)return;
+  o.done=true;if(o.status!=='confirmado')o.status='entregado';
+  saveOrders();renderOrders();toast('✓ Seguimiento finalizado. Pedido archivado.');
+}
+function reopenTracking(id){
+  const o=orders.find(o=>o.id===id);if(!o)return;
+  o.done=false;saveOrders();renderOrders();toast('Seguimiento reabierto');
+}
 const JOURNEY=['nuevo','proceso','terminado','camino','entregado','confirmado'];
 const STLABEL={nuevo:'Nuevo',proceso:'En proceso',terminado:'Listo',camino:'En camino',entregado:'Entregado',confirmado:'Confirmado ✓'};
 function journeyPos(st){const i=Math.max(0,JOURNEY.indexOf(st));return Math.round(i/(JOURNEY.length-1)*100);}
@@ -679,23 +753,29 @@ function renderOrders(){
   renderOrderStats();
   const list=document.getElementById('orderList');
   if(!orders.length){list.innerHTML='<div class="empty">Aún no hay pedidos. Crea el primero con “+ Nuevo pedido”.</div>';return;}
-  list.innerHTML=[...orders].reverse().map(o=>{const pos=journeyPos(o.status),ji=JOURNEY.indexOf(o.status);return `
-    <div class="order" data-order="${o.id}">
+  list.innerHTML=[...orders].reverse().map(o=>{const pos=journeyPos(o.status),ji=JOURNEY.indexOf(o.status);const ready=ji>=2;return `
+    <div class="order${o.done?' done':''}" data-order="${o.id}">
       <div class="orow">
-        <div class="main"><div class="ot">${esc(o.client)} <span class="badge b-${o.status}">${STLABEL[o.status]}</span></div>
+        <div class="main"><div class="ot">${esc(o.client)} <span class="badge b-${o.status}">${STLABEL[o.status]}</span>${o.done?'<span class="badge done-badge">✓ Finalizado</span>':''}</div>
           <div class="od">${esc(o.product||'—')}${o.due?' · entrega '+esc(o.due):''}</div>
           ${o.reminder?'<div class="rem-badge">🔔 Recordatorio automático programado</div>':''}</div>
         <div class="oval">US$ ${o.value.toFixed(0)}</div>
-        <select onchange="updateStatus(${o.id},this.value)">
+        <select onchange="updateStatus(${o.id},this.value)" ${o.done?'disabled':''}>
           ${JOURNEY.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${STLABEL[s]}</option>`).join('')}
         </select>
         <button class="rem" onclick="openReminder(${o.id})">🔔 Recordatorio</button>
         <button class="del" onclick="deleteOrder(${o.id})">Eliminar</button>
       </div>
+      ${o.done?`
+      <div class="finished-row">
+        <span>✅ Seguimiento finalizado · pedido completado</span>
+        <button class="reopen" onclick="reopenTracking(${o.id})">↩ Reabrir seguimiento</button>
+      </div>`:`
       <div class="journey">
         <div class="road"><div class="fill" style="width:0" data-pos="${pos}"></div><span class="truck" style="left:0" data-pos="${pos}"><span class="ti">🚚</span></span><span class="dest">📍</span></div>
         <div class="stages">${JOURNEY.map((s,i)=>`<span class="${i<=ji?'on':''}">${STLABEL[s].replace(' ✓','')}</span>`).join('')}</div>
-      </div>
+        ${ready?`<div class="finish-row"><button class="finish" onclick="finishTracking(${o.id})">✓ Finalizar seguimiento</button></div>`:''}
+      </div>`}
     </div>`;}).join('');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('#orderList .order').forEach(el=>{const f=el.querySelector('.fill'),t=el.querySelector('.truck');if(f)f.style.width=(f.getAttribute('data-pos')||'0')+'%';if(t)t.style.left=(t.getAttribute('data-pos')||'0')+'%';});}));
 }
@@ -713,18 +793,26 @@ function calcCost(){
   const mat=n('c_mat'),hours=n('c_hours'),rate=n('c_rate'),pack=n('c_pack'),oh=n('c_oh'),margin=n('c_margin'),fx=n('c_fx')||3.75;
   const labor=hours*rate;const base=mat+labor+pack;const withOh=base*(1+oh/100);const price=withOh*(1+margin/100);
   const usd=price/fx;lastUsd=usd;
+  const profit=price-withOh;const costTotal=price-profit;const profitPct=price?Math.round(profit/price*100):0;
   document.getElementById('costOut').innerHTML=`
-    <div class="breakdown">
-      <div class="brow"><span>Materiales / fibra</span><span>S/ ${mat.toFixed(2)}</span></div>
-      <div class="brow"><span>Mano de obra (${hours}h × S/${rate})</span><span>S/ ${labor.toFixed(2)}</span></div>
-      <div class="brow"><span>Empaque</span><span>S/ ${pack.toFixed(2)}</span></div>
-      <div class="brow"><span>Gastos generales (${oh}%)</span><span>S/ ${(withOh-base).toFixed(2)}</span></div>
-      <div class="brow"><span>Margen de ganancia (${margin}%)</span><span>S/ ${(price-withOh).toFixed(2)}</span></div>
-      <div class="brow total"><span>Precio mínimo de venta</span><span class="pv">S/ ${price.toFixed(2)}</span></div>
-    </div>
-    <div class="price-cards">
-      <div class="pcard"><div class="pv" style="color:var(--gold)">S/ ${price.toFixed(0)}</div><div class="pl">Precio en soles</div></div>
-      <div class="pcard"><div class="pv" style="color:var(--jade)">US$ ${usd.toFixed(0)}</div><div class="pl">Precio en dólares</div></div>
+    <div class="cost-top">
+      <div class="breakdown">
+        <div class="brow"><span>Materiales / fibra</span><span>S/ ${mat.toFixed(2)}</span></div>
+        <div class="brow"><span>Mano de obra (${hours}h × S/${rate})</span><span>S/ ${labor.toFixed(2)}</span></div>
+        <div class="brow"><span>Empaque</span><span>S/ ${pack.toFixed(2)}</span></div>
+        <div class="brow"><span>Gastos generales (${oh}%)</span><span>S/ ${(withOh-base).toFixed(2)}</span></div>
+        <div class="brow"><span>Margen de ganancia (${margin}%)</span><span>S/ ${profit.toFixed(2)}</span></div>
+        <div class="brow total"><span>Precio mínimo de venta</span><span class="pv">S/ ${price.toFixed(2)}</span></div>
+      </div>
+      <div class="cost-side">
+        <div class="pcard"><div class="pv" style="color:var(--gold)">S/ ${price.toFixed(0)}</div><div class="pl">Precio en soles</div></div>
+        <div class="pcard"><div class="pv" style="color:var(--jade)">US$ ${usd.toFixed(0)}</div><div class="pl">Precio en dólares</div></div>
+        <div class="split-card">
+          <div class="cb-title" style="margin:0 0 10px">Costo vs ganancia</div>
+          <div class="split-bar"><span class="sb-cost" style="width:${100-profitPct}%"></span><span class="sb-profit" style="width:${profitPct}%"></span></div>
+          <div class="split-legend"><span><i style="background:var(--terra)"></i>Costo S/ ${costTotal.toFixed(0)}</span><span><i style="background:var(--jade)"></i>Ganancia S/ ${profit.toFixed(0)} · ${profitPct}%</span></div>
+        </div>
+      </div>
     </div>
     <div id="priceGrid">${priceGridHTML(usd,null)}</div>`;
 }
