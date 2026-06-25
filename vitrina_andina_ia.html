@@ -98,7 +98,7 @@
   .post-avatar{width:40px;height:40px;border-radius:50%;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.1rem}
   .post-name{font-weight:800;font-size:.92rem;line-height:1.1}
   .post-handle{font-size:.78rem;color:#8a8a8a}
-  .post-img{height:180px;display:grid;place-items:center;color:#fff;font-size:2.6rem;background:linear-gradient(135deg,var(--vicuna),var(--terra))}
+  .post-img{position:relative;overflow:hidden;height:180px;display:grid;place-items:center;color:#fff;font-size:2.6rem;background:linear-gradient(135deg,var(--vicuna),var(--terra))}
   .post-body{padding:13px 14px 16px;font-size:.92rem;white-space:pre-wrap;line-height:1.5}
   .share-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
   /* plan de contenido / cronograma */
@@ -110,7 +110,8 @@
   /* referencias de ángulos / banco de imágenes */
   .shot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;margin-top:6px}
   .shot{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:6px}
-  .shot-frame{height:74px;border:2px dashed rgba(224,179,82,.4);border-radius:10px;display:grid;place-items:center;font-size:2rem;background:rgba(255,255,255,.02)}
+  .shot-frame{position:relative;overflow:hidden;height:110px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font-size:2rem;background:rgba(255,255,255,.02)}
+  .shot-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .shot-t{font-weight:800;font-size:.9rem}
   .shot-d{font-size:.78rem;color:var(--muted);line-height:1.4;flex:1}
   .shot button{margin-top:4px}
@@ -278,7 +279,7 @@
 
     <div class="card">
       <h2 class="sec" style="font-size:1.1rem">🎞️ Referencias de ángulos · banco de imágenes gratis</h2>
-      <p class="sub">Inspírate antes de fotografiar. Cada ejemplo abre un banco de fotos <b>gratis y libres de derechos</b> para ver e ir bajando referencias del ángulo. <span style="color:var(--muted)">(Necesita internet.)</span></p>
+      <p class="sub">Estas son <b>referencias reales</b> del ángulo (de bancos libres de derechos) para inspirar tus tomas. Toca <b>“Más ejemplos”</b> para ver y descargar más. <span style="color:var(--muted)">(Las imágenes necesitan internet.)</span></p>
       <div class="shot-grid" id="shotGrid"></div>
       <div class="note">Son <b>referencias</b> para inspirar tus tomas y encuadres — publica siempre tus <b>propias fotos</b> del producto real. Bancos libres: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a> · <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a> · <a href="https://pixabay.com" target="_blank" rel="noopener">Pixabay</a>.</div>
     </div>
@@ -304,6 +305,9 @@
       <div id="passOut" style="margin-top:20px"></div>
     </div>
   </section>
+  <footer style="text-align:center;color:var(--muted);font-size:.74rem;padding:30px 0 6px;border-top:1px solid var(--line);margin-top:30px">
+    Vitrina Andina IA · Artesanía Inteligente · Versión <b style="color:var(--gold)">v2026.06.25.1</b>
+  </footer>
 </main>
 
 <div class="modal" id="settings">
@@ -527,29 +531,62 @@ const SHOTS=[
   {k:'paisaje',ic:'🏔️',t:'En contexto andino',d:'Con paisaje o textiles de fondo: cuenta de dónde viene.',q:p=>`peru andes textile`}
 ];
 function openShotSearch(k){const s=SHOTS.find(x=>x.k===k);if(!s)return;window.open('https://www.pexels.com/search/'+encodeURIComponent(s.q(productEN()))+'/','_blank');}
-function renderShots(){const el=document.getElementById('shotGrid');if(!el)return;el.innerHTML=SHOTS.map(s=>`<div class="shot"><div class="shot-frame">${s.ic}</div><div class="shot-t">${esc(s.t)}</div><div class="shot-d">${esc(s.d)}</div><button class="btn ghost sm" onclick="openShotSearch('${s.k}')">📥 Ver ejemplos gratis</button></div>`).join('');}
-function tplContentES(type){
-  const n=D.name||'[Tu nombre]',r=D.region||'los Andes',p=(D.product||'textiles andinos').toLowerCase(),f=(D.fiber||'alpaca').toLowerCase();
-  const m={
-    producto:`✨ ${D.product||'Pieza'} en ${f}, tejido a mano en ${r}, Perú. 🇵🇪\n\nCada fibra cuenta una historia de más de 5,000 años de tradición andina. Calidad premium, exclusividad garantizada.\n\n📩 Escríbeme para pedidos internacionales.`,
-    proceso:`Del ande a tus manos 🤲\n\nAsí nace cada ${p}: fibra de camélido seleccionada, hilada y tejida ${D.technique||'a mano'}. Horas de trabajo en cada detalle.\n\nEsto es lo que lo industrial nunca podrá copiar. ❤️`,
-    historia:`Soy ${n}, de ${r} 🏔️\n\n${D.special||'Aprendí este arte de mi familia, y cada pieza lleva la identidad de mi comunidad.'}\n\nCuando compras artesanía andina, sostienes una cultura viva. Gracias por ser parte. 🙏`,
-    exportacion:`🌎 Envíos a todo el mundo.\n\n${D.product||'Piezas'} de ${f} 100% natural, hechas a mano en ${r}, Perú. Lujo natural a precio justo, directo del artesano.\n\n📦 Pregunta por envíos a tu país.`,
-    descripcion:`${D.product||'Pieza'} en ${f}, ${D.technique||'hecha a mano'} en ${r}, Perú.\n\n• Fibra natural de camélido andino, suave y térmica\n• Pieza única hecha a mano por ${n}\n• Cuidado: lavar a mano en agua fría, secar en plano\n\nUn tesoro de los Andes para tu vida diaria.`
-  };
-  return m[type]||m.producto;
+function refImg(query,w,h){return `https://loremflickr.com/${w}/${h}/${encodeURIComponent(query)}`;}
+function renderShots(){const el=document.getElementById('shotGrid');if(!el)return;el.innerHTML=SHOTS.map(s=>`<div class="shot"><div class="shot-frame">${esc(s.ic)}<img src="${refImg(s.q(productEN()),320,220)}" referrerpolicy="no-referrer" loading="lazy" alt="${esc(s.t)}" onerror="this.remove()"></div><div class="shot-t">${esc(s.t)}</div><div class="shot-d">${esc(s.d)}</div><button class="btn ghost sm" onclick="openShotSearch('${s.k}')">🔍 Más ejemplos gratis</button></div>`).join('');}
+/* imagen del preview de post: referencia real (online) o foto propia subida */
+function postImgInner(){
+  if(D.postImg)return `<img src="${D.postImg}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+  return `${angleImg(curAngle)}<img src="${refImg(productEN()+',peru,wool',600,360)}" referrerpolicy="no-referrer" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.remove()">`;
 }
-function tplContentEN(type){
-  const n=D.name||'[Your name]',r=D.region||'the Andes',f=(D.fiber||'alpaca').toLowerCase();
-  const prodEN={'Chal':'shawl','Poncho':'poncho','Chompa / suéter':'sweater','Chullo':'chullo hat','Bufanda':'scarf','Manta':'blanket','Guantes':'gloves','Tapiz':'tapestry'}[D.product]||'handwoven piece';
-  const m={
-    producto:`✨ Handwoven ${prodEN} in ${f}, made in ${r}, Peru. 🇵🇪\n\nEvery fiber carries 5,000 years of Andean tradition. Premium quality, one of a kind.\n\n📩 Message me for international orders.`,
-    proceso:`From the Andes to your hands 🤲\n\nThis is how each ${prodEN} is born: selected camelid fiber, hand-spun and handwoven. Hours of work in every detail.\n\nThis is what mass production can never copy. ❤️`,
-    historia:`I'm ${n}, from ${r} 🏔️\n\n${D.special||'I learned this craft from my family, and every piece carries the identity of my community.'}\n\nWhen you buy Andean craftwork, you keep a living culture alive. Thank you. 🙏`,
-    exportacion:`🌎 Worldwide shipping.\n\n100% natural ${f} ${prodEN}, handmade in ${r}, Peru. Natural luxury at a fair price, straight from the artisan.\n\n📦 Ask about shipping to your country.`,
-    descripcion:`Handwoven ${prodEN} in ${f}, made in ${r}, Peru.\n\n• Natural Andean camelid fiber — soft and warm\n• One-of-a-kind piece handmade by ${n}\n• Care: hand wash cold, dry flat\n\nA treasure from the Andes for your everyday life.`
+function setPostPhoto(e){const fl=e.target.files&&e.target.files[0];if(!fl)return;const rd=new FileReader();rd.onload=()=>{D.postImg=rd.result;const el=document.getElementById('postImg');if(el)el.innerHTML=postImgInner();toast('Foto agregada ✓');};rd.readAsDataURL(fl);}
+const FIBER_I18N={
+  en:{'Alpaca':'alpaca','Alpaca baby':'baby alpaca','Vicuña':'vicuña wool','Llama':'llama wool','Lana de oveja':'sheep wool','Mezcla de alpaca':'alpaca blend'},
+  fr:{'Alpaca':'alpaga','Alpaca baby':'bébé alpaga','Vicuña':'vigogne','Llama':'lama','Lana de oveja':'laine','Mezcla de alpaca':"mélange d'alpaga"},
+  de:{'Alpaca':'Alpaka','Alpaca baby':'Baby-Alpaka','Vicuña':'Vikunja','Llama':'Lama','Lana de oveja':'Schafwolle','Mezcla de alpaca':'Alpaka-Mischung'},
+  ja:{'Alpaca':'アルパカ','Alpaca baby':'ベビーアルパカ','Vicuña':'ビクーニャ','Llama':'リャマ','Lana de oveja':'ウール','Mezcla de alpaca':'アルパカ混紡'}
+};
+const PROD_EN={'Chal':'shawl','Poncho':'poncho','Chompa / suéter':'sweater','Chullo':'chullo hat','Bufanda':'scarf','Manta':'blanket','Guantes':'gloves','Tapiz':'tapestry'};
+function fiberI18n(lang){const m=FIBER_I18N[lang];return m?(m[D.fiber]||'alpaca'):(D.fiber||'alpaca').toLowerCase();}
+function tplContent(lang,type){
+  const n=D.name||'Artesano andino',r=D.region||'los Andes',f=fiberI18n(lang),sp=D.special||'';
+  const T={
+    es:{
+      producto:`✨ ${D.product||'Pieza'} en ${(D.fiber||'alpaca').toLowerCase()}, tejido a mano en ${r}, Perú. 🇵🇪\n\nCada fibra cuenta una historia de más de 5,000 años de tradición andina. Calidad premium, exclusividad garantizada.\n\n📩 Escríbeme para pedidos internacionales.`,
+      proceso:`Del ande a tus manos 🤲\n\nAsí nace cada pieza: fibra de camélido seleccionada, hilada y tejida ${D.technique||'a mano'}. Horas de trabajo en cada detalle.\n\nEsto es lo que lo industrial nunca podrá copiar. ❤️`,
+      historia:`Soy ${n}, de ${r} 🏔️\n\n${sp||'Aprendí este arte de mi familia, y cada pieza lleva la identidad de mi comunidad.'}\n\nCuando compras artesanía andina, sostienes una cultura viva. Gracias por ser parte. 🙏`,
+      exportacion:`🌎 Envíos a todo el mundo.\n\n${D.product||'Piezas'} de ${(D.fiber||'alpaca').toLowerCase()} 100% natural, hechas a mano en ${r}, Perú. Lujo natural a precio justo, directo del artesano.\n\n📦 Pregunta por envíos a tu país.`,
+      descripcion:`${D.product||'Pieza'} en ${(D.fiber||'alpaca').toLowerCase()}, ${D.technique||'hecha a mano'} en ${r}, Perú.\n\n• Fibra natural de camélido andino, suave y térmica\n• Pieza única hecha a mano por ${n}\n• Cuidado: lavar a mano en agua fría, secar en plano\n\nUn tesoro de los Andes para tu vida diaria.`
+    },
+    en:(()=>{const p=PROD_EN[D.product]||'handwoven piece';return{
+      producto:`✨ Handwoven ${p} in ${f}, made in ${r}, Peru. 🇵🇪\n\nEvery fiber carries 5,000 years of Andean tradition. Premium quality, one of a kind.\n\n📩 Message me for international orders.`,
+      proceso:`From the Andes to your hands 🤲\n\nThis is how each ${p} is born: selected camelid fiber, hand-spun and handwoven. Hours of work in every detail.\n\nThis is what mass production can never copy. ❤️`,
+      historia:`I'm ${n}, from ${r} 🏔️\n\n${sp||'I learned this craft from my family, and every piece carries the identity of my community.'}\n\nWhen you buy Andean craftwork, you keep a living culture alive. Thank you. 🙏`,
+      exportacion:`🌎 Worldwide shipping.\n\n100% natural ${f} ${p}, handmade in ${r}, Peru. Natural luxury at a fair price, straight from the artisan.\n\n📦 Ask about shipping to your country.`,
+      descripcion:`Handwoven ${p} in ${f}, made in ${r}, Peru.\n\n• Natural Andean camelid fiber — soft and warm\n• One-of-a-kind piece handmade by ${n}\n• Care: hand wash cold, dry flat\n\nA treasure from the Andes for your everyday life.`
+    };})(),
+    fr:{
+      producto:`✨ Pièce tissée à la main en ${f}, ${r}, Pérou. 🇵🇪\n\nChaque fibre porte plus de 5 000 ans de tradition andine. Qualité premium, pièce unique.\n\n📩 Écrivez-moi pour vos commandes internationales.`,
+      proceso:`Des Andes à vos mains 🤲\n\nVoici comment naît chaque pièce : fibre de camélidé sélectionnée, filée et tissée à la main. Des heures de travail dans chaque détail.\n\nCe que l'industrie ne pourra jamais copier. ❤️`,
+      historia:`Je suis ${n}, de ${r} 🏔️\n\n${sp||"Chaque pièce porte l'identité de ma communauté et le savoir transmis par ma famille."}\n\nEn achetant l'artisanat andin, vous faites vivre une culture. Merci. 🙏`,
+      exportacion:`🌎 Livraison dans le monde entier.\n\nPièces en ${f} 100% naturelle, faites main à ${r}, Pérou. Luxe naturel à prix juste, directement de l'artisan.\n\n📦 Demandez la livraison vers votre pays.`,
+      descripcion:`Pièce tissée à la main en ${f}, ${r}, Pérou.\n\n• Fibre naturelle de camélidé andin, douce et chaude\n• Pièce unique faite main par ${n}\n• Entretien : lavage à la main à l'eau froide, séchage à plat\n\nUn trésor des Andes pour votre quotidien.`
+    },
+    de:{
+      producto:`✨ Handgewebtes Stück aus ${f}, ${r}, Peru. 🇵🇪\n\nJede Faser trägt über 5.000 Jahre andine Tradition. Premium-Qualität, ein Unikat.\n\n📩 Schreiben Sie mir für internationale Bestellungen.`,
+      proceso:`Von den Anden in Ihre Hände 🤲\n\nSo entsteht jedes Stück: ausgewählte Kamelidenfaser, von Hand gesponnen und gewebt. Stunden voller Sorgfalt in jedem Detail.\n\nWas Massenware niemals kopieren kann. ❤️`,
+      historia:`Ich bin ${n}, aus ${r} 🏔️\n\n${sp||'Jedes Stück trägt die Identität meiner Gemeinschaft und das Wissen meiner Familie.'}\n\nWer andines Kunsthandwerk kauft, hält eine Kultur lebendig. Danke. 🙏`,
+      exportacion:`🌎 Weltweiter Versand.\n\nStücke aus 100% natürlicher ${f}, handgefertigt in ${r}, Peru. Natürlicher Luxus zu fairem Preis, direkt vom Kunsthandwerker.\n\n📦 Fragen Sie nach dem Versand in Ihr Land.`,
+      descripcion:`Handgewebtes Stück aus ${f}, ${r}, Peru.\n\n• Natürliche andine Kamelidenfaser – weich und warm\n• Unikat, handgefertigt von ${n}\n• Pflege: Handwäsche kalt, liegend trocknen\n\nEin Schatz aus den Anden für Ihren Alltag.`
+    },
+    ja:{
+      producto:`✨ 手織りの${f}作品、ペルー・${r}。🇵🇪\n\n一本一本の糸に5000年以上のアンデスの伝統が息づいています。プレミアム品質、世界に一つだけ。\n\n📩 海外発送のご注文はメッセージください。`,
+      proceso:`アンデスからあなたの手へ 🤲\n\n選び抜いたラクダ科の繊維を手で紡ぎ、手で織り上げます。細部にまで込められた時間と想い。\n\n大量生産には決して真似できない一品です。❤️`,
+      historia:`${r}出身の${n}です 🏔️\n\n${sp||'どの作品にも、私の村のアイデンティティと家族から受け継いだ技が込められています。'}\n\nアンデスの手仕事を買うことは、生きた文化を支えること。ありがとう。🙏`,
+      exportacion:`🌎 世界中へ発送します。\n\n100%天然${f}、ペルー・${r}の手作り。職人から直接、自然の贅沢をフェアな価格で。\n\n📦 お住まいの国への発送についてお問い合わせください。`,
+      descripcion:`手織りの${f}作品、ペルー・${r}製。\n\n• やわらかく暖かいアンデスのラクダ科天然繊維\n• ${n}が手がけた一点もの\n• お手入れ：冷水で手洗い、平干し\n\n日々の暮らしに、アンデスの宝物を。`
+    }
   };
-  return m[type]||m.producto;
+  const set=T[lang]||T.es;return set[type]||set.producto;
 }
 async function genContent(){
   if(!requireProfile())return;
@@ -559,11 +596,7 @@ async function genContent(){
   const sys=`Eres experto en marketing de redes para marcas artesanales premium. Escribe el texto en ${LANGNAME[curLang]}: cálido, auténtico, con emojis bien usados y una llamada a la acción. NO incluyas hashtags. Devuelve SOLO el texto, sin comentarios. Máximo 65 palabras.`;
   const usr=`Artesano: ${D.name} de ${D.region}, Perú.\nProducto: ${D.product} en ${D.fiber}, ${D.technique}.\n${D.special?'Detalle especial: '+D.special:''}\nEscribe una publicación ${angleDesc[curAngle]}.`;
   let text=await AI.call(sys,usr),ai=true,note='';
-  if(!text){
-    ai=false;
-    if(curLang==='es')text=tplContentES(curAngle);
-    else{text=tplContentEN(curAngle);if(curLang!=='en')note=`Versión en inglés — conéctate a internet para la versión en ${LANGNAME[curLang]}.`;}
-  }
+  if(!text){ai=false;text=tplContent(curLang,curAngle);}
   D.lastPost=text;
   const initial=(D.name||'A').trim().charAt(0).toUpperCase();
   const langLabel=(CONTENT_LANGS.find(l=>l.k===curLang)||{}).t||'';
@@ -571,16 +604,18 @@ async function genContent(){
     <div style="margin-bottom:12px">${srcTag(ai)} <span style="font-size:.82rem;color:var(--muted);margin-left:6px">${langLabel}</span></div>
     <div class="post-card">
       <div class="post-head"><div class="post-avatar">${esc(initial)}</div><div><div class="post-name">${esc(D.name)}</div><div class="post-handle">@${esc((D.name||'artesano').toLowerCase().replace(/\s/g,'_'))} · ${esc(D.region)}, Perú</div></div></div>
-      <div class="post-img">${angleImg(curAngle)}</div>
+      <div class="post-img" id="postImg">${postImgInner()}</div>
       <div class="post-body" id="postBody">${esc(text)}</div>
     </div>
     ${note?`<div class="note">🌐 ${note}</div>`:''}
+    <input type="file" id="postPhoto" accept="image/*" onchange="setPostPhoto(event)" hidden>
     <div class="share-row">
+      <button class="btn ghost sm" onclick="document.getElementById('postPhoto').click()">📷 Usar mi foto</button>
       <button class="btn wa sm" onclick="shareWhatsApp(D.lastPost)">📲 Compartir por WhatsApp</button>
       <button class="btn ghost sm" onclick="copyAndOpenIG()">📋 Copiar y abrir Instagram</button>
       <button class="btn ghost sm" onclick="copyPost()">Copiar texto</button>
     </div>
-    <div class="demo-hint">Reemplaza el ícono por tu <b>foto real</b> del producto antes de publicar (mira la guía de fotos abajo). El texto ya está listo, sin hashtags.</div>`;
+    <div class="demo-hint">La imagen es solo una <b>referencia</b>. Toca <b>“📷 Usar mi foto”</b> para poner la foto real de tu producto antes de publicar. El texto ya está listo, sin hashtags.</div>`;
   btn.disabled=false;btn.innerHTML='✦ Generar contenido';markDone('redes');
 }
 function shareWhatsApp(text){window.open('https://wa.me/?text='+encodeURIComponent(text||''),'_blank');}
@@ -611,7 +646,7 @@ async function genPlan(){
     <div class="plan-grid">${plan.map(p=>`<div class="plan-card"><div class="plan-day">${esc(p.day)}</div><div class="plan-angle">${esc(angleLabel(p.angle))}</div><div class="plan-idea">${esc(p.idea)}</div><button class="btn ghost sm" onclick="usePlanAngle('${p.angle}')">✍️ Crear este post</button></div>`).join('')}</div>`;
   btn.disabled=false;btn.innerHTML='✦ Regenerar plan';markDone('redes');
 }
-function usePlanAngle(k){curAngle=k;renderContentControls();const seg=document.getElementById('angleSeg');if(seg)seg.scrollIntoView({behavior:'smooth',block:'center'});toast('Ángulo elegido: '+angleLabel(k).replace(/^[^ ]+ /,''));}
+function usePlanAngle(k){curAngle=k;renderContentControls();const seg=document.getElementById('angleSeg');if(seg)seg.scrollIntoView({behavior:'smooth',block:'center'});genContent();}
 
 /* ===== TAB 3: CERTIFICACIONES (ordenadas por dificultad) ===== */
 const CERTS=[
@@ -708,7 +743,7 @@ async function aiRoute(){
 
 /* ===== TAB 4: PASAPORTE ===== */
 function genCode(){const seed=(D.name+D.region+Date.now()).split('').reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);const pre={'Vicuña':'VIC','Alpaca baby':'ABY'}[D.fiber]||'AND';return `${pre}-2026-${(seed%10000).toString().padStart(4,'0')}`;}
-function passportPayload(){return `PASAPORTE ANDINO DE AUTENTICIDAD\nArtesano: ${D.name}\nOrigen: ${D.region}, Peru\nProducto: ${D.product} - ${D.fiber}\nTecnica: ${D.technique}\nCodigo: ${D.code}${D.contact?'\nContacto: '+D.contact:''}`;}
+function passportPayload(){const l=['PASAPORTE ANDINO',D.name,`${D.region}, Peru`,`${D.product} - ${D.fiber}`,`Cod: ${D.code}`];if(D.contact)l.push(D.contact);return l.join('\n');}
 async function generatePassport(){
   if(!requireProfile())return;
   const btn=document.getElementById('genPassBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando…';
