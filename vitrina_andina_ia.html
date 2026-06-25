@@ -107,6 +107,15 @@
   .plan-day{font-size:.74rem;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.05em}
   .plan-angle{font-size:.76rem;color:var(--muted);margin:2px 0 8px}
   .plan-idea{font-size:.9rem;color:var(--cream);line-height:1.45;margin-bottom:12px;flex:1}
+  /* referencias de ángulos / banco de imágenes */
+  .shot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;margin-top:6px}
+  .shot{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:6px}
+  .shot-frame{height:74px;border:2px dashed rgba(224,179,82,.4);border-radius:10px;display:grid;place-items:center;font-size:2rem;background:rgba(255,255,255,.02)}
+  .shot-t{font-weight:800;font-size:.9rem}
+  .shot-d{font-size:.78rem;color:var(--muted);line-height:1.4;flex:1}
+  .shot button{margin-top:4px}
+  .note a{color:var(--gold);font-weight:700;text-decoration:none}
+  .note a:hover{text-decoration:underline}
   /* certificaciones */
   .route-card{background:linear-gradient(150deg,rgba(47,143,128,.15),rgba(224,179,82,.08));border:1px solid rgba(224,179,82,.32);border-radius:14px;padding:18px;margin-bottom:18px}
   .route-card .rt-h{font-weight:800;font-size:1.02rem;display:flex;align-items:center;gap:8px}
@@ -126,7 +135,7 @@
   .cert-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
   .cchip{font-size:.73rem;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line)}
   .cchip.cost{background:rgba(224,179,82,.12);color:var(--gold)}
-  .cchip.up{background:rgba(67,209,122,.13);color:#7ee6a6}
+  .cchip.up{background:rgba(67,209,122,.18);color:#8af0ad;border-color:rgba(67,209,122,.4);font-weight:800}
   .cchip.who{background:rgba(255,255,255,.05);color:var(--cream2)}
   .cert-body{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);font-size:.9rem;color:var(--cream);line-height:1.55}
   .cert.open .cert-body{display:block}
@@ -147,7 +156,7 @@
   .pp-rows .v{color:var(--cream);font-weight:600}
   .pp-story{font-size:.9rem;color:var(--cream2);font-style:italic;line-height:1.6;border-top:1px solid var(--line);padding-top:13px;margin-top:4px}
   .pp-qr{background:#fff;border-radius:14px;padding:12px;display:grid;place-items:center;align-self:start;justify-self:center}
-  .pp-qr canvas{display:block;border-radius:6px;image-rendering:pixelated;width:170px;height:170px}
+  .pp-qr canvas{display:block;border-radius:6px;image-rendering:pixelated;width:auto;height:auto;max-width:260px}
   .pp-qr .code{font-size:.74rem;font-weight:800;color:#14121f;margin-top:8px;letter-spacing:.05em}
   .spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -266,6 +275,13 @@
       <ul class="checklist" id="photoGuide"></ul>
       <div class="note">Una buena foto + descripción en inglés puede ser la diferencia entre que un comprador de Japón o Alemania haga clic… o pase de largo.</div>
     </div>
+
+    <div class="card">
+      <h2 class="sec" style="font-size:1.1rem">🎞️ Referencias de ángulos · banco de imágenes gratis</h2>
+      <p class="sub">Inspírate antes de fotografiar. Cada ejemplo abre un banco de fotos <b>gratis y libres de derechos</b> para ver e ir bajando referencias del ángulo. <span style="color:var(--muted)">(Necesita internet.)</span></p>
+      <div class="shot-grid" id="shotGrid"></div>
+      <div class="note">Son <b>referencias</b> para inspirar tus tomas y encuadres — publica siempre tus <b>propias fotos</b> del producto real. Bancos libres: <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a> · <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a> · <a href="https://pixabay.com" target="_blank" rel="noopener">Pixabay</a>.</div>
+    </div>
   </section>
 
   <!-- TAB 3 · CERTIFICADOS -->
@@ -275,7 +291,7 @@
       <p class="sub">Cada certificado es una <b>llave a un precio más alto</b>. Aquí están ordenados de lo más fácil a lo más exigente, con costo aproximado y cuánto más podrías vender.</p>
       <div id="certRoute"></div>
       <div id="certList"></div>
-      <div class="note">⚠️ <b>Cifras orientativas.</b> Costos y trámites varían y los confirma la entidad certificadora, PROMPERÚ o INDECOPI. <b>Clave:</b> certificarse en <b>asociación o cooperativa</b> baja mucho el costo por artesano. Toca “Personalizar con IA” para una ruta a tu medida.</div>
+      <div class="note">⚠️ <b>Cifras orientativas.</b> Los <b>precios</b> y trámites varían y los confirma la entidad certificadora, PROMPERÚ o INDECOPI. El <b>% es el aumento de precio potencial</b> al abrir canales premium, no una garantía. <b>Clave:</b> certificarse en <b>asociación o cooperativa</b> baja mucho el costo por artesano. Toca “Personalizar con IA” para una ruta a tu medida.</div>
     </div>
   </section>
 
@@ -402,7 +418,7 @@ function drawQRTo(ctx,text,ox,oy,target){
   for(let i=0;i<r.size;i++)for(let c=0;c<r.size;c++)if(r.matrix[i][c])ctx.fillRect(ox+(c+quiet)*scale,oy+(i+quiet)*scale,scale,scale);
   return dim;
 }
-function drawQR(canvas,text){const ctx=canvas.getContext('2d');const r=QR.encode(text);const quiet=4;const scale=Math.max(2,Math.floor(168/(r.size+quiet*2)));const dim=(r.size+quiet*2)*scale;canvas.width=dim;canvas.height=dim;drawQRTo(ctx,text,0,0,168);}
+function drawQR(canvas,text){const ctx=canvas.getContext('2d');const r=QR.encode(text);const quiet=4;const scale=Math.max(4,Math.floor(260/(r.size+quiet*2)));const dim=(r.size+quiet*2)*scale;canvas.width=dim;canvas.height=dim;drawQRTo(ctx,text,0,0,dim);}
 
 /* ===== HYBRID AI — Gemini (Google AI Studio) ===== */
 const GEMINI_MODEL='gemini-2.0-flash'; // si tu clave usa otro, cámbialo (ej. gemini-2.5-flash, gemini-1.5-flash)
@@ -499,6 +515,19 @@ const PHOTO_TIPS=[
   'Guarda una versión con descripción en inglés: es lo que buscan en Etsy, Faire e Instagram.'
 ];
 function angleImg(k){const a=ANGLES.find(x=>x.k===k);return a?a.img:'🧶';}
+/* referencias de ángulos · banco de imágenes gratis (Pexels) */
+function productEN(){return {'Chal':'shawl','Poncho':'poncho','Chompa / suéter':'sweater','Chullo':'chullo hat','Bufanda':'scarf','Manta':'blanket','Guantes':'gloves','Tapiz':'tapestry'}[D.product]||'alpaca textile';}
+function fiberEN(){return (D.fiber||'alpaca').toLowerCase().includes('vic')?'vicuna':'alpaca';}
+const SHOTS=[
+  {k:'plano',ic:'🖼️',t:'Plano completo',d:'Toda la pieza centrada, fondo limpio. Es tu foto principal.',q:p=>`${p} product photography`},
+  {k:'detalle',ic:'🔍',t:'Detalle / textura',d:'Acércate al tejido para que se vea la suavidad de la fibra.',q:p=>`${fiberEN()} wool texture`},
+  {k:'enuso',ic:'🧍',t:'En uso (sobre el cuerpo)',d:'Puesta sobre una persona o maniquí: ayuda a imaginar cómo se ve.',q:p=>`model wearing ${p}`},
+  {k:'flatlay',ic:'📐',t:'Flat lay (desde arriba)',d:'Vista cenital, bien acomodada con accesorios simples.',q:p=>`${p} flat lay`},
+  {k:'taller',ic:'🧶',t:'En tu taller',d:'Tejiendo en el telar: el proceso enamora y da autenticidad.',q:p=>`weaving loom artisan peru`},
+  {k:'paisaje',ic:'🏔️',t:'En contexto andino',d:'Con paisaje o textiles de fondo: cuenta de dónde viene.',q:p=>`peru andes textile`}
+];
+function openShotSearch(k){const s=SHOTS.find(x=>x.k===k);if(!s)return;window.open('https://www.pexels.com/search/'+encodeURIComponent(s.q(productEN()))+'/','_blank');}
+function renderShots(){const el=document.getElementById('shotGrid');if(!el)return;el.innerHTML=SHOTS.map(s=>`<div class="shot"><div class="shot-frame">${s.ic}</div><div class="shot-t">${esc(s.t)}</div><div class="shot-d">${esc(s.d)}</div><button class="btn ghost sm" onclick="openShotSearch('${s.k}')">📥 Ver ejemplos gratis</button></div>`).join('');}
 function tplContentES(type){
   const n=D.name||'[Tu nombre]',r=D.region||'los Andes',p=(D.product||'textiles andinos').toLowerCase(),f=(D.fiber||'alpaca').toLowerCase();
   const m={
@@ -586,23 +615,23 @@ function usePlanAngle(k){curAngle=k;renderContentControls();const seg=document.g
 
 /* ===== TAB 3: CERTIFICACIONES (ordenadas por dificultad) ===== */
 const CERTS=[
-  {ic:'🏛️',name:'Formalización + Marca (INDECOPI)',sub:'La base de todo: te deja facturar, exportar y proteger tu nombre.',diff:1,cost:'Bajo · RUC gratis en SUNAT; registrar marca ≈ S/ 535 por clase en INDECOPI',up:'Habilita exportar y vender formal',who:'Individual',
-    why:'Sin RUC no puedes facturar ni exportar formalmente, y sin marca registrada cualquiera puede copiar tu nombre. Es el primer escalón y el más barato.',
+  {ic:'🏛️',name:'Formalización + Marca (INDECOPI)',sub:'La base de todo: te deja facturar, exportar y proteger tu nombre.',diff:1,cost:'RUC gratis · marca ≈ S/ 535 por clase',pct:'+10–20%',who:'Individual',
+    why:'Sin RUC no puedes facturar ni exportar formalmente, y sin marca registrada cualquiera puede copiar tu nombre. Es el primer escalón y el más barato. Vender formal y con marca propia ya te permite subir el precio.',
     steps:['Saca tu RUC en SUNAT (gratis, puede ser RUC de persona natural con negocio).','Busca que el nombre de tu marca esté libre en INDECOPI.','Solicita el registro de marca en INDECOPI y paga la tasa por clase.','Espera la publicación y resolución (suele tomar varios meses).']},
-  {ic:'🦙',name:'Sello “Alpaca del Perú”',sub:'Respaldo de marca país que da confianza al comprador internacional.',diff:2,cost:'Bajo–Medio · licencia de uso de marca sectorial (según convocatoria)',up:'+ confianza y mejor precio',who:'Individual o asociación',
-    why:'Es una marca sectorial que certifica que usas alpaca peruana genuina. Da respaldo de “marca país” y diferencia tu producto de las imitaciones.',
+  {ic:'🦙',name:'Sello “Alpaca del Perú”',sub:'Respaldo de marca país que da confianza al comprador internacional.',diff:2,cost:'≈ S/ 0–500 (según convocatoria)',pct:'+15–30%',who:'Individual o asociación',
+    why:'Es una marca sectorial que certifica que usas alpaca peruana genuina. Da respaldo de “marca país” y diferencia tu producto de las imitaciones, lo que justifica un mejor precio.',
     steps:['Trabaja con fibra 100% de alpaca peruana.','Infórmate de la convocatoria de licencia con PROMPERÚ / el gremio alpaquero.','Cumple los estándares de calidad y origen que pide la marca.','Usa el sello en tus etiquetas y tu Pasaporte Digital.']},
-  {ic:'🤝',name:'Comercio Justo (Fairtrade / WFTO)',sub:'Abre canales éticos premium que pagan sobreprecio por tu trabajo.',diff:3,cost:'Medio · mucho más barato en asociación/cooperativa',up:'Hasta ~3× en canal premium*',who:'Asociación / cooperativa',
-    why:'Garantiza pago justo y buenas condiciones. Abre tiendas y compradores éticos en Europa y EE.UU. que pagan bastante más. Se certifica en grupo, lo que reparte el costo.',
+  {ic:'🤝',name:'Comercio Justo (Fairtrade / WFTO)',sub:'Abre canales éticos premium que pagan sobreprecio por tu trabajo.',diff:3,cost:'≈ US$ 1,500–3,000/año (en grupo, mucho menos por persona)',pct:'+25–50%',who:'Asociación / cooperativa',
+    why:'Garantiza pago justo y buenas condiciones. Abre tiendas y compradores éticos en Europa y EE.UU. que pagan bastante más. Se certifica en grupo, lo que reparte el costo entre todos.',
     steps:['Organízate en una asociación o cooperativa de artesanos.','Cumple los criterios sociales y ambientales del estándar.','Pasa la auditoría de un organismo (FLOCERT / WFTO).','Usa el sello para entrar a ferias y canales de comercio justo.']},
-  {ic:'🧪',name:'OEKO-TEX Standard 100',sub:'Certifica que tu textil está libre de sustancias nocivas. Muy pedido en Europa.',diff:3,cost:'Medio–Alto · análisis de laboratorio por producto/línea, renovación anual',up:'Hasta ~3× en canal premium*',who:'Individual o asociación',
-    why:'Muchas tiendas europeas lo exigen como mínimo de seguridad. Es por producto: certificas tu línea y la puedes vender con respaldo de laboratorio.',
+  {ic:'🧪',name:'OEKO-TEX Standard 100',sub:'Certifica que tu textil está libre de sustancias nocivas. Muy pedido en Europa.',diff:3,cost:'≈ US$ 500–1,500 por línea/año',pct:'+20–40%',who:'Individual o asociación',
+    why:'Muchas tiendas europeas lo exigen como mínimo de seguridad. Es por producto: certificas tu línea y la puedes vender con respaldo de laboratorio, accediendo a canales que pagan más.',
     steps:['Asegura que fibra y tintes cumplan los límites de sustancias.','Envía muestras a un instituto OEKO-TEX acreditado.','Aprueba los análisis de laboratorio.','Renueva el certificado cada año.']},
-  {ic:'🌿',name:'GOTS — Textil Orgánico',sub:'El sello de mayor valor para fibra natural orgánica.',diff:4,cost:'Alto · audita toda la cadena; recomendable de forma colectiva',up:'Máximo premium en orgánico*',who:'Asociación / cadena',
-    why:'Certifica que la fibra es orgánica y que toda la cadena (hilado, teñido, confección) cumple normas ambientales y sociales. Es el más exigente, pero el de mayor precio en el nicho orgánico.',
+  {ic:'🌿',name:'GOTS — Textil Orgánico',sub:'El sello de mayor valor para fibra natural orgánica.',diff:4,cost:'≈ US$ 2,000–4,000/año (colectivo)',pct:'+30–60%',who:'Asociación / cadena',
+    why:'Certifica que la fibra es orgánica y que toda la cadena (hilado, teñido, confección) cumple normas ambientales y sociales. Es el más exigente, pero el de mayor precio en el nicho orgánico premium.',
     steps:['Consigue fibra orgánica certificada.','Documenta y limpia toda la cadena de producción.','Contrata una certificadora acreditada GOTS para la auditoría.','Mantén registros y renueva la certificación.']},
-  {ic:'♻️',name:'GRS — Estándar de Reciclado',sub:'Para líneas con contenido reciclado; nichos de moda sostenible.',diff:4,cost:'Alto · auditoría de cadena de custodia',up:'Acceso a nichos sostenibles',who:'Asociación / cadena',
-    why:'Verifica el contenido reciclado y su trazabilidad. Útil solo si trabajas materiales reciclados; abre marcas de moda con metas de sostenibilidad.',
+  {ic:'♻️',name:'GRS — Estándar de Reciclado',sub:'Para líneas con contenido reciclado; nichos de moda sostenible.',diff:4,cost:'≈ US$ 1,500–3,000/año',pct:'+15–35%',who:'Asociación / cadena',
+    why:'Verifica el contenido reciclado y su trazabilidad. Útil solo si trabajas materiales reciclados; abre marcas de moda con metas de sostenibilidad que pagan más por contenido certificado.',
     steps:['Usa y documenta material reciclado verificable.','Mantén trazabilidad de la cadena de custodia.','Pasa la auditoría de una certificadora GRS.','Etiqueta el porcentaje de contenido reciclado.']}
 ];
 function diffDots(level){let h='<span class="diff">';for(let i=1;i<=5;i++)h+=`<i class="${i<=level?'on':''}"></i>`;const lbl=['','Muy alcanzable','Alcanzable','Media','Exigente','Muy exigente'][level];h+=`<span class="dl">${lbl}</span></span>`;return h;}
@@ -618,7 +647,7 @@ function renderCerts(){
           <div class="cert-chips">
             ${diffDots(c.diff)}
             <span class="cchip cost">💵 ${esc(c.cost)}</span>
-            <span class="cchip up">📈 ${esc(c.up)}</span>
+            <span class="cchip up">📈 ${esc(c.pct)} más</span>
             <span class="cchip who">👥 ${esc(c.who)}</span>
           </div>
         </div>
@@ -679,7 +708,7 @@ async function aiRoute(){
 
 /* ===== TAB 4: PASAPORTE ===== */
 function genCode(){const seed=(D.name+D.region+Date.now()).split('').reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);const pre={'Vicuña':'VIC','Alpaca baby':'ABY'}[D.fiber]||'AND';return `${pre}-2026-${(seed%10000).toString().padStart(4,'0')}`;}
-function passportPayload(){return `PASAPORTE ANDINO DE AUTENTICIDAD\nArtesano: ${D.name}\nOrigen: ${D.region}, Peru\nProducto: ${D.product} en ${D.fiber}\nTecnica: ${D.technique}\nExperiencia: ${D.years}\nCodigo: ${D.code}${D.contact?'\nContacto: '+D.contact:''}`;}
+function passportPayload(){return `PASAPORTE ANDINO DE AUTENTICIDAD\nArtesano: ${D.name}\nOrigen: ${D.region}, Peru\nProducto: ${D.product} - ${D.fiber}\nTecnica: ${D.technique}\nCodigo: ${D.code}${D.contact?'\nContacto: '+D.contact:''}`;}
 async function generatePassport(){
   if(!requireProfile())return;
   const btn=document.getElementById('genPassBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando…';
@@ -712,7 +741,7 @@ async function generatePassport(){
       <button class="btn ghost sm" onclick="downloadPassport()">⬇ Descargar imagen</button>
       <button class="btn ghost sm" onclick="window.print()">🖨 Imprimir</button>
     </div>
-    <div class="demo-hint no-print">El comprador escanea este QR con la cámara de su celular y ve el origen, el artesano y la técnica — <b>sin internet</b>. “Enviar a WhatsApp” abre el menú de compartir del celular y adjunta la imagen del pasaporte.</div>`;
+    <div class="demo-hint no-print">📷 Al escanear el QR (cámara o Google Lens) aparece una <b>ficha de texto de autenticidad</b>: artesano, origen, producto, técnica y código — <b>sin necesidad de internet</b>, porque los datos viajan dentro del propio QR. “Enviar a WhatsApp” abre el menú de compartir y adjunta la imagen del pasaporte.</div>`;
   try{drawQR(document.getElementById('qrCanvas'),passportPayload());}
   catch(e){document.querySelector('.pp-qr').innerHTML='<div style="color:#14121f;font-size:.8rem;padding:20px;text-align:center">Texto demasiado largo para el QR. Acorta el contacto.</div>';}
   btn.disabled=false;btn.innerHTML='✦ Regenerar Pasaporte';markDone('pasaporte');
@@ -751,7 +780,7 @@ function sharePassport(){
 function downloadPassport(){let cv;try{cv=composePassportImage();}catch(e){toast('Genera el pasaporte primero');return;}const a=document.createElement('a');a.download=`pasaporte_${D.code||'andino'}.png`;a.href=cv.toDataURL('image/png');a.click();toast('Pasaporte descargado');}
 
 /* ===== INIT ===== */
-renderSteps();renderProgress();renderContentControls();renderCerts();refreshAiStatus();
+renderSteps();renderProgress();renderContentControls();renderShots();renderCerts();refreshAiStatus();
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 if(!localStorage.getItem('va_seen')){document.getElementById('welcome').classList.add('open');localStorage.setItem('va_seen','1');}
 </script>
