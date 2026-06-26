@@ -229,6 +229,57 @@
     letter-spacing:.8px;
   }
 
+  /* ── TECSUP corner logo (fixed, every slide) ── */
+  .tecsup-corner {
+    position: fixed; bottom: 18px; left: 22px; z-index: 950;
+    display: flex; align-items: center; gap: 7px;
+    opacity: .75;
+    transition: opacity .2s;
+  }
+  .tecsup-corner:hover { opacity: 1; }
+  .tecsup-corner .tc-mark {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .tecsup-corner .tc-bar {
+    height: 4px; border-radius: 2px;
+  }
+  .tecsup-corner .tc-bar:nth-child(1) { width: 20px; background:#0077B6; }
+  .tecsup-corner .tc-bar:nth-child(2) { width: 14px; background:#0077B6; opacity:.7; }
+  .tecsup-corner .tc-bar:nth-child(3) { width: 8px;  background:#0077B6; opacity:.4; }
+  .tecsup-corner .tc-text {
+    font-size: 15px; font-weight: 900; letter-spacing: 1.5px;
+    color: #0077B6; line-height: 1;
+  }
+  .tecsup-corner .tc-sub {
+    font-size: 7.5px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: rgba(0,119,182,.6); margin-top: 2px;
+  }
+
+  /* ── TECSUP slide-1 logo (larger) ── */
+  .tecsup-hero {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 32px;
+  }
+  .tecsup-hero .th-mark {
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .tecsup-hero .th-bar {
+    height: 5px; border-radius: 2px;
+  }
+  .tecsup-hero .th-bar:nth-child(1) { width: 30px; background:#0077B6; }
+  .tecsup-hero .th-bar:nth-child(2) { width: 20px; background:#0077B6; opacity:.7; }
+  .tecsup-hero .th-bar:nth-child(3) { width: 10px; background:#0077B6; opacity:.4; }
+  .tecsup-hero .th-divider {
+    width: 1px; height: 36px; background: rgba(0,119,182,.35); margin: 0 4px;
+  }
+  .tecsup-hero .th-text { line-height: 1.15; }
+  .tecsup-hero .th-name {
+    font-size: 22px; font-weight: 900; letter-spacing: 2.5px; color: #0077B6;
+  }
+  .tecsup-hero .th-sub {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(0,119,182,.6); margin-top: 2px;
+  }
+
   @media (max-width:700px) {
     .slide { padding:70px 22px 66px; }
     .grid2 { grid-template-columns:1fr; }
@@ -246,11 +297,40 @@
 <button class="arrow next" onclick="go(1)">›</button>
 <div class="dots" id="dots"></div>
 
+<!-- TECSUP corner: aparece en todos los slides -->
+<div class="tecsup-corner">
+  <div class="tc-mark">
+    <div class="tc-bar"></div>
+    <div class="tc-bar"></div>
+    <div class="tc-bar"></div>
+  </div>
+  <div>
+    <div class="tc-text">TECSUP</div>
+    <div class="tc-sub">Tecnología Superior</div>
+  </div>
+</div>
+
 <div class="deck">
 
   <!-- ══ SLIDE 1: Portada ══ -->
   <div class="slide active" id="s0">
-    <svg class="chakana" width="68" height="68" viewBox="0 0 72 72" fill="none">
+
+    <!-- TECSUP logo prominente arriba -->
+    <div class="tecsup-hero">
+      <div class="th-mark">
+        <div class="th-bar"></div>
+        <div class="th-bar"></div>
+        <div class="th-bar"></div>
+      </div>
+      <div class="th-divider"></div>
+      <div class="th-text">
+        <div class="th-name">TECSUP</div>
+        <div class="th-sub">Tecnología Superior</div>
+      </div>
+    </div>
+
+    <!-- Chakana + títulos -->
+    <svg class="chakana" width="60" height="60" viewBox="0 0 72 72" fill="none">
       <defs>
         <linearGradient id="cg" x1="0" y1="0" x2="72" y2="72" gradientUnits="userSpaceOnUse">
           <stop offset="0%"   stop-color="#e0b352"/>
@@ -261,11 +341,20 @@
       <path d="M28 0h16v16h16v16h12v16H60v16H44v12H28V64H12V48H0V32h12V16h16V0z" fill="url(#cg)"/>
       <rect x="24" y="24" width="24" height="24" fill="#14121f"/>
     </svg>
+
     <div class="tag">Expo Perú Los Andes · Huancavelica 2026</div>
     <h1><span class="gold">ARTESANÍA</span><br><span class="cream">INTELIGENTE</span></h1>
     <div class="divider"></div>
     <p class="sub">Lo que los datos dicen sobre el textil andino —<br>y por qué el momento de actuar es <strong style="color:var(--gold)">ahora mismo</strong>.</p>
-    <div class="badge">Domingo 28 de junio · 9:40 am · Domo principal</div>
+
+    <!-- Sección asignada -->
+    <div class="badge" style="text-align:center;line-height:1.4">
+      <div style="font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:4px;text-transform:uppercase">Sesión</div>
+      Incorporación de IA en los Procesos de la Industria Textil
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);letter-spacing:.5px">
+      Expo Perú Los Andes 2026 · Huancavelica
+    </div>
   </div>
 
   <!-- ══ SLIDE 2: El evento ══ -->
