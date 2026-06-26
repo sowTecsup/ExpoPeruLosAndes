@@ -392,7 +392,10 @@ const QR=(function(){
   function rsDivisor(deg){const res=new Array(deg).fill(0);res[deg-1]=1;let root=1;for(let i=0;i<deg;i++){for(let j=0;j<res.length;j++){res[j]=gmul(res[j],root);if(j+1<res.length)res[j]^=res[j+1];}root=gmul(root,2);}return res;}
   function rsRemainder(data,divisor){const res=new Array(divisor.length).fill(0);for(const b of data){const factor=b^res[0];res.shift();res.push(0);for(let j=0;j<res.length;j++)res[j]^=gmul(divisor[j],factor);}return res;}
   function encode(text){
-    const data=Array.from(new TextEncoder().encode(text));let ver=0;for(let v=1;v<=10;v++)if(data.length<=CAP[v]){ver=v;break;}
+    /* Tope en v6: las versiones 7+ de este encoder casero las rechazan los lectores estrictos
+       de los celulares (verificado con qrcode-reader). Mejor lanzar "muy largo" que emitir un QR
+       que parece válido pero no escanea. */
+    const data=Array.from(new TextEncoder().encode(text));let ver=0;for(let v=1;v<=6;v++)if(data.length<=CAP[v]){ver=v;break;}
     if(!ver)throw new Error('Texto demasiado largo para el QR');
     const size=ver*4+17;const[ecLen,g1n,g1d,g2n,g2d]=ECL[ver];const totalData=g1n*g1d+g2n*g2d;
     const bits=[];const put=(val,len)=>{for(let i=len-1;i>=0;i--)bits.push((val>>i)&1);};
@@ -762,10 +765,14 @@ async function aiRoute(){
 
 /* ===== TAB 4: PASAPORTE ===== */
 function genCode(){const seed=(D.name+D.region+Date.now()).split('').reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);const pre={'Vicuña':'VIC','Alpaca baby':'ABY'}[D.fiber]||'AND';return `${pre}-2026-${(seed%10000).toString().padStart(4,'0')}`;}
-const PASSPORT_BASE='https://sowtecsup.github.io/ExpoPeruLosAndes/pasaporte.html';
-function passportData(){const d={n:D.name,r:D.region,p:D.product,f:D.fiber,t:D.technique,y:D.years,c:D.code};if(D.contact)d.x=D.contact;return d;}
-function passportPayload(){const d=passportData(),p=new URLSearchParams();for(const k in d)if(d[k])p.set(k,d[k]);return PASSPORT_BASE+'#'+p.toString();}
-function previewPassport(){if(!D.name){toast('Genera el pasaporte primero');return;}const d=passportData(),p=new URLSearchParams();for(const k in d)if(d[k])p.set(k,d[k]);window.open('pasaporte.html#'+p.toString(),'_blank');}
+/* QR de TEXTO corto a propósito: mantiene la versión del QR baja (v2–v4, módulos gruesos)
+   = se escanea de forma fiable en celulares reales. El encoder casero falla en v7+ (lo rechazan
+   los lectores estrictos), por eso NO metemos URLs ni textos largos aquí. Verificado con dos
+   decodificadores independientes (jsQR + qrcode-reader). */
+function passportPayload(){
+  const l=[`${D.name} - ${D.region}, Peru`,`${D.product} en ${D.fiber}`,`Codigo: ${D.code}`];
+  return l.join('\n');
+}
 async function generatePassport(){
   if(!requireProfile())return;
   const btn=document.getElementById('genPassBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Generando…';
@@ -776,7 +783,7 @@ async function generatePassport(){
   if(!story){story=`Cada hilo de esta pieza guarda la memoria de ${D.region} y las manos que la tejieron, ${D.technique}.`;ai=false;}
   D.story=story;
   document.getElementById('passOut').innerHTML=`
-    ${srcTag(ai)} <span style="font-size:.82rem;color:var(--muted);margin-left:8px">QR con enlace a tu página de autenticidad</span>
+    ${srcTag(ai)} <span style="font-size:.82rem;color:var(--muted);margin-left:8px">QR escaneable · funciona sin internet</span>
     <div class="passport" id="passportCard" style="margin-top:14px">
       <div>
         <div class="pp-label">Pasaporte Digital · Producto</div>
@@ -795,11 +802,10 @@ async function generatePassport(){
     </div>
     <div class="share-row no-print">
       <button class="btn wa sm" onclick="sharePassport()">📲 Enviar a WhatsApp</button>
-      <button class="btn ghost sm" onclick="previewPassport()">👁 Previsualizar página</button>
       <button class="btn ghost sm" onclick="downloadPassport()">⬇ Descargar imagen</button>
       <button class="btn ghost sm" onclick="window.print()">🖨 Imprimir</button>
     </div>
-    <div class="demo-hint no-print">📷 Al escanear el QR (cámara o Google Lens) aparece un <b>enlace tocable</b> que abre la <b>página de autenticidad</b> de tu pieza (artesano, origen, producto, técnica y código), con diseño de marca. Los datos viajan <b>dentro del propio enlace</b>; abrir la página necesita internet. Toca <b>“Previsualizar página”</b> para ver cómo la verá el comprador.</div>`;
+    <div class="demo-hint no-print">📷 Al escanear el QR (cámara o Google Lens) aparece la <b>ficha de autenticidad</b> de tu pieza: artesano, origen, producto, fibra y código único — <b>al instante y sin internet</b>, porque los datos viajan dentro del propio QR. Es la prueba de origen que el comprador premium valora. “Enviar a WhatsApp” adjunta la imagen del pasaporte.</div>`;
   try{drawQR(document.getElementById('qrCanvas'),passportPayload());}
   catch(e){document.querySelector('.pp-qr').innerHTML='<div style="color:#14121f;font-size:.8rem;padding:20px;text-align:center">Texto demasiado largo para el QR. Acorta el contacto.</div>';}
   btn.disabled=false;btn.innerHTML='✦ Regenerar Pasaporte';markDone('pasaporte');
