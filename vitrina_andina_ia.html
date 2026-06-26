@@ -99,6 +99,8 @@
   .post-name{font-weight:800;font-size:.92rem;line-height:1.1}
   .post-handle{font-size:.78rem;color:#8a8a8a}
   .post-img{position:relative;overflow:hidden;height:180px;display:grid;place-items:center;color:#fff;font-size:2.6rem;background:linear-gradient(135deg,var(--vicuna),var(--terra))}
+  .post-img img{transition:transform .5s ease}
+  .post-card:hover .post-img img{transform:scale(1.05)}
   .post-body{padding:13px 14px 16px;font-size:.92rem;white-space:pre-wrap;line-height:1.5}
   .share-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
   /* plan de contenido / cronograma */
@@ -111,7 +113,8 @@
   .shot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;margin-top:6px}
   .shot{background:rgba(20,18,31,.55);border:1px solid var(--line);border-radius:13px;padding:13px;display:flex;flex-direction:column;gap:6px}
   .shot-frame{position:relative;overflow:hidden;height:110px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font-size:2rem;background:rgba(255,255,255,.02)}
-  .shot-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .shot-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+  .shot:hover .shot-frame img{transform:scale(1.07)}
   .shot-t{font-weight:800;font-size:.9rem}
   .shot-d{font-size:.78rem;color:var(--muted);line-height:1.4;flex:1}
   .shot button{margin-top:4px}
@@ -210,7 +213,7 @@
 <main>
   <section class="hero">
     <h1>Abre las puertas del <em>mercado premium</em></h1>
-    <p>Tu marca, tus redes y tus certificados — las tres llaves para que compradores de todo el mundo te paguen lo que tu arte vale. Con ayuda de IA, en español, y <b>funciona sin internet</b>.</p>
+    <p>Tu marca, tus redes y tus certificados — las tres llaves para que compradores de todo el mundo te paguen lo que tu arte vale. Con ayuda de IA, en español, y <b>lo esencial funciona aunque tu internet falle</b>.</p>
   </section>
 
   <nav class="steps" id="steps"></nav>
@@ -315,7 +318,7 @@
     </div>
   </section>
   <footer style="text-align:center;color:var(--muted);font-size:.74rem;padding:30px 0 6px;border-top:1px solid var(--line);margin-top:30px">
-    Vitrina Andina IA · Artesanía Inteligente · Versión <b style="color:var(--gold)">v2026.06.25.3</b>
+    Vitrina Andina IA · Artesanía Inteligente · Versión <b style="color:var(--gold)">v2026.06.26.1</b>
   </footer>
 </main>
 
@@ -357,7 +360,7 @@
     <div style="margin-bottom:18px">
       <div style="font-weight:800;color:var(--gold);margin-bottom:6px">💡 Preguntas comunes</div>
       <div style="font-size:.88rem;color:var(--cream);line-height:1.7">
-        <b>¿Sin internet funciona?</b> Sí, todo. La IA se activa cuando tengas conexión.<br>
+        <b>¿Sin internet funciona?</b> Lo esencial sí: los textos con plantillas y tu Pasaporte QR. La IA y las fotos de referencia se activan cuando tengas conexión.<br>
         <b>¿No puedo certificarme solo?</b> Muchas certificaciones son más baratas y fáciles en <b>asociación o cooperativa</b>.<br>
         <b>¿Mis datos están seguros?</b> Todo se guarda solo en tu dispositivo.
       </div>
@@ -369,7 +372,7 @@
 <div class="modal" id="welcome">
   <div class="modal-card">
     <h3>👋 Bienvenido/a a Vitrina Andina</h3>
-    <p>Esta herramienta te ayuda a <b>vender más caro y mejor</b>: contenido para tus <b>redes</b> en varios idiomas, una <b>ruta de certificaciones</b> que abre mercados premium, y un <b>Pasaporte Digital con QR</b> que prueba el origen de tu arte. Todo <b>funciona sin internet</b>.</p>
+    <p>Esta herramienta te ayuda a <b>vender más caro y mejor</b>: contenido para tus <b>redes</b> en varios idiomas, una <b>ruta de certificaciones</b> que abre mercados premium, y un <b>Pasaporte Digital con QR</b> que prueba el origen de tu arte. Lo esencial <b>funciona aunque tu internet falle</b>.</p>
     <p style="margin-bottom:10px">¿Primera vez? Carga un ejemplo y mira cómo funciona, o toca <b>❓ Ayuda</b> arriba cuando lo necesites.</p>
     <div class="nav-row">
       <button class="btn ghost sm" onclick="closeWelcome()">Empezar de cero</button>
@@ -449,12 +452,19 @@ const AI={
       if(system)body.system_instruction={parts:[{text:system}]};
       const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(AI.getKey())}`,
         {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
-      if(!res.ok)return null;
+      if(!res.ok){
+        /* No rompemos la demo: caemos a plantilla. El motivo queda en consola para diagnóstico
+           (clave inválida=400 API_KEY_INVALID, modelo inexistente=404, cuota=429). */
+        let msg='';try{const e=await res.json();msg=e&&e.error&&e.error.message||'';}catch(_){}
+        console.warn(`[Gemini] ${res.status} ${msg} — usando plantilla offline`);
+        return null;
+      }
       const data=await res.json();
       const cand=data.candidates&&data.candidates[0];
       const part=cand&&cand.content&&cand.content.parts&&cand.content.parts.find(p=>p.text);
+      if(!part)console.warn('[Gemini] respuesta sin texto (posible bloqueo de seguridad) — usando plantilla');
       return part?part.text.trim():null;
-    }catch(e){return null;}
+    }catch(e){console.warn('[Gemini] error de red — usando plantilla offline',e);return null;}
   }
 };
 
@@ -511,7 +521,7 @@ function srcTag(ai){return ai?'<span class="src-tag src-ai">● IA real</span>':
 function requireProfile(){if(!D.name){toast('Completa el perfil primero');goStep(1);return false;}return true;}
 
 /* ===== TAB 2: REDES — contenido multi-idioma, sin hashtags ===== */
-const ANGLES=[{k:'producto',t:'🧶 Producto',img:'🧶'},{k:'proceso',t:'⚙️ Proceso',img:'🧵'},{k:'historia',t:'📖 Historia',img:'🏔️'},{k:'exportacion',t:'🌎 Exportación',img:'🌎'},{k:'descripcion',t:'🏷️ Descripción de producto',img:'🏷️'}];
+const ANGLES=[{k:'producto',t:'🧶 Producto'},{k:'proceso',t:'⚙️ Proceso'},{k:'historia',t:'📖 Historia'},{k:'exportacion',t:'🌎 Exportación'},{k:'descripcion',t:'🏷️ Descripción de producto'}];
 const CONTENT_LANGS=[{k:'es',t:'🇪🇸 Español'},{k:'en',t:'🇬🇧 English'},{k:'fr',t:'🇫🇷 Français'},{k:'de',t:'🇩🇪 Deutsch'},{k:'ja',t:'🇯🇵 日本語'}];
 const LANGNAME={es:'español',en:'inglés',fr:'francés',de:'alemán',ja:'japonés'};
 let curAngle='producto',curLang='es';
@@ -530,25 +540,32 @@ const PHOTO_TIPS=[
   'Incluye algo para dar escala (una mano, una taza) y muestra el color real, sin filtros fuertes.',
   'Guarda una versión con descripción en inglés: es lo que buscan en Etsy, Faire e Instagram.'
 ];
-function angleImg(k){const a=ANGLES.find(x=>x.k===k);return a?a.img:'🧶';}
 /* referencias de ángulos · banco de imágenes gratis (Pexels) */
 function productEN(){return {'Chal':'shawl','Poncho':'poncho','Chompa / suéter':'sweater','Chullo':'chullo hat','Bufanda':'scarf','Manta':'blanket','Guantes':'gloves','Tapiz':'tapestry'}[D.product]||'alpaca textile';}
 function fiberEN(){return (D.fiber||'alpaca').toLowerCase().includes('vic')?'vicuna':'alpaca';}
 const SHOTS=[
-  {k:'plano',ic:'🖼️',t:'Plano completo',d:'Toda la pieza centrada, fondo limpio. Es tu foto principal.',q:p=>`${p} product photography`},
-  {k:'detalle',ic:'🔍',t:'Detalle / textura',d:'Acércate al tejido para que se vea la suavidad de la fibra.',q:p=>`${fiberEN()} wool texture`},
-  {k:'enuso',ic:'🧍',t:'En uso (sobre el cuerpo)',d:'Puesta sobre una persona o maniquí: ayuda a imaginar cómo se ve.',q:p=>`model wearing ${p}`},
-  {k:'flatlay',ic:'📐',t:'Flat lay (desde arriba)',d:'Vista cenital, bien acomodada con accesorios simples.',q:p=>`${p} flat lay`},
-  {k:'taller',ic:'🧶',t:'En tu taller',d:'Tejiendo en el telar: el proceso enamora y da autenticidad.',q:p=>`weaving loom artisan peru`},
-  {k:'paisaje',ic:'🏔️',t:'En contexto andino',d:'Con paisaje o textiles de fondo: cuenta de dónde viene.',q:p=>`peru andes textile`}
+  {k:'plano',ic:'🖼️',t:'Plano completo',d:'Toda la pieza centrada, fondo limpio. Es tu foto principal.',img:33027862,q:p=>`${p} product photography`},
+  {k:'detalle',ic:'🔍',t:'Detalle / textura',d:'Acércate al tejido para que se vea la suavidad de la fibra.',img:5710046,q:p=>`${fiberEN()} wool texture`},
+  {k:'enuso',ic:'🧍',t:'En uso (sobre el cuerpo)',d:'Puesta sobre una persona o maniquí: ayuda a imaginar cómo se ve.',img:27167269,q:p=>`model wearing ${p}`},
+  {k:'flatlay',ic:'📐',t:'Flat lay (desde arriba)',d:'Vista cenital, bien acomodada con accesorios simples.',img:5603009,q:p=>`${p} flat lay`},
+  {k:'taller',ic:'🧶',t:'En tu taller',d:'Tejiendo en el telar: el proceso enamora y da autenticidad.',img:17649814,q:p=>`weaving loom artisan peru`},
+  {k:'paisaje',ic:'🏔️',t:'En contexto andino',d:'Con paisaje o textiles de fondo: cuenta de dónde viene.',img:17015841,q:p=>`peru andes textile`}
 ];
 function openShotSearch(k){const s=SHOTS.find(x=>x.k===k);if(!s)return;window.open('https://www.pexels.com/search/'+encodeURIComponent(s.q(productEN()))+'/','_blank');}
-function refImg(query,w,h){return `https://loremflickr.com/${w}/${h}/${encodeURIComponent(query)}`;}
-function renderShots(){const el=document.getElementById('shotGrid');if(!el)return;el.innerHTML=SHOTS.map(s=>`<div class="shot"><div class="shot-frame">${esc(s.ic)}<img src="${refImg(s.q(productEN()),320,220)}" referrerpolicy="no-referrer" loading="lazy" alt="${esc(s.t)}" onerror="this.remove()"></div><div class="shot-t">${esc(s.t)}</div><div class="shot-d">${esc(s.d)}</div><button class="btn ghost sm" onclick="openShotSearch('${s.k}')">🔍 Más ejemplos gratis</button></div>`).join('');}
-/* imagen del preview de post: referencia real (online) o foto propia subida */
+function renderShots(){const el=document.getElementById('shotGrid');if(!el)return;el.innerHTML=SHOTS.map(s=>`<div class="shot"><div class="shot-frame"><img src="${pexels(s.img,600)}" referrerpolicy="no-referrer" loading="lazy" alt="${esc(s.t)}"></div><div class="shot-t">${esc(s.t)}</div><div class="shot-d">${esc(s.d)}</div><button class="btn ghost sm" onclick="openShotSearch('${s.k}')">🔍 Más ejemplos gratis</button></div>`).join('');}
+/* imagen del preview de post: foto real de banco (Pexels) representativa por proceso, o foto propia subida */
+const POST_IMG={
+  producto:38011984,   // textiles andinos vibrantes con los Andes de fondo
+  proceso:20453594,    // artesana tejiendo a mano
+  historia:5498791,    // artesana sonriente en traje tradicional (Cusco)
+  exportacion:4440800, // cajas listas para envío con etiqueta
+  descripcion:5603009  // chompas de punto dobladas (foto de producto)
+};
+function pexels(id,w){return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w||900}`;}
 function postImgInner(){
   if(D.postImg)return `<img src="${D.postImg}" alt="" style="width:100%;height:100%;object-fit:cover">`;
-  return `${angleImg(curAngle)}<img src="${refImg(productEN()+',peru,wool',600,360)}" referrerpolicy="no-referrer" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.remove()">`;
+  const id=POST_IMG[curAngle]||POST_IMG.producto;
+  return `<img src="${pexels(id)}" alt="" referrerpolicy="no-referrer" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`;
 }
 function setPostPhoto(e){const fl=e.target.files&&e.target.files[0];if(!fl)return;const rd=new FileReader();rd.onload=()=>{D.postImg=rd.result;const el=document.getElementById('postImg');if(el)el.innerHTML=postImgInner();toast('Foto agregada ✓');};rd.readAsDataURL(fl);}
 const FIBER_I18N={
